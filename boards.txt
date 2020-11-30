@@ -40,6 +40,7 @@ esp32s2.build.flash_mode=qio
 esp32s2.build.boot=qio
 esp32s2.build.partitions=default
 esp32s2.build.defines=
+esp32s2.build.esptool_extra=
 
 esp32s2.menu.SerialMode.default=UART0
 esp32s2.menu.SerialMode.default.build.serial=0
@@ -179,6 +180,7 @@ esp32.build.flash_mode=dio
 esp32.build.boot=dio
 esp32.build.partitions=default
 esp32.build.defines=
+esp32.build.esptool_extra=
 esp32.build.loop_core=
 esp32.build.event_core=
 
@@ -329,6 +331,7 @@ esp32wrover.build.flash_mode=dio
 esp32wrover.build.boot=dio
 esp32wrover.build.partitions=default
 esp32wrover.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
+esp32wrover.build.esptool_extra=
 
 esp32wrover.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
 esp32wrover.menu.PartitionScheme.default.build.partitions=default
@@ -429,6 +432,7 @@ pico32.build.flash_mode=dio
 pico32.build.boot=dio
 pico32.build.partitions=default
 pico32.build.defines=
+pico32.build.esptool_extra=
 
 pico32.menu.PartitionScheme.default=Default
 pico32.menu.PartitionScheme.default.build.partitions=default
@@ -610,6 +614,7 @@ tinypico.build.flash_mode=dio
 tinypico.build.boot=dio
 tinypico.build.partitions=default
 tinypico.build.defines=
+tinypico.build.esptool_extra=
 
 tinypico.menu.PartitionScheme.default=Default
 tinypico.menu.PartitionScheme.default.build.partitions=default
@@ -691,6 +696,7 @@ feathers2.build.flash_mode=dio
 feathers2.build.boot=qio
 feathers2.build.partitions=fatflash
 feathers2.build.defines=
+feathers2.build.esptool_extra=
 
 feathers2.menu.SerialMode.cdc=USB CDC
 feathers2.menu.SerialMode.cdc.build.serial=1
@@ -812,6 +818,7 @@ pros2.build.flash_mode=dio
 pros2.build.boot=qio
 pros2.build.partitions=fatflash
 pros2.build.defines=
+pros2.build.esptool_extra=
 
 pros2.menu.SerialMode.cdc=USB CDC
 pros2.menu.SerialMode.cdc.build.serial=1
@@ -930,6 +937,7 @@ S_ODI_Ultra.build.flash_size=4MB
 S_ODI_Ultra.build.boot=dio
 S_ODI_Ultra.build.partitions=default
 S_ODI_Ultra.build.defines=
+S_ODI_Ultra.build.esptool_extra=
 
 S_ODI_Ultra.menu.FlashFreq.80=80MHz
 S_ODI_Ultra.menu.FlashFreq.80.build.flash_freq=80m
@@ -989,6 +997,7 @@ micros2.build.flash_mode=dio
 micros2.build.boot=qio
 micros2.build.partitions=fatflash
 micros2.build.defines=
+micros2.build.esptool_extra=
 
 micros2.menu.SerialMode.cdc=USB CDC
 micros2.menu.SerialMode.cdc.build.serial=1
@@ -1142,6 +1151,7 @@ turta_iot_node.build.flash_mode=dio
 turta_iot_node.build.boot=dio
 turta_iot_node.build.partitions=default
 turta_iot_node.build.defines=
+turta_iot_node.build.esptool_extra=
 
 turta_iot_node.menu.UploadSpeed.921600=921600
 turta_iot_node.menu.UploadSpeed.921600.upload.speed=921600
@@ -1241,6 +1251,7 @@ ttgo-t1.build.flash_mode=dio
 ttgo-t1.build.boot=dio
 ttgo-t1.build.partitions=default
 ttgo-t1.build.defines=
+ttgo-t1.build.esptool_extra=
 
 ttgo-t1.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
 ttgo-t1.menu.PartitionScheme.default.build.partitions=default
@@ -1438,6 +1449,7 @@ esp32thing.build.flash_size=4MB
 esp32thing.build.boot=dio
 esp32thing.build.partitions=default
 esp32thing.build.defines=
+esp32thing.build.esptool_extra=
 
 esp32thing.menu.FlashFreq.80=80MHz
 esp32thing.menu.FlashFreq.80.build.flash_freq=80m
@@ -1504,6 +1516,7 @@ esp32thing_plus.build.flash_size=16MB
 esp32thing_plus.build.boot=dio
 esp32thing_plus.build.partitions=default
 esp32thing_plus.build.defines=
+esp32thing_plus.build.esptool_extra=
 
 esp32thing_plus.menu.FlashFreq.80=80MHz
 esp32thing_plus.menu.FlashFreq.80.build.flash_freq=80m
@@ -1569,6 +1582,7 @@ nina_w10.build.flash_mode=dio
 nina_w10.build.flash_size=2MB
 nina_w10.build.flash_freq=40m
 nina_w10.build.defines=
+nina_w10.build.esptool_extra=
 
 nina_w10.menu.UploadSpeed.921600=921600
 nina_w10.menu.UploadSpeed.921600.upload.speed=921600
@@ -1608,6 +1622,7 @@ widora-air.build.flash_size=16MB
 widora-air.build.boot=dio
 widora-air.build.partitions=default
 widora-air.build.defines=
+widora-air.build.esptool_extra=
 
 widora-air.menu.FlashFreq.80=80MHz
 widora-air.menu.FlashFreq.80.build.flash_freq=80m
@@ -1652,6 +1667,7 @@ esp320.build.flash_size=4MB
 esp320.build.boot=dio
 esp320.build.partitions=default
 esp320.build.defines=
+esp320.build.esptool_extra=
 
 esp320.menu.FlashFreq.80=80MHz
 esp320.menu.FlashFreq.80.build.flash_freq=80m
@@ -1696,6 +1712,7 @@ nano32.build.flash_size=4MB
 nano32.build.boot=dio
 nano32.build.partitions=default
 nano32.build.defines=
+nano32.build.esptool_extra=
 
 nano32.menu.FlashFreq.80=80MHz
 nano32.menu.FlashFreq.80.build.flash_freq=80m
@@ -1741,6 +1758,7 @@ d32.build.flash_mode=dio
 d32.build.boot=dio
 d32.build.partitions=default
 d32.build.defines=
+d32.build.esptool_extra=
 
 d32.menu.PartitionScheme.default=Default
 d32.menu.PartitionScheme.default.build.partitions=default
@@ -1814,6 +1832,7 @@ d32_pro.build.flash_mode=dio
 d32_pro.build.boot=dio
 d32_pro.build.partitions=default
 d32_pro.build.defines=
+d32_pro.build.esptool_extra=
 
 d32_pro.menu.PSRAM.disabled=Disabled
 d32_pro.menu.PSRAM.disabled.build.defines=
@@ -1891,6 +1910,7 @@ lolin32.build.flash_size=4MB
 lolin32.build.boot=dio
 lolin32.build.partitions=default
 lolin32.build.defines=
+lolin32.build.esptool_extra=
 
 lolin32.menu.FlashFreq.80=80MHz
 lolin32.menu.FlashFreq.80.build.flash_freq=80m
@@ -1961,6 +1981,7 @@ pocket_32.build.flash_size=4MB
 pocket_32.build.boot=dio
 pocket_32.build.partitions=default
 pocket_32.build.defines=
+pocket_32.build.esptool_extra=
 
 pocket_32.menu.FlashFreq.80=80MHz
 pocket_32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2005,6 +2026,7 @@ WeMosBat.build.flash_size=4MB
 WeMosBat.build.boot=dio
 WeMosBat.build.partitions=default
 WeMosBat.build.defines=
+WeMosBat.build.esptool_extra=
 
 WeMosBat.menu.FlashFreq.80=80MHz
 WeMosBat.menu.FlashFreq.80.build.flash_freq=80m
@@ -2062,6 +2084,7 @@ espea32.build.flash_size=4MB
 espea32.build.boot=dio
 espea32.build.partitions=default
 espea32.build.defines=
+espea32.build.esptool_extra=
 
 espea32.menu.FlashFreq.80=80MHz
 espea32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2106,6 +2129,7 @@ quantum.build.flash_size=16MB
 quantum.build.boot=dio
 quantum.build.partitions=default
 quantum.build.defines=
+quantum.build.esptool_extra=
 
 quantum.menu.FlashFreq.80=80MHz
 quantum.menu.FlashFreq.80.build.flash_freq=80m
@@ -2150,6 +2174,7 @@ node32s.build.flash_size=4MB
 node32s.build.boot=dio
 node32s.build.partitions=default
 node32s.build.defines=
+node32s.build.esptool_extra=
 
 node32s.menu.PartitionScheme.default=Default
 node32s.menu.PartitionScheme.default.build.partitions=default
@@ -2216,6 +2241,7 @@ hornbill32dev.build.flash_size=4MB
 hornbill32dev.build.boot=dio
 hornbill32dev.build.partitions=default
 hornbill32dev.build.defines=
+hornbill32dev.build.esptool_extra=
 
 hornbill32dev.menu.FlashFreq.80=80MHz
 hornbill32dev.menu.FlashFreq.80.build.flash_freq=80m
@@ -2259,6 +2285,7 @@ hornbill32minima.build.flash_size=4MB
 hornbill32minima.build.boot=dio
 hornbill32minima.build.partitions=default
 hornbill32minima.build.defines=
+hornbill32minima.build.esptool_extra=
 
 hornbill32minima.menu.FlashFreq.80=80MHz
 hornbill32minima.menu.FlashFreq.80.build.flash_freq=80m
@@ -2303,6 +2330,7 @@ firebeetle32.build.flash_size=4MB
 firebeetle32.build.boot=dio
 firebeetle32.build.partitions=default
 firebeetle32.build.defines=
+firebeetle32.build.esptool_extra=
 
 firebeetle32.menu.FlashFreq.80=80MHz
 firebeetle32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2347,6 +2375,7 @@ intorobot-fig.build.flash_size=4MB
 intorobot-fig.build.boot=dio
 intorobot-fig.build.partitions=default
 intorobot-fig.build.defines=
+intorobot-fig.build.esptool_extra=
 
 intorobot-fig.menu.FlashFreq.80=80MHz
 intorobot-fig.menu.FlashFreq.80.build.flash_freq=80m
@@ -2391,6 +2420,7 @@ onehorse32dev.build.flash_size=4MB
 onehorse32dev.build.boot=dio
 onehorse32dev.build.partitions=default
 onehorse32dev.build.defines=
+onehorse32dev.build.esptool_extra=
 
 onehorse32dev.menu.FlashFreq.80=80MHz
 onehorse32dev.menu.FlashFreq.80.build.flash_freq=80m
@@ -2435,6 +2465,7 @@ featheresp32.build.flash_size=4MB
 featheresp32.build.boot=dio
 featheresp32.build.partitions=default
 featheresp32.build.defines=
+featheresp32.build.esptool_extra=
 
 featheresp32.menu.FlashFreq.80=80MHz
 featheresp32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2509,6 +2540,7 @@ adafruit_metro_esp32s2.build.flash_mode=qio
 adafruit_metro_esp32s2.build.boot=qio
 adafruit_metro_esp32s2.build.partitions=default
 adafruit_metro_esp32s2.build.defines=
+adafruit_metro_esp32s2.build.esptool_extra=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 
 adafruit_metro_esp32s2.menu.SerialMode.cdc=USB CDC
 adafruit_metro_esp32s2.menu.SerialMode.cdc.build.serial=1
@@ -2656,6 +2688,7 @@ adafruit_magtag29_esp32s2.build.flash_mode=qio
 adafruit_magtag29_esp32s2.build.boot=qio
 adafruit_magtag29_esp32s2.build.partitions=default
 adafruit_magtag29_esp32s2.build.defines=
+adafruit_magtag29_esp32s2.build.esptool_extra=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 
 adafruit_magtag29_esp32s2.menu.SerialMode.cdc=USB CDC
 adafruit_magtag29_esp32s2.menu.SerialMode.cdc.build.serial=1
@@ -2794,6 +2827,7 @@ nodemcu-32s.build.flash_size=4MB
 nodemcu-32s.build.boot=dio
 nodemcu-32s.build.partitions=default
 nodemcu-32s.build.defines=
+nodemcu-32s.build.esptool_extra=
 
 nodemcu-32s.menu.FlashFreq.80=80MHz
 nodemcu-32s.menu.FlashFreq.80.build.flash_freq=80m
@@ -2838,6 +2872,7 @@ mhetesp32devkit.build.flash_size=4MB
 mhetesp32devkit.build.boot=dio
 mhetesp32devkit.build.partitions=default
 mhetesp32devkit.build.defines=
+mhetesp32devkit.build.esptool_extra=
 
 mhetesp32devkit.menu.FlashFreq.80=80MHz
 mhetesp32devkit.menu.FlashFreq.80.build.flash_freq=80m
@@ -2904,6 +2939,7 @@ mhetesp32minikit.build.flash_size=4MB
 mhetesp32minikit.build.boot=dio
 mhetesp32minikit.build.partitions=default
 mhetesp32minikit.build.defines=
+mhetesp32minikit.build.esptool_extra=
 
 mhetesp32minikit.menu.FlashFreq.80=80MHz
 mhetesp32minikit.menu.FlashFreq.80.build.flash_freq=80m
@@ -2972,6 +3008,7 @@ esp32vn-iot-uno.build.flash_size=4MB
 esp32vn-iot-uno.build.boot=dio
 esp32vn-iot-uno.build.partitions=default
 esp32vn-iot-uno.build.defines=
+esp32vn-iot-uno.build.esptool_extra=
 
 esp32vn-iot-uno.menu.FlashFreq.80=80MHz
 esp32vn-iot-uno.menu.FlashFreq.80.build.flash_freq=80m
@@ -3016,6 +3053,7 @@ esp32doit-devkit-v1.build.flash_size=4MB
 esp32doit-devkit-v1.build.boot=dio
 esp32doit-devkit-v1.build.partitions=default
 esp32doit-devkit-v1.build.defines=
+esp32doit-devkit-v1.build.esptool_extra=
 
 esp32doit-devkit-v1.menu.FlashFreq.80=80MHz
 esp32doit-devkit-v1.menu.FlashFreq.80.build.flash_freq=80m
@@ -3071,6 +3109,7 @@ esp32doit-espduino.build.flash_size=4MB
 esp32doit-espduino.build.boot=dio
 esp32doit-espduino.build.partitions=default
 esp32doit-espduino.build.defines=
+esp32doit-espduino.build.esptool_extra=
 
 esp32doit-espduino.menu.FlashFreq.80=80MHz
 esp32doit-espduino.menu.FlashFreq.80.build.flash_freq=80m
@@ -3126,6 +3165,7 @@ esp32-evb.build.flash_size=4MB
 esp32-evb.build.boot=dio
 esp32-evb.build.partitions=default
 esp32-evb.build.defines=
+esp32-evb.build.esptool_extra=
 
 esp32-evb.menu.FlashFreq.80=80MHz
 esp32-evb.menu.FlashFreq.80.build.flash_freq=80m
@@ -3174,6 +3214,7 @@ esp32-gateway.build.flash_size=4MB
 esp32-gateway.build.boot=dio
 esp32-gateway.build.partitions=default
 esp32-gateway.build.defines=
+esp32-gateway.build.esptool_extra=
 
 esp32-gateway.menu.FlashFreq.80=80MHz
 esp32-gateway.menu.FlashFreq.80.build.flash_freq=80m
@@ -3216,6 +3257,7 @@ esp32-poe.build.flash_size=4MB
 esp32-poe.build.boot=dio
 esp32-poe.build.partitions=default
 esp32-poe.build.defines=
+esp32-poe.build.esptool_extra=
 
 esp32-poe.menu.FlashFreq.80=80MHz
 esp32-poe.menu.FlashFreq.80.build.flash_freq=80m
@@ -3258,6 +3300,7 @@ esp32-poe-iso.build.flash_size=4MB
 esp32-poe-iso.build.boot=dio
 esp32-poe-iso.build.partitions=default
 esp32-poe-iso.build.defines=
+esp32-poe-iso.build.esptool_extra=
 
 esp32-poe-iso.menu.FlashFreq.80=80MHz
 esp32-poe-iso.menu.FlashFreq.80.build.flash_freq=80m
@@ -3301,6 +3344,7 @@ esp32-DevKitLipo.build.flash_mode=dio
 esp32-DevKitLipo.build.boot=dio
 esp32-DevKitLipo.build.partitions=default
 esp32-DevKitLipo.build.defines=
+esp32-DevKitLipo.build.esptool_extra=
 
 esp32-DevKitLipo.menu.PartitionScheme.default=Default
 esp32-DevKitLipo.menu.PartitionScheme.default.build.partitions=default
@@ -3373,6 +3417,7 @@ espino32.build.flash_size=4MB
 espino32.build.boot=dio
 espino32.build.partitions=default
 espino32.build.defines=
+espino32.build.esptool_extra=
 
 espino32.menu.FlashFreq.80=80MHz
 espino32.menu.FlashFreq.80.build.flash_freq=80m
@@ -3417,6 +3462,7 @@ m5stack-core-esp32.build.flash_mode=dio
 m5stack-core-esp32.build.boot=dio
 m5stack-core-esp32.build.partitions=default
 m5stack-core-esp32.build.defines=
+m5stack-core-esp32.build.esptool_extra=
 
 m5stack-core-esp32.menu.FlashMode.qio=QIO
 m5stack-core-esp32.menu.FlashMode.qio.build.flash_mode=dio
@@ -3497,6 +3543,7 @@ m5stack-fire.build.flash_mode=dio
 m5stack-fire.build.boot=dio
 m5stack-fire.build.partitions=default_16MB
 m5stack-fire.build.defines=
+m5stack-fire.build.esptool_extra=
 
 m5stack-fire.menu.PSRAM.enabled=Enabled
 m5stack-fire.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -3562,6 +3609,7 @@ m5stick-c.build.flash_mode=dio
 m5stick-c.build.boot=dio
 m5stick-c.build.partitions=default
 m5stick-c.build.defines=
+m5stick-c.build.esptool_extra=
 
 m5stick-c.menu.PartitionScheme.default=Default
 m5stick-c.menu.PartitionScheme.default.build.partitions=default
@@ -3623,6 +3671,7 @@ m5stack-atom.build.flash_mode=dio
 m5stack-atom.build.boot=dio
 m5stack-atom.build.partitions=default
 m5stack-atom.build.defines=
+m5stack-atom.build.esptool_extra=
 
 m5stack-atom.menu.PartitionScheme.default=Default
 m5stack-atom.menu.PartitionScheme.default.build.partitions=default
@@ -3686,6 +3735,7 @@ m5stack-core2.build.flash_mode=dio
 m5stack-core2.build.boot=dio
 m5stack-core2.build.partitions=default_16MB
 m5stack-core2.build.defines=
+m5stack-core2.build.esptool_extra=
 
 m5stack-core2.menu.PSRAM.enabled=Enabled
 m5stack-core2.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -3785,6 +3835,7 @@ m5stack-timer-cam.build.flash_mode=dio
 m5stack-timer-cam.build.boot=dio
 m5stack-timer-cam.build.partitions=default
 m5stack-timer-cam.build.defines=
+m5stack-timer-cam.build.esptool_extra=
 
 m5stack-timer-cam.menu.PSRAM.enabled=Enabled
 m5stack-timer-cam.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -3876,6 +3927,7 @@ m5stack-coreink.build.flash_mode=dio
 m5stack-coreink.build.boot=dio
 m5stack-coreink.build.partitions=default
 m5stack-coreink.build.defines=
+m5stack-coreink.build.esptool_extra=
 
 m5stack-coreink.menu.PartitionScheme.default=Default
 m5stack-coreink.menu.PartitionScheme.default.build.partitions=default
@@ -3939,6 +3991,7 @@ odroid_esp32.build.flash_mode=dio
 odroid_esp32.build.boot=dio
 odroid_esp32.build.partitions=default
 odroid_esp32.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
+odroid_esp32.build.esptool_extra=
 
 odroid_esp32.menu.FlashMode.qio=QIO
 odroid_esp32.menu.FlashMode.qio.build.flash_mode=dio
@@ -4019,6 +4072,7 @@ heltec_wifi_kit_32.build.flash_mode=dio
 heltec_wifi_kit_32.build.boot=dio
 heltec_wifi_kit_32.build.partitions=default
 heltec_wifi_kit_32.build.defines=
+heltec_wifi_kit_32.build.esptool_extra=
 
 heltec_wifi_kit_32.menu.PSRAM.disabled=Disabled
 heltec_wifi_kit_32.menu.PSRAM.disabled.build.defines=
@@ -4131,6 +4185,7 @@ heltec_wifi_lora_32.build.flash_mode=dio
 heltec_wifi_lora_32.build.boot=dio
 heltec_wifi_lora_32.build.partitions=default
 heltec_wifi_lora_32.build.defines=
+heltec_wifi_lora_32.build.esptool_extra=
 
 heltec_wifi_lora_32.menu.PSRAM.disabled=Disabled
 heltec_wifi_lora_32.menu.PSRAM.disabled.build.defines=
@@ -4243,6 +4298,7 @@ heltec_wifi_lora_32_V2.build.flash_mode=dio
 heltec_wifi_lora_32_V2.build.boot=dio
 heltec_wifi_lora_32_V2.build.partitions=default_8MB
 heltec_wifi_lora_32_V2.build.defines=
+heltec_wifi_lora_32_V2.build.esptool_extra=
 
 heltec_wifi_lora_32_V2.menu.PSRAM.disabled=Disabled
 heltec_wifi_lora_32_V2.menu.PSRAM.disabled.build.defines=
@@ -4361,6 +4417,7 @@ heltec_wireless_stick.build.flash_mode=dio
 heltec_wireless_stick.build.boot=dio
 heltec_wireless_stick.build.partitions=default_8MB
 heltec_wireless_stick.build.defines=
+heltec_wireless_stick.build.esptool_extra=
 
 heltec_wireless_stick.menu.PSRAM.disabled=Disabled
 heltec_wireless_stick.menu.PSRAM.disabled.build.defines=
@@ -4478,6 +4535,7 @@ espectro32.build.flash_mode=dio
 espectro32.build.boot=dio
 espectro32.build.partitions=default
 espectro32.build.defines=
+espectro32.build.esptool_extra=
 
 espectro32.menu.FlashMode.qio=QIO
 espectro32.menu.FlashMode.qio.build.flash_mode=dio
@@ -4554,6 +4612,7 @@ CoreESP32.build.flash_size=4MB
 CoreESP32.build.boot=dio
 CoreESP32.build.partitions=default
 CoreESP32.build.defines=
+CoreESP32.build.esptool_extra=
 
 CoreESP32.menu.PSRAM.disabled=Disabled
 CoreESP32.menu.PSRAM.disabled.build.defines=
@@ -4631,6 +4690,7 @@ alksesp32.build.flash_mode=dio
 alksesp32.build.boot=dio
 alksesp32.build.partitions=default
 alksesp32.build.defines=
+alksesp32.build.esptool_extra=
 
 alksesp32.menu.PSRAM.disabled=Disabled
 alksesp32.menu.PSRAM.disabled.build.defines=
@@ -4760,6 +4820,7 @@ wipy3.build.flash_size=8MB
 wipy3.build.boot=dio
 wipy3.build.partitions=default
 wipy3.build.defines=
+wipy3.build.esptool_extra=
 
 wipy3.menu.FlashFreq.80=80MHz
 wipy3.menu.FlashFreq.80.build.flash_freq=80m
@@ -4860,6 +4921,7 @@ wesp32.build.flash_size=4MB
 wesp32.build.boot=dio
 wesp32.build.partitions=default
 wesp32.build.defines=
+wesp32.build.esptool_extra=
 
 wesp32.menu.FlashFreq.80=80MHz
 wesp32.menu.FlashFreq.80.build.flash_freq=80m
@@ -4979,6 +5041,7 @@ d-duino-32.build.flash_mode=dio
 d-duino-32.build.boot=dio
 d-duino-32.build.partitions=default
 d-duino-32.build.defines=
+d-duino-32.build.esptool_extra=
 
 d-duino-32.menu.PartitionScheme.default=Default
 d-duino-32.menu.PartitionScheme.default.build.partitions=default
@@ -5166,6 +5229,7 @@ oroca_edubot.build.flash_size=4MB
 oroca_edubot.build.boot=dio
 oroca_edubot.build.partitions=huge_app
 oroca_edubot.build.defines=
+oroca_edubot.build.esptool_extra=
 
 oroca_edubot.menu.PartitionScheme.huge_app=Huge APP (3MB No OTA)
 oroca_edubot.menu.PartitionScheme.huge_app.build.partitions=huge_app
@@ -5233,6 +5297,7 @@ fm-devkit.build.flash_mode=dio
 fm-devkit.build.boot=dio
 fm-devkit.build.partitions=default
 fm-devkit.build.defines=
+fm-devkit.build.esptool_extra=
 
 fm-devkit.menu.UploadSpeed.921600=921600
 fm-devkit.menu.UploadSpeed.921600.upload.speed=921600
@@ -5285,6 +5350,7 @@ frogboard.build.flash_mode=dio
 frogboard.build.boot=dio
 frogboard.build.partitions=default
 frogboard.build.defines=
+frogboard.build.esptool_extra=
 
 frogboard.menu.PSRAM.disabled=Disabled
 frogboard.menu.PSRAM.disabled.build.defines=
@@ -5372,6 +5438,7 @@ esp32cam.build.board=ESP32_DEV
 esp32cam.build.flash_size=4MB
 esp32cam.build.partitions=huge_app
 esp32cam.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
+esp32cam.build.esptool_extra=
 esp32cam.build.code_debug=0
 
 esp32cam.menu.CPUFreq.240=240MHz (WiFi/BT)
@@ -5511,6 +5578,7 @@ twatch.build.flash_mode=dio
 twatch.build.boot=dio
 twatch.build.partitions=default_16MB
 twatch.build.defines=
+twatch.build.esptool_extra=
 
 twatch.menu.PSRAM.enabled=Enabled
 twatch.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -5579,6 +5647,7 @@ d1_mini32.build.flash_size=4MB
 d1_mini32.build.boot=dio
 d1_mini32.build.partitions=default
 d1_mini32.build.defines=
+d1_mini32.build.esptool_extra=
 
 d1_mini32.menu.FlashFreq.80=80MHz
 d1_mini32.menu.FlashFreq.80.build.flash_freq=80m
@@ -5705,6 +5774,7 @@ vintlabs-devkit-v1.build.flash_size=4MB
 vintlabs-devkit-v1.build.boot=dio
 vintlabs-devkit-v1.build.partitions=default
 vintlabs-devkit-v1.build.defines=
+vintlabs-devkit-v1.build.esptool_extra=
 
 vintlabs-devkit-v1.menu.FlashFreq.80=80MHz
 vintlabs-devkit-v1.menu.FlashFreq.80.build.flash_freq=80m
@@ -5807,6 +5877,7 @@ honeylemon.build.flash_size=4MB
 honeylemon.build.boot=dio
 honeylemon.build.partitions=default
 honeylemon.build.defines=
+honeylemon.build.esptool_extra=
 
 honeylemon.menu.FlashFreq.80=80MHz
 honeylemon.menu.FlashFreq.80.build.flash_freq=80m
@@ -5852,6 +5923,7 @@ mgbot-iotik32a.build.flash_mode=dio
 mgbot-iotik32a.build.boot=dio
 mgbot-iotik32a.build.partitions=default
 mgbot-iotik32a.build.defines=
+mgbot-iotik32a.build.esptool_extra=
 
 mgbot-iotik32a.menu.PSRAM.disabled=Disabled
 mgbot-iotik32a.menu.PSRAM.disabled.build.defines=
@@ -5990,6 +6062,7 @@ mgbot-iotik32b.build.flash_mode=dio
 mgbot-iotik32b.build.boot=dio
 mgbot-iotik32b.build.partitions=default
 mgbot-iotik32b.build.defines=
+mgbot-iotik32b.build.esptool_extra=
 
 mgbot-iotik32b.menu.PSRAM.disabled=Disabled
 mgbot-iotik32b.menu.PSRAM.disabled.build.defines=
@@ -6126,6 +6199,7 @@ piranha_esp-32.build.flash_size=4MB
 piranha_esp-32.build.boot=dio
 piranha_esp-32.build.partitions=default
 piranha_esp-32.build.defines=
+piranha_esp-32.build.esptool_extra=
 
 piranha_esp-32.menu.PartitionScheme.default=Default
 piranha_esp-32.menu.PartitionScheme.default.build.partitions=default
@@ -6192,6 +6266,7 @@ metro_esp-32.build.flash_size=4MB
 metro_esp-32.build.boot=dio
 metro_esp-32.build.partitions=default
 metro_esp-32.build.defines=
+metro_esp-32.build.esptool_extra=
 
 metro_esp-32.menu.PartitionScheme.default=Default
 metro_esp-32.menu.PartitionScheme.default.build.partitions=default
@@ -6257,6 +6332,7 @@ sensesiot_weizen.build.flash_size=4MB
 sensesiot_weizen.build.boot=dio
 sensesiot_weizen.build.partitions=default
 sensesiot_weizen.build.defines=
+sensesiot_weizen.build.esptool_extra=
 
 sensesiot_weizen.menu.FlashFreq.80=80MHz
 sensesiot_weizen.menu.FlashFreq.80.build.flash_freq=80m
@@ -6301,6 +6377,7 @@ kits-edu.build.flash_mode=dio
 kits-edu.build.boot=dio
 kits-edu.build.partitions=default
 kits-edu.build.defines=
+kits-edu.build.esptool_extra=
 
 kits-edu.menu.PartitionScheme.default=Default
 kits-edu.menu.PartitionScheme.default.build.partitions=default
@@ -6362,6 +6439,7 @@ mPython.build.flash_mode=dio
 mPython.build.boot=dio
 mPython.build.partitions=huge_app
 mPython.build.defines=
+mPython.build.esptool_extra=
 
 mPython.menu.PSRAM.disabled=Disabled
 mPython.menu.PSRAM.disabled.build.defines=
@@ -6472,6 +6550,7 @@ OpenKB.build.flash_size=4MB
 OpenKB.build.boot=dio
 OpenKB.build.partitions=default
 OpenKB.build.defines=
+OpenKB.build.esptool_extra=
 
 OpenKB.menu.FlashFreq.80=80MHz
 OpenKB.menu.FlashFreq.80.build.flash_freq=80m
@@ -6516,6 +6595,7 @@ wifiduino32.build.flash_size=4MB
 wifiduino32.build.boot=dio
 wifiduino32.build.partitions=default
 wifiduino32.build.defines=
+wifiduino32.build.esptool_extra=
 
 wifiduino32.menu.PartitionScheme.default=Default
 wifiduino32.menu.PartitionScheme.default.build.partitions=default
@@ -6690,6 +6770,7 @@ imbrios-logsens-v1p1.build.flash_size=4MB
 imbrios-logsens-v1p1.build.boot=dio
 imbrios-logsens-v1p1.build.partitions=default
 imbrios-logsens-v1p1.build.defines=
+imbrios-logsens-v1p1.build.esptool_extra=
 
 imbrios-logsens-v1p1.menu.FlashFreq.80=80MHz
 imbrios-logsens-v1p1.menu.FlashFreq.80.build.flash_freq=80m
@@ -6760,6 +6841,7 @@ healthypi4.build.flash_size=4MB
 healthypi4.build.boot=dio
 healthypi4.build.partitions=min_spiffs
 healthypi4.build.defines=
+healthypi4.build.esptool_extra=
 
 healthypi4.menu.FlashFreq.80=80MHz
 healthypi4.menu.FlashFreq.80.build.flash_freq=80m
