@@ -23,6 +23,7 @@ esp32s2.upload.tool=esptool_py
 esp32s2.upload.maximum_size=1310720
 esp32s2.upload.maximum_data_size=327680
 esp32s2.upload.flags=
+esp32s2.upload.extra_flags=
 
 esp32s2.serial.disableDTR=false
 esp32s2.serial.disableRTS=false
@@ -40,7 +41,6 @@ esp32s2.build.flash_mode=qio
 esp32s2.build.boot=qio
 esp32s2.build.partitions=default
 esp32s2.build.defines=
-esp32s2.build.esptool_extra=
 
 esp32s2.menu.SerialMode.default=UART0
 esp32s2.menu.SerialMode.default.build.serial=0
@@ -164,6 +164,7 @@ esp32.upload.tool=esptool_py
 esp32.upload.maximum_size=1310720
 esp32.upload.maximum_data_size=327680
 esp32.upload.flags=
+esp32.upload.extra_flags=
 
 esp32.serial.disableDTR=true
 esp32.serial.disableRTS=true
@@ -180,7 +181,6 @@ esp32.build.flash_mode=dio
 esp32.build.boot=dio
 esp32.build.partitions=default
 esp32.build.defines=
-esp32.build.esptool_extra=
 esp32.build.loop_core=
 esp32.build.event_core=
 
@@ -315,6 +315,7 @@ esp32wrover.upload.tool=esptool_py
 esp32wrover.upload.maximum_size=1310720
 esp32wrover.upload.maximum_data_size=327680
 esp32wrover.upload.flags=
+esp32wrover.upload.extra_flags=
 
 esp32wrover.serial.disableDTR=true
 esp32wrover.serial.disableRTS=true
@@ -331,7 +332,6 @@ esp32wrover.build.flash_mode=dio
 esp32wrover.build.boot=dio
 esp32wrover.build.partitions=default
 esp32wrover.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
-esp32wrover.build.esptool_extra=
 
 esp32wrover.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
 esp32wrover.menu.PartitionScheme.default.build.partitions=default
@@ -416,6 +416,7 @@ pico32.upload.tool=esptool_py
 pico32.upload.maximum_size=1310720
 pico32.upload.maximum_data_size=327680
 pico32.upload.flags=
+pico32.upload.extra_flags=
 
 pico32.serial.disableDTR=true
 pico32.serial.disableRTS=true
@@ -432,7 +433,6 @@ pico32.build.flash_mode=dio
 pico32.build.boot=dio
 pico32.build.partitions=default
 pico32.build.defines=
-pico32.build.esptool_extra=
 
 pico32.menu.PartitionScheme.default=Default
 pico32.menu.PartitionScheme.default.build.partitions=default
@@ -478,6 +478,7 @@ esp32wroverkit.upload.tool=esptool_py
 esp32wroverkit.upload.maximum_size=1310720
 esp32wroverkit.upload.maximum_data_size=327680
 esp32wroverkit.upload.flags=
+esp32wroverkit.upload.extra_flags=
 esp32wroverkit.serial.disableDTR=true
 esp32wroverkit.serial.disableRTS=true
 esp32wroverkit.build.mcu=esp32
@@ -598,6 +599,7 @@ tinypico.upload.tool=esptool_py
 tinypico.upload.maximum_size=1310720
 tinypico.upload.maximum_data_size=327680
 tinypico.upload.flags=
+tinypico.upload.extra_flags=
 
 tinypico.serial.disableDTR=true
 tinypico.serial.disableRTS=true
@@ -614,7 +616,6 @@ tinypico.build.flash_mode=dio
 tinypico.build.boot=dio
 tinypico.build.partitions=default
 tinypico.build.defines=
-tinypico.build.esptool_extra=
 
 tinypico.menu.PartitionScheme.default=Default
 tinypico.menu.PartitionScheme.default.build.partitions=default
@@ -679,6 +680,7 @@ feathers2.upload.tool=esptool_py
 feathers2.upload.maximum_size=1310720
 feathers2.upload.maximum_data_size=327680
 feathers2.upload.flags=
+feathers2.upload.extra_flags=
 
 feathers2.serial.disableDTR=false
 feathers2.serial.disableRTS=false
@@ -696,7 +698,6 @@ feathers2.build.flash_mode=dio
 feathers2.build.boot=qio
 feathers2.build.partitions=fatflash
 feathers2.build.defines=
-feathers2.build.esptool_extra=
 
 feathers2.menu.SerialMode.cdc=USB CDC
 feathers2.menu.SerialMode.cdc.build.serial=1
@@ -801,6 +802,7 @@ pros2.upload.tool=esptool_py
 pros2.upload.maximum_size=1310720
 pros2.upload.maximum_data_size=327680
 pros2.upload.flags=
+pros2.upload.extra_flags=
 
 pros2.serial.disableDTR=false
 pros2.serial.disableRTS=false
@@ -818,7 +820,6 @@ pros2.build.flash_mode=dio
 pros2.build.boot=qio
 pros2.build.partitions=fatflash
 pros2.build.defines=
-pros2.build.esptool_extra=
 
 pros2.menu.SerialMode.cdc=USB CDC
 pros2.menu.SerialMode.cdc.build.serial=1
@@ -922,6 +923,7 @@ S_ODI_Ultra.upload.tool=esptool_py
 S_ODI_Ultra.upload.maximum_size=1310720
 S_ODI_Ultra.upload.maximum_data_size=327680
 S_ODI_Ultra.upload.wait_for_upload_port=true
+S_ODI_Ultra.upload.extra_flags=
 
 S_ODI_Ultra.serial.disableDTR=true
 S_ODI_Ultra.serial.disableRTS=true
@@ -937,7 +939,6 @@ S_ODI_Ultra.build.flash_size=4MB
 S_ODI_Ultra.build.boot=dio
 S_ODI_Ultra.build.partitions=default
 S_ODI_Ultra.build.defines=
-S_ODI_Ultra.build.esptool_extra=
 
 S_ODI_Ultra.menu.FlashFreq.80=80MHz
 S_ODI_Ultra.menu.FlashFreq.80.build.flash_freq=80m
@@ -980,6 +981,7 @@ micros2.upload.tool=esptool_py
 micros2.upload.maximum_size=1310720
 micros2.upload.maximum_data_size=327680
 micros2.upload.flags=
+micros2.upload.extra_flags=
 
 micros2.serial.disableDTR=false
 micros2.serial.disableRTS=false
@@ -997,7 +999,6 @@ micros2.build.flash_mode=dio
 micros2.build.boot=qio
 micros2.build.partitions=fatflash
 micros2.build.defines=
-micros2.build.esptool_extra=
 
 micros2.menu.SerialMode.cdc=USB CDC
 micros2.menu.SerialMode.cdc.build.serial=1
@@ -1100,6 +1101,7 @@ magicbit.upload.tool=esptool_py
 magicbit.upload.maximum_size=1310720
 magicbit.upload.maximum_data_size=327680
 magicbit.upload.flags=
+magicbit.upload.extra_flags=
 
 magicbit.serial.disableDTR=true
 magicbit.serial.disableRTS=true
@@ -1135,6 +1137,7 @@ turta_iot_node.upload.tool=esptool_py
 turta_iot_node.upload.maximum_size=1310720
 turta_iot_node.upload.maximum_data_size=327680
 turta_iot_node.upload.flags=
+turta_iot_node.upload.extra_flags=
 
 turta_iot_node.serial.disableDTR=true
 turta_iot_node.serial.disableRTS=true
@@ -1151,7 +1154,6 @@ turta_iot_node.build.flash_mode=dio
 turta_iot_node.build.boot=dio
 turta_iot_node.build.partitions=default
 turta_iot_node.build.defines=
-turta_iot_node.build.esptool_extra=
 
 turta_iot_node.menu.UploadSpeed.921600=921600
 turta_iot_node.menu.UploadSpeed.921600.upload.speed=921600
@@ -1179,6 +1181,7 @@ ttgo-lora32-v1.upload.tool=esptool_py
 ttgo-lora32-v1.upload.maximum_size=1310720
 ttgo-lora32-v1.upload.maximum_data_size=294912
 ttgo-lora32-v1.upload.flags=
+ttgo-lora32-v1.upload.extra_flags=
 
 ttgo-lora32-v1.serial.disableDTR=true
 ttgo-lora32-v1.serial.disableRTS=true
@@ -1235,6 +1238,7 @@ ttgo-t1.upload.tool=esptool_py
 ttgo-t1.upload.maximum_size=1310720
 ttgo-t1.upload.maximum_data_size=327680
 ttgo-t1.upload.flags=
+ttgo-t1.upload.extra_flags=
 
 ttgo-t1.serial.disableDTR=true
 ttgo-t1.serial.disableRTS=true
@@ -1251,7 +1255,6 @@ ttgo-t1.build.flash_mode=dio
 ttgo-t1.build.boot=dio
 ttgo-t1.build.partitions=default
 ttgo-t1.build.defines=
-ttgo-t1.build.esptool_extra=
 
 ttgo-t1.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
 ttgo-t1.menu.PartitionScheme.default.build.partitions=default
@@ -1358,6 +1361,7 @@ cw02.upload.tool=esptool_py
 cw02.upload.maximum_size=1310720
 cw02.upload.maximum_data_size=294912
 cw02.upload.flags=
+cw02.upload.extra_flags=
 
 cw02.serial.disableDTR=true
 cw02.serial.disableRTS=true
@@ -1434,6 +1438,7 @@ esp32thing.upload.tool=esptool_py
 esp32thing.upload.maximum_size=1310720
 esp32thing.upload.maximum_data_size=327680
 esp32thing.upload.flags=
+esp32thing.upload.extra_flags=
 
 esp32thing.serial.disableDTR=true
 esp32thing.serial.disableRTS=true
@@ -1449,7 +1454,6 @@ esp32thing.build.flash_size=4MB
 esp32thing.build.boot=dio
 esp32thing.build.partitions=default
 esp32thing.build.defines=
-esp32thing.build.esptool_extra=
 
 esp32thing.menu.FlashFreq.80=80MHz
 esp32thing.menu.FlashFreq.80.build.flash_freq=80m
@@ -1501,6 +1505,7 @@ esp32thing_plus.upload.tool=esptool_py
 esp32thing_plus.upload.maximum_size=1310720
 esp32thing_plus.upload.maximum_data_size=327680
 esp32thing_plus.upload.wait_for_upload_port=true
+esp32thing_plus.upload.extra_flags=
 
 esp32thing_plus.serial.disableDTR=true
 esp32thing_plus.serial.disableRTS=true
@@ -1516,7 +1521,6 @@ esp32thing_plus.build.flash_size=16MB
 esp32thing_plus.build.boot=dio
 esp32thing_plus.build.partitions=default
 esp32thing_plus.build.defines=
-esp32thing_plus.build.esptool_extra=
 
 esp32thing_plus.menu.FlashFreq.80=80MHz
 esp32thing_plus.menu.FlashFreq.80.build.flash_freq=80m
@@ -1567,6 +1571,7 @@ nina_w10.upload.tool=esptool_py
 nina_w10.upload.maximum_size=1310720
 nina_w10.upload.maximum_data_size=327680
 nina_w10.upload.flags=
+nina_w10.upload.extra_flags=
 
 nina_w10.serial.disableDTR=true
 nina_w10.serial.disableRTS=true
@@ -1582,7 +1587,6 @@ nina_w10.build.flash_mode=dio
 nina_w10.build.flash_size=2MB
 nina_w10.build.flash_freq=40m
 nina_w10.build.defines=
-nina_w10.build.esptool_extra=
 
 nina_w10.menu.UploadSpeed.921600=921600
 nina_w10.menu.UploadSpeed.921600.upload.speed=921600
@@ -1607,6 +1611,7 @@ widora-air.upload.tool=esptool_py
 widora-air.upload.maximum_size=1310720
 widora-air.upload.maximum_data_size=327680
 widora-air.upload.flags=
+widora-air.upload.extra_flags=
 
 widora-air.serial.disableDTR=true
 widora-air.serial.disableRTS=true
@@ -1622,7 +1627,6 @@ widora-air.build.flash_size=16MB
 widora-air.build.boot=dio
 widora-air.build.partitions=default
 widora-air.build.defines=
-widora-air.build.esptool_extra=
 
 widora-air.menu.FlashFreq.80=80MHz
 widora-air.menu.FlashFreq.80.build.flash_freq=80m
@@ -1652,6 +1656,7 @@ esp320.upload.tool=esptool_py
 esp320.upload.maximum_size=1310720
 esp320.upload.maximum_data_size=327680
 esp320.upload.flags=
+esp320.upload.extra_flags=
 
 esp320.serial.disableDTR=true
 esp320.serial.disableRTS=true
@@ -1667,7 +1672,6 @@ esp320.build.flash_size=4MB
 esp320.build.boot=dio
 esp320.build.partitions=default
 esp320.build.defines=
-esp320.build.esptool_extra=
 
 esp320.menu.FlashFreq.80=80MHz
 esp320.menu.FlashFreq.80.build.flash_freq=80m
@@ -1697,6 +1701,7 @@ nano32.upload.tool=esptool_py
 nano32.upload.maximum_size=1310720
 nano32.upload.maximum_data_size=327680
 nano32.upload.flags=
+nano32.upload.extra_flags=
 
 nano32.serial.disableDTR=true
 nano32.serial.disableRTS=true
@@ -1712,7 +1717,6 @@ nano32.build.flash_size=4MB
 nano32.build.boot=dio
 nano32.build.partitions=default
 nano32.build.defines=
-nano32.build.esptool_extra=
 
 nano32.menu.FlashFreq.80=80MHz
 nano32.menu.FlashFreq.80.build.flash_freq=80m
@@ -1742,6 +1746,7 @@ d32.upload.tool=esptool_py
 d32.upload.maximum_size=1310720
 d32.upload.maximum_data_size=327680
 d32.upload.flags=
+d32.upload.extra_flags=
 
 d32.serial.disableDTR=true
 d32.serial.disableRTS=true
@@ -1758,7 +1763,6 @@ d32.build.flash_mode=dio
 d32.build.boot=dio
 d32.build.partitions=default
 d32.build.defines=
-d32.build.esptool_extra=
 
 d32.menu.PartitionScheme.default=Default
 d32.menu.PartitionScheme.default.build.partitions=default
@@ -1816,6 +1820,7 @@ d32_pro.upload.tool=esptool_py
 d32_pro.upload.maximum_size=1310720
 d32_pro.upload.maximum_data_size=327680
 d32_pro.upload.flags=
+d32_pro.upload.extra_flags=
 
 d32_pro.serial.disableDTR=true
 d32_pro.serial.disableRTS=true
@@ -1832,7 +1837,6 @@ d32_pro.build.flash_mode=dio
 d32_pro.build.boot=dio
 d32_pro.build.partitions=default
 d32_pro.build.defines=
-d32_pro.build.esptool_extra=
 
 d32_pro.menu.PSRAM.disabled=Disabled
 d32_pro.menu.PSRAM.disabled.build.defines=
@@ -1895,6 +1899,7 @@ lolin32.upload.tool=esptool_py
 lolin32.upload.maximum_size=1310720
 lolin32.upload.maximum_data_size=327680
 lolin32.upload.flags=
+lolin32.upload.extra_flags=
 
 lolin32.serial.disableDTR=true
 lolin32.serial.disableRTS=true
@@ -1910,7 +1915,6 @@ lolin32.build.flash_size=4MB
 lolin32.build.boot=dio
 lolin32.build.partitions=default
 lolin32.build.defines=
-lolin32.build.esptool_extra=
 
 lolin32.menu.FlashFreq.80=80MHz
 lolin32.menu.FlashFreq.80.build.flash_freq=80m
@@ -1966,6 +1970,7 @@ pocket_32.upload.tool=esptool_py
 pocket_32.upload.maximum_size=1310720
 pocket_32.upload.maximum_data_size=327680
 pocket_32.upload.flags=
+pocket_32.upload.extra_flags=
 
 pocket_32.serial.disableDTR=true
 pocket_32.serial.disableRTS=true
@@ -1981,7 +1986,6 @@ pocket_32.build.flash_size=4MB
 pocket_32.build.boot=dio
 pocket_32.build.partitions=default
 pocket_32.build.defines=
-pocket_32.build.esptool_extra=
 
 pocket_32.menu.FlashFreq.80=80MHz
 pocket_32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2011,6 +2015,7 @@ WeMosBat.upload.tool=esptool_py
 WeMosBat.upload.maximum_size=1310720
 WeMosBat.upload.maximum_data_size=327680
 WeMosBat.upload.flags=
+WeMosBat.upload.extra_flags=
 
 WeMosBat.serial.disableDTR=true
 WeMosBat.serial.disableRTS=true
@@ -2026,7 +2031,6 @@ WeMosBat.build.flash_size=4MB
 WeMosBat.build.boot=dio
 WeMosBat.build.partitions=default
 WeMosBat.build.defines=
-WeMosBat.build.esptool_extra=
 
 WeMosBat.menu.FlashFreq.80=80MHz
 WeMosBat.menu.FlashFreq.80.build.flash_freq=80m
@@ -2069,6 +2073,7 @@ espea32.upload.tool=esptool_py
 espea32.upload.maximum_size=1310720
 espea32.upload.maximum_data_size=327680
 espea32.upload.flags=
+espea32.upload.extra_flags=
 
 espea32.serial.disableDTR=true
 espea32.serial.disableRTS=true
@@ -2084,7 +2089,6 @@ espea32.build.flash_size=4MB
 espea32.build.boot=dio
 espea32.build.partitions=default
 espea32.build.defines=
-espea32.build.esptool_extra=
 
 espea32.menu.FlashFreq.80=80MHz
 espea32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2114,6 +2118,7 @@ quantum.upload.tool=esptool_py
 quantum.upload.maximum_size=1310720
 quantum.upload.maximum_data_size=327680
 quantum.upload.flags=
+quantum.upload.extra_flags=
 
 quantum.serial.disableDTR=true
 quantum.serial.disableRTS=true
@@ -2129,7 +2134,6 @@ quantum.build.flash_size=16MB
 quantum.build.boot=dio
 quantum.build.partitions=default
 quantum.build.defines=
-quantum.build.esptool_extra=
 
 quantum.menu.FlashFreq.80=80MHz
 quantum.menu.FlashFreq.80.build.flash_freq=80m
@@ -2159,6 +2163,7 @@ node32s.upload.tool=esptool_py
 node32s.upload.maximum_size=1310720
 node32s.upload.maximum_data_size=327680
 node32s.upload.flags=
+node32s.upload.extra_flags=
 
 node32s.serial.disableDTR=true
 node32s.serial.disableRTS=true
@@ -2174,7 +2179,6 @@ node32s.build.flash_size=4MB
 node32s.build.boot=dio
 node32s.build.partitions=default
 node32s.build.defines=
-node32s.build.esptool_extra=
 
 node32s.menu.PartitionScheme.default=Default
 node32s.menu.PartitionScheme.default.build.partitions=default
@@ -2226,6 +2230,7 @@ hornbill32dev.upload.tool=esptool_py
 hornbill32dev.upload.maximum_size=1310720
 hornbill32dev.upload.maximum_data_size=327680
 hornbill32dev.upload.flags=
+hornbill32dev.upload.extra_flags=
 
 hornbill32dev.serial.disableDTR=true
 hornbill32dev.serial.disableRTS=true
@@ -2241,7 +2246,6 @@ hornbill32dev.build.flash_size=4MB
 hornbill32dev.build.boot=dio
 hornbill32dev.build.partitions=default
 hornbill32dev.build.defines=
-hornbill32dev.build.esptool_extra=
 
 hornbill32dev.menu.FlashFreq.80=80MHz
 hornbill32dev.menu.FlashFreq.80.build.flash_freq=80m
@@ -2271,6 +2275,7 @@ hornbill32minima.upload.tool=esptool_py
 hornbill32minima.upload.maximum_size=1310720
 hornbill32minima.upload.maximum_data_size=327680
 hornbill32minima.upload.flags=
+hornbill32minima.upload.extra_flags=
 
 hornbill32minima.serial.disableDTR=true
 hornbill32minima.serial.disableRTS=true
@@ -2285,7 +2290,6 @@ hornbill32minima.build.flash_size=4MB
 hornbill32minima.build.boot=dio
 hornbill32minima.build.partitions=default
 hornbill32minima.build.defines=
-hornbill32minima.build.esptool_extra=
 
 hornbill32minima.menu.FlashFreq.80=80MHz
 hornbill32minima.menu.FlashFreq.80.build.flash_freq=80m
@@ -2315,6 +2319,7 @@ firebeetle32.upload.tool=esptool_py
 firebeetle32.upload.maximum_size=1310720
 firebeetle32.upload.maximum_data_size=327680
 firebeetle32.upload.flags=
+firebeetle32.upload.extra_flags=
 
 firebeetle32.serial.disableDTR=true
 firebeetle32.serial.disableRTS=true
@@ -2330,7 +2335,6 @@ firebeetle32.build.flash_size=4MB
 firebeetle32.build.boot=dio
 firebeetle32.build.partitions=default
 firebeetle32.build.defines=
-firebeetle32.build.esptool_extra=
 
 firebeetle32.menu.FlashFreq.80=80MHz
 firebeetle32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2360,6 +2364,7 @@ intorobot-fig.upload.tool=esptool_py
 intorobot-fig.upload.maximum_size=1310720
 intorobot-fig.upload.maximum_data_size=327680
 intorobot-fig.upload.flags=
+intorobot-fig.upload.extra_flags=
 
 intorobot-fig.serial.disableDTR=true
 intorobot-fig.serial.disableRTS=true
@@ -2375,7 +2380,6 @@ intorobot-fig.build.flash_size=4MB
 intorobot-fig.build.boot=dio
 intorobot-fig.build.partitions=default
 intorobot-fig.build.defines=
-intorobot-fig.build.esptool_extra=
 
 intorobot-fig.menu.FlashFreq.80=80MHz
 intorobot-fig.menu.FlashFreq.80.build.flash_freq=80m
@@ -2405,6 +2409,7 @@ onehorse32dev.upload.tool=esptool_py
 onehorse32dev.upload.maximum_size=1310720
 onehorse32dev.upload.maximum_data_size=327680
 onehorse32dev.upload.flags=
+onehorse32dev.upload.extra_flags=
 
 onehorse32dev.serial.disableDTR=true
 onehorse32dev.serial.disableRTS=true
@@ -2420,7 +2425,6 @@ onehorse32dev.build.flash_size=4MB
 onehorse32dev.build.boot=dio
 onehorse32dev.build.partitions=default
 onehorse32dev.build.defines=
-onehorse32dev.build.esptool_extra=
 
 onehorse32dev.menu.FlashFreq.80=80MHz
 onehorse32dev.menu.FlashFreq.80.build.flash_freq=80m
@@ -2450,6 +2454,7 @@ featheresp32.upload.tool=esptool_py
 featheresp32.upload.maximum_size=1310720
 featheresp32.upload.maximum_data_size=327680
 featheresp32.upload.flags=
+featheresp32.upload.extra_flags=
 
 featheresp32.serial.disableDTR=true
 featheresp32.serial.disableRTS=true
@@ -2465,7 +2470,6 @@ featheresp32.build.flash_size=4MB
 featheresp32.build.boot=dio
 featheresp32.build.partitions=default
 featheresp32.build.defines=
-featheresp32.build.esptool_extra=
 
 featheresp32.menu.FlashFreq.80=80MHz
 featheresp32.menu.FlashFreq.80.build.flash_freq=80m
@@ -2523,6 +2527,7 @@ adafruit_metro_esp32s2.upload.tool=esptool_py
 adafruit_metro_esp32s2.upload.maximum_size=1310720
 adafruit_metro_esp32s2.upload.maximum_data_size=327680
 adafruit_metro_esp32s2.upload.flags=
+adafruit_metro_esp32s2.upload.extra_flags=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 
 adafruit_metro_esp32s2.serial.disableDTR=false
 adafruit_metro_esp32s2.serial.disableRTS=false
@@ -2540,7 +2545,6 @@ adafruit_metro_esp32s2.build.flash_mode=qio
 adafruit_metro_esp32s2.build.boot=qio
 adafruit_metro_esp32s2.build.partitions=default
 adafruit_metro_esp32s2.build.defines=
-adafruit_metro_esp32s2.build.esptool_extra=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 
 adafruit_metro_esp32s2.menu.SerialMode.cdc=USB CDC
 adafruit_metro_esp32s2.menu.SerialMode.cdc.build.serial=1
@@ -2671,6 +2675,7 @@ adafruit_magtag29_esp32s2.upload.tool=esptool_py
 adafruit_magtag29_esp32s2.upload.maximum_size=1310720
 adafruit_magtag29_esp32s2.upload.maximum_data_size=327680
 adafruit_magtag29_esp32s2.upload.flags=
+adafruit_magtag29_esp32s2.upload.extra_flags=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 
 adafruit_magtag29_esp32s2.serial.disableDTR=false
 adafruit_magtag29_esp32s2.serial.disableRTS=false
@@ -2688,7 +2693,6 @@ adafruit_magtag29_esp32s2.build.flash_mode=qio
 adafruit_magtag29_esp32s2.build.boot=qio
 adafruit_magtag29_esp32s2.build.partitions=default
 adafruit_magtag29_esp32s2.build.defines=
-adafruit_magtag29_esp32s2.build.esptool_extra=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 
 adafruit_magtag29_esp32s2.menu.SerialMode.cdc=USB CDC
 adafruit_magtag29_esp32s2.menu.SerialMode.cdc.build.serial=1
@@ -2812,6 +2816,7 @@ nodemcu-32s.upload.tool=esptool_py
 nodemcu-32s.upload.maximum_size=1310720
 nodemcu-32s.upload.maximum_data_size=327680
 nodemcu-32s.upload.flags=
+nodemcu-32s.upload.extra_flags=
 
 nodemcu-32s.serial.disableDTR=true
 nodemcu-32s.serial.disableRTS=true
@@ -2827,7 +2832,6 @@ nodemcu-32s.build.flash_size=4MB
 nodemcu-32s.build.boot=dio
 nodemcu-32s.build.partitions=default
 nodemcu-32s.build.defines=
-nodemcu-32s.build.esptool_extra=
 
 nodemcu-32s.menu.FlashFreq.80=80MHz
 nodemcu-32s.menu.FlashFreq.80.build.flash_freq=80m
@@ -2857,6 +2861,7 @@ mhetesp32devkit.upload.tool=esptool_py
 mhetesp32devkit.upload.maximum_size=1310720
 mhetesp32devkit.upload.maximum_data_size=327680
 mhetesp32devkit.upload.flags=
+mhetesp32devkit.upload.extra_flags=
 
 mhetesp32devkit.serial.disableDTR=true
 mhetesp32devkit.serial.disableRTS=true
@@ -2872,7 +2877,6 @@ mhetesp32devkit.build.flash_size=4MB
 mhetesp32devkit.build.boot=dio
 mhetesp32devkit.build.partitions=default
 mhetesp32devkit.build.defines=
-mhetesp32devkit.build.esptool_extra=
 
 mhetesp32devkit.menu.FlashFreq.80=80MHz
 mhetesp32devkit.menu.FlashFreq.80.build.flash_freq=80m
@@ -2924,6 +2928,7 @@ mhetesp32minikit.upload.tool=esptool_py
 mhetesp32minikit.upload.maximum_size=1310720
 mhetesp32minikit.upload.maximum_data_size=327680
 mhetesp32minikit.upload.flags=
+mhetesp32minikit.upload.extra_flags=
 
 mhetesp32minikit.serial.disableDTR=true
 mhetesp32minikit.serial.disableRTS=true
@@ -2939,7 +2944,6 @@ mhetesp32minikit.build.flash_size=4MB
 mhetesp32minikit.build.boot=dio
 mhetesp32minikit.build.partitions=default
 mhetesp32minikit.build.defines=
-mhetesp32minikit.build.esptool_extra=
 
 mhetesp32minikit.menu.FlashFreq.80=80MHz
 mhetesp32minikit.menu.FlashFreq.80.build.flash_freq=80m
@@ -2993,6 +2997,7 @@ esp32vn-iot-uno.upload.tool=esptool_py
 esp32vn-iot-uno.upload.maximum_size=1310720
 esp32vn-iot-uno.upload.maximum_data_size=327680
 esp32vn-iot-uno.upload.flags=
+esp32vn-iot-uno.upload.extra_flags=
 
 esp32vn-iot-uno.serial.disableDTR=true
 esp32vn-iot-uno.serial.disableRTS=true
@@ -3008,7 +3013,6 @@ esp32vn-iot-uno.build.flash_size=4MB
 esp32vn-iot-uno.build.boot=dio
 esp32vn-iot-uno.build.partitions=default
 esp32vn-iot-uno.build.defines=
-esp32vn-iot-uno.build.esptool_extra=
 
 esp32vn-iot-uno.menu.FlashFreq.80=80MHz
 esp32vn-iot-uno.menu.FlashFreq.80.build.flash_freq=80m
@@ -3038,6 +3042,7 @@ esp32doit-devkit-v1.upload.tool=esptool_py
 esp32doit-devkit-v1.upload.maximum_size=1310720
 esp32doit-devkit-v1.upload.maximum_data_size=327680
 esp32doit-devkit-v1.upload.flags=
+esp32doit-devkit-v1.upload.extra_flags=
 
 esp32doit-devkit-v1.serial.disableDTR=true
 esp32doit-devkit-v1.serial.disableRTS=true
@@ -3053,7 +3058,6 @@ esp32doit-devkit-v1.build.flash_size=4MB
 esp32doit-devkit-v1.build.boot=dio
 esp32doit-devkit-v1.build.partitions=default
 esp32doit-devkit-v1.build.defines=
-esp32doit-devkit-v1.build.esptool_extra=
 
 esp32doit-devkit-v1.menu.FlashFreq.80=80MHz
 esp32doit-devkit-v1.menu.FlashFreq.80.build.flash_freq=80m
@@ -3094,6 +3098,7 @@ esp32doit-espduino.upload.tool=esptool
 esp32doit-espduino.upload.maximum_size=1310720
 esp32doit-espduino.upload.maximum_data_size=327680
 esp32doit-espduino.upload.wait_for_upload_port=true
+esp32doit-espduino.upload.extra_flags=
 
 esp32doit-espduino.serial.disableDTR=true
 esp32doit-espduino.serial.disableRTS=true
@@ -3109,7 +3114,6 @@ esp32doit-espduino.build.flash_size=4MB
 esp32doit-espduino.build.boot=dio
 esp32doit-espduino.build.partitions=default
 esp32doit-espduino.build.defines=
-esp32doit-espduino.build.esptool_extra=
 
 esp32doit-espduino.menu.FlashFreq.80=80MHz
 esp32doit-espduino.menu.FlashFreq.80.build.flash_freq=80m
@@ -3150,6 +3154,7 @@ esp32-evb.upload.tool=esptool_py
 esp32-evb.upload.maximum_size=1310720
 esp32-evb.upload.maximum_data_size=327680
 esp32-evb.upload.flags=
+esp32-evb.upload.extra_flags=
 
 esp32-evb.serial.disableDTR=true
 esp32-evb.serial.disableRTS=true
@@ -3165,7 +3170,6 @@ esp32-evb.build.flash_size=4MB
 esp32-evb.build.boot=dio
 esp32-evb.build.partitions=default
 esp32-evb.build.defines=
-esp32-evb.build.esptool_extra=
 
 esp32-evb.menu.FlashFreq.80=80MHz
 esp32-evb.menu.FlashFreq.80.build.flash_freq=80m
@@ -3193,6 +3197,7 @@ esp32-gateway.upload.tool=esptool_py
 esp32-gateway.upload.maximum_size=1310720
 esp32-gateway.upload.maximum_data_size=327680
 esp32-gateway.upload.flags=
+esp32-gateway.upload.extra_flags=
 
 esp32-gateway.serial.disableDTR=true
 esp32-gateway.serial.disableRTS=true
@@ -3214,7 +3219,6 @@ esp32-gateway.build.flash_size=4MB
 esp32-gateway.build.boot=dio
 esp32-gateway.build.partitions=default
 esp32-gateway.build.defines=
-esp32-gateway.build.esptool_extra=
 
 esp32-gateway.menu.FlashFreq.80=80MHz
 esp32-gateway.menu.FlashFreq.80.build.flash_freq=80m
@@ -3242,6 +3246,7 @@ esp32-poe.upload.tool=esptool_py
 esp32-poe.upload.maximum_size=1310720
 esp32-poe.upload.maximum_data_size=327680
 esp32-poe.upload.flags=
+esp32-poe.upload.extra_flags=
 
 esp32-poe.serial.disableDTR=true
 esp32-poe.serial.disableRTS=true
@@ -3257,7 +3262,6 @@ esp32-poe.build.flash_size=4MB
 esp32-poe.build.boot=dio
 esp32-poe.build.partitions=default
 esp32-poe.build.defines=
-esp32-poe.build.esptool_extra=
 
 esp32-poe.menu.FlashFreq.80=80MHz
 esp32-poe.menu.FlashFreq.80.build.flash_freq=80m
@@ -3285,6 +3289,7 @@ esp32-poe-iso.upload.tool=esptool_py
 esp32-poe-iso.upload.maximum_size=1310720
 esp32-poe-iso.upload.maximum_data_size=327680
 esp32-poe-iso.upload.flags=
+esp32-poe-iso.upload.extra_flags=
 
 esp32-poe-iso.serial.disableDTR=true
 esp32-poe-iso.serial.disableRTS=true
@@ -3300,7 +3305,6 @@ esp32-poe-iso.build.flash_size=4MB
 esp32-poe-iso.build.boot=dio
 esp32-poe-iso.build.partitions=default
 esp32-poe-iso.build.defines=
-esp32-poe-iso.build.esptool_extra=
 
 esp32-poe-iso.menu.FlashFreq.80=80MHz
 esp32-poe-iso.menu.FlashFreq.80.build.flash_freq=80m
@@ -3328,6 +3332,7 @@ esp32-DevKitLipo.upload.tool=esptool_py
 esp32-DevKitLipo.upload.maximum_size=1310720
 esp32-DevKitLipo.upload.maximum_data_size=327680
 esp32-DevKitLipo.upload.flags=
+esp32-DevKitLipo.upload.extra_flags=
 
 esp32-DevKitLipo.serial.disableDTR=true
 esp32-DevKitLipo.serial.disableRTS=true
@@ -3344,7 +3349,6 @@ esp32-DevKitLipo.build.flash_mode=dio
 esp32-DevKitLipo.build.boot=dio
 esp32-DevKitLipo.build.partitions=default
 esp32-DevKitLipo.build.defines=
-esp32-DevKitLipo.build.esptool_extra=
 
 esp32-DevKitLipo.menu.PartitionScheme.default=Default
 esp32-DevKitLipo.menu.PartitionScheme.default.build.partitions=default
@@ -3402,6 +3406,7 @@ espino32.upload.tool=esptool_py
 espino32.upload.maximum_size=1310720
 espino32.upload.maximum_data_size=327680
 espino32.upload.flags=
+espino32.upload.extra_flags=
 
 espino32.serial.disableDTR=true
 espino32.serial.disableRTS=true
@@ -3417,7 +3422,6 @@ espino32.build.flash_size=4MB
 espino32.build.boot=dio
 espino32.build.partitions=default
 espino32.build.defines=
-espino32.build.esptool_extra=
 
 espino32.menu.FlashFreq.80=80MHz
 espino32.menu.FlashFreq.80.build.flash_freq=80m
@@ -3447,6 +3451,7 @@ m5stack-core-esp32.upload.tool=esptool_py
 m5stack-core-esp32.upload.maximum_size=1310720
 m5stack-core-esp32.upload.maximum_data_size=327680
 m5stack-core-esp32.upload.flags=
+m5stack-core-esp32.upload.extra_flags=
 
 m5stack-core-esp32.serial.disableDTR=true
 m5stack-core-esp32.serial.disableRTS=true
@@ -3462,7 +3467,6 @@ m5stack-core-esp32.build.flash_mode=dio
 m5stack-core-esp32.build.boot=dio
 m5stack-core-esp32.build.partitions=default
 m5stack-core-esp32.build.defines=
-m5stack-core-esp32.build.esptool_extra=
 
 m5stack-core-esp32.menu.FlashMode.qio=QIO
 m5stack-core-esp32.menu.FlashMode.qio.build.flash_mode=dio
@@ -3527,6 +3531,7 @@ m5stack-fire.upload.tool=esptool_py
 m5stack-fire.upload.maximum_size=6553600
 m5stack-fire.upload.maximum_data_size=4521984
 m5stack-fire.upload.flags=
+m5stack-fire.upload.extra_flags=
 
 m5stack-fire.serial.disableDTR=true
 m5stack-fire.serial.disableRTS=true
@@ -3543,7 +3548,6 @@ m5stack-fire.build.flash_mode=dio
 m5stack-fire.build.boot=dio
 m5stack-fire.build.partitions=default_16MB
 m5stack-fire.build.defines=
-m5stack-fire.build.esptool_extra=
 
 m5stack-fire.menu.PSRAM.enabled=Enabled
 m5stack-fire.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -3593,6 +3597,7 @@ m5stick-c.upload.tool=esptool_py
 m5stick-c.upload.maximum_size=1310720
 m5stick-c.upload.maximum_data_size=327680
 m5stick-c.upload.flags=
+m5stick-c.upload.extra_flags=
 
 m5stick-c.serial.disableDTR=true
 m5stick-c.serial.disableRTS=true
@@ -3609,7 +3614,6 @@ m5stick-c.build.flash_mode=dio
 m5stick-c.build.boot=dio
 m5stick-c.build.partitions=default
 m5stick-c.build.defines=
-m5stick-c.build.esptool_extra=
 
 m5stick-c.menu.PartitionScheme.default=Default
 m5stick-c.menu.PartitionScheme.default.build.partitions=default
@@ -3655,6 +3659,7 @@ m5stack-atom.upload.tool=esptool_py
 m5stack-atom.upload.maximum_size=1310720
 m5stack-atom.upload.maximum_data_size=327680
 m5stack-atom.upload.flags=
+m5stack-atom.upload.extra_flags=
 
 m5stack-atom.serial.disableDTR=true
 m5stack-atom.serial.disableRTS=true
@@ -3671,7 +3676,6 @@ m5stack-atom.build.flash_mode=dio
 m5stack-atom.build.boot=dio
 m5stack-atom.build.partitions=default
 m5stack-atom.build.defines=
-m5stack-atom.build.esptool_extra=
 
 m5stack-atom.menu.PartitionScheme.default=Default
 m5stack-atom.menu.PartitionScheme.default.build.partitions=default
@@ -3719,6 +3723,7 @@ m5stack-core2.upload.maximum_size=6553600
 m5stack-core2.upload.maximum_data_size=4521984
 m5stack-core2.upload.wait_for_upload_port=true
 m5stack-core2.upload.flags=
+m5stack-core2.upload.extra_flags=
 
 m5stack-core2.serial.disableDTR=true
 m5stack-core2.serial.disableRTS=true
@@ -3735,7 +3740,6 @@ m5stack-core2.build.flash_mode=dio
 m5stack-core2.build.boot=dio
 m5stack-core2.build.partitions=default_16MB
 m5stack-core2.build.defines=
-m5stack-core2.build.esptool_extra=
 
 m5stack-core2.menu.PSRAM.enabled=Enabled
 m5stack-core2.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -3819,6 +3823,7 @@ m5stack-timer-cam.upload.tool=esptool_py
 m5stack-timer-cam.upload.maximum_size=1310720
 m5stack-timer-cam.upload.maximum_data_size=327680
 m5stack-timer-cam.upload.wait_for_upload_port=true
+m5stack-timer-cam.upload.extra_flags=
 
 m5stack-timer-cam.serial.disableDTR=true
 m5stack-timer-cam.serial.disableRTS=true
@@ -3835,7 +3840,6 @@ m5stack-timer-cam.build.flash_mode=dio
 m5stack-timer-cam.build.boot=dio
 m5stack-timer-cam.build.partitions=default
 m5stack-timer-cam.build.defines=
-m5stack-timer-cam.build.esptool_extra=
 
 m5stack-timer-cam.menu.PSRAM.enabled=Enabled
 m5stack-timer-cam.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -3911,6 +3915,7 @@ m5stack-coreink.upload.tool=esptool_py
 m5stack-coreink.upload.maximum_size=1310720
 m5stack-coreink.upload.maximum_data_size=327680
 m5stack-coreink.upload.wait_for_upload_port=true
+m5stack-coreink.upload.extra_flags=
 
 m5stack-coreink.serial.disableDTR=true
 m5stack-coreink.serial.disableRTS=true
@@ -3927,7 +3932,6 @@ m5stack-coreink.build.flash_mode=dio
 m5stack-coreink.build.boot=dio
 m5stack-coreink.build.partitions=default
 m5stack-coreink.build.defines=
-m5stack-coreink.build.esptool_extra=
 
 m5stack-coreink.menu.PartitionScheme.default=Default
 m5stack-coreink.menu.PartitionScheme.default.build.partitions=default
@@ -3976,6 +3980,7 @@ odroid_esp32.upload.tool=esptool_py
 odroid_esp32.upload.maximum_size=1310720
 odroid_esp32.upload.maximum_data_size=327680
 odroid_esp32.upload.flags=
+odroid_esp32.upload.extra_flags=
 
 odroid_esp32.serial.disableDTR=true
 odroid_esp32.serial.disableRTS=true
@@ -3991,7 +3996,6 @@ odroid_esp32.build.flash_mode=dio
 odroid_esp32.build.boot=dio
 odroid_esp32.build.partitions=default
 odroid_esp32.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
-odroid_esp32.build.esptool_extra=
 
 odroid_esp32.menu.FlashMode.qio=QIO
 odroid_esp32.menu.FlashMode.qio.build.flash_mode=dio
@@ -4056,6 +4060,7 @@ heltec_wifi_kit_32.upload.tool=esptool_py
 heltec_wifi_kit_32.upload.maximum_size=1310720
 heltec_wifi_kit_32.upload.maximum_data_size=327680
 heltec_wifi_kit_32.upload.flags=
+heltec_wifi_kit_32.upload.extra_flags=
 
 heltec_wifi_kit_32.serial.disableDTR=true
 heltec_wifi_kit_32.serial.disableRTS=true
@@ -4072,7 +4077,6 @@ heltec_wifi_kit_32.build.flash_mode=dio
 heltec_wifi_kit_32.build.boot=dio
 heltec_wifi_kit_32.build.partitions=default
 heltec_wifi_kit_32.build.defines=
-heltec_wifi_kit_32.build.esptool_extra=
 
 heltec_wifi_kit_32.menu.PSRAM.disabled=Disabled
 heltec_wifi_kit_32.menu.PSRAM.disabled.build.defines=
@@ -4169,6 +4173,7 @@ heltec_wifi_lora_32.upload.tool=esptool_py
 heltec_wifi_lora_32.upload.maximum_size=1310720
 heltec_wifi_lora_32.upload.maximum_data_size=327680
 heltec_wifi_lora_32.upload.flags=
+heltec_wifi_lora_32.upload.extra_flags=
 
 heltec_wifi_lora_32.serial.disableDTR=true
 heltec_wifi_lora_32.serial.disableRTS=true
@@ -4185,7 +4190,6 @@ heltec_wifi_lora_32.build.flash_mode=dio
 heltec_wifi_lora_32.build.boot=dio
 heltec_wifi_lora_32.build.partitions=default
 heltec_wifi_lora_32.build.defines=
-heltec_wifi_lora_32.build.esptool_extra=
 
 heltec_wifi_lora_32.menu.PSRAM.disabled=Disabled
 heltec_wifi_lora_32.menu.PSRAM.disabled.build.defines=
@@ -4282,6 +4286,7 @@ heltec_wifi_lora_32_V2.upload.tool=esptool_py
 heltec_wifi_lora_32_V2.upload.maximum_size=1310720
 heltec_wifi_lora_32_V2.upload.maximum_data_size=327680
 heltec_wifi_lora_32_V2.upload.flags=
+heltec_wifi_lora_32_V2.upload.extra_flags=
 
 heltec_wifi_lora_32_V2.serial.disableDTR=true
 heltec_wifi_lora_32_V2.serial.disableRTS=true
@@ -4298,7 +4303,6 @@ heltec_wifi_lora_32_V2.build.flash_mode=dio
 heltec_wifi_lora_32_V2.build.boot=dio
 heltec_wifi_lora_32_V2.build.partitions=default_8MB
 heltec_wifi_lora_32_V2.build.defines=
-heltec_wifi_lora_32_V2.build.esptool_extra=
 
 heltec_wifi_lora_32_V2.menu.PSRAM.disabled=Disabled
 heltec_wifi_lora_32_V2.menu.PSRAM.disabled.build.defines=
@@ -4401,6 +4405,7 @@ heltec_wireless_stick.upload.tool=esptool_py
 heltec_wireless_stick.upload.maximum_size=1310720
 heltec_wireless_stick.upload.maximum_data_size=327680
 heltec_wireless_stick.upload.flags=
+heltec_wireless_stick.upload.extra_flags=
 
 heltec_wireless_stick.serial.disableDTR=true
 heltec_wireless_stick.serial.disableRTS=true
@@ -4417,7 +4422,6 @@ heltec_wireless_stick.build.flash_mode=dio
 heltec_wireless_stick.build.boot=dio
 heltec_wireless_stick.build.partitions=default_8MB
 heltec_wireless_stick.build.defines=
-heltec_wireless_stick.build.esptool_extra=
 
 heltec_wireless_stick.menu.PSRAM.disabled=Disabled
 heltec_wireless_stick.menu.PSRAM.disabled.build.defines=
@@ -4520,6 +4524,7 @@ espectro32.upload.tool=esptool_py
 espectro32.upload.maximum_size=1310720
 espectro32.upload.maximum_data_size=327680
 espectro32.upload.flags=
+espectro32.upload.extra_flags=
 
 espectro32.serial.disableDTR=true
 espectro32.serial.disableRTS=true
@@ -4535,7 +4540,6 @@ espectro32.build.flash_mode=dio
 espectro32.build.boot=dio
 espectro32.build.partitions=default
 espectro32.build.defines=
-espectro32.build.esptool_extra=
 
 espectro32.menu.FlashMode.qio=QIO
 espectro32.menu.FlashMode.qio.build.flash_mode=dio
@@ -4597,6 +4601,7 @@ CoreESP32.upload.tool=esptool_py
 CoreESP32.upload.maximum_size=1310720
 CoreESP32.upload.maximum_data_size=327680
 CoreESP32.upload.flags=
+CoreESP32.upload.extra_flags=
 
 CoreESP32.serial.disableDTR=false
 CoreESP32.serial.disableRTS=false
@@ -4612,7 +4617,6 @@ CoreESP32.build.flash_size=4MB
 CoreESP32.build.boot=dio
 CoreESP32.build.partitions=default
 CoreESP32.build.defines=
-CoreESP32.build.esptool_extra=
 
 CoreESP32.menu.PSRAM.disabled=Disabled
 CoreESP32.menu.PSRAM.disabled.build.defines=
@@ -4674,6 +4678,7 @@ alksesp32.upload.tool=esptool_py
 alksesp32.upload.maximum_size=1310720
 alksesp32.upload.maximum_data_size=327680
 alksesp32.upload.flags=
+alksesp32.upload.extra_flags=
 
 alksesp32.serial.disableDTR=true
 alksesp32.serial.disableRTS=true
@@ -4690,7 +4695,6 @@ alksesp32.build.flash_mode=dio
 alksesp32.build.boot=dio
 alksesp32.build.partitions=default
 alksesp32.build.defines=
-alksesp32.build.esptool_extra=
 
 alksesp32.menu.PSRAM.disabled=Disabled
 alksesp32.menu.PSRAM.disabled.build.defines=
@@ -4805,6 +4809,7 @@ wipy3.upload.tool=esptool_py
 wipy3.upload.maximum_size=1310720
 wipy3.upload.maximum_data_size=294912
 wipy3.upload.flags=
+wipy3.upload.extra_flags=
 
 wipy3.serial.disableDTR=true
 wipy3.serial.disableRTS=true
@@ -4820,7 +4825,6 @@ wipy3.build.flash_size=8MB
 wipy3.build.boot=dio
 wipy3.build.partitions=default
 wipy3.build.defines=
-wipy3.build.esptool_extra=
 
 wipy3.menu.FlashFreq.80=80MHz
 wipy3.menu.FlashFreq.80.build.flash_freq=80m
@@ -4863,6 +4867,7 @@ bpi-bit.upload.tool=esptool_py
 bpi-bit.upload.maximum_size=1310720
 bpi-bit.upload.maximum_data_size=294912
 bpi-bit.upload.flags=
+bpi-bit.upload.extra_flags=
 
 bpi-bit.serial.disableDTR=true
 bpi-bit.serial.disableRTS=true
@@ -4906,6 +4911,7 @@ wesp32.upload.tool=esptool_py
 wesp32.upload.maximum_size=1310720
 wesp32.upload.maximum_data_size=327680
 wesp32.upload.flags=
+wesp32.upload.extra_flags=
 
 wesp32.serial.disableDTR=true
 wesp32.serial.disableRTS=true
@@ -4921,7 +4927,6 @@ wesp32.build.flash_size=4MB
 wesp32.build.boot=dio
 wesp32.build.partitions=default
 wesp32.build.defines=
-wesp32.build.esptool_extra=
 
 wesp32.menu.FlashFreq.80=80MHz
 wesp32.menu.FlashFreq.80.build.flash_freq=80m
@@ -4964,6 +4969,7 @@ t-beam.upload.tool=esptool_py
 t-beam.upload.maximum_size=1310720
 t-beam.upload.maximum_data_size=327680
 t-beam.upload.flags=
+t-beam.upload.extra_flags=
 
 t-beam.serial.disableDTR=true
 t-beam.serial.disableRTS=true
@@ -5025,6 +5031,7 @@ d-duino-32.upload.tool=esptool_py
 d-duino-32.upload.maximum_size=1310720
 d-duino-32.upload.maximum_data_size=327680
 d-duino-32.upload.flags=
+d-duino-32.upload.extra_flags=
 
 d-duino-32.serial.disableDTR=true
 d-duino-32.serial.disableRTS=true
@@ -5041,7 +5048,6 @@ d-duino-32.build.flash_mode=dio
 d-duino-32.build.boot=dio
 d-duino-32.build.partitions=default
 d-duino-32.build.defines=
-d-duino-32.build.esptool_extra=
 
 d-duino-32.menu.PartitionScheme.default=Default
 d-duino-32.menu.PartitionScheme.default.build.partitions=default
@@ -5097,6 +5103,7 @@ lopy.upload.tool=esptool_py
 lopy.upload.maximum_size=1310720
 lopy.upload.maximum_data_size=327680
 lopy.upload.flags=
+lopy.upload.extra_flags=
 
 lopy.serial.disableDTR=true
 lopy.serial.disableRTS=true
@@ -5153,6 +5160,7 @@ lopy4.upload.tool=esptool_py
 lopy4.upload.maximum_size=1310720
 lopy4.upload.maximum_data_size=327680
 lopy4.upload.flags=
+lopy4.upload.extra_flags=
 
 lopy4.serial.disableDTR=true
 lopy4.serial.disableRTS=true
@@ -5214,6 +5222,7 @@ oroca_edubot.upload.tool=esptool_py
 oroca_edubot.upload.maximum_size=3145728
 oroca_edubot.upload.maximum_data_size=327680
 oroca_edubot.upload.flags=
+oroca_edubot.upload.extra_flags=
 
 oroca_edubot.serial.disableDTR=true
 oroca_edubot.serial.disableRTS=true
@@ -5229,7 +5238,6 @@ oroca_edubot.build.flash_size=4MB
 oroca_edubot.build.boot=dio
 oroca_edubot.build.partitions=huge_app
 oroca_edubot.build.defines=
-oroca_edubot.build.esptool_extra=
 
 oroca_edubot.menu.PartitionScheme.huge_app=Huge APP (3MB No OTA)
 oroca_edubot.menu.PartitionScheme.huge_app.build.partitions=huge_app
@@ -5281,6 +5289,7 @@ fm-devkit.upload.tool=esptool
 fm-devkit.upload.maximum_size=1310720
 fm-devkit.upload.maximum_data_size=327680
 fm-devkit.upload.flags=
+fm-devkit.upload.extra_flags=
 
 fm-devkit.serial.disableDTR=true
 fm-devkit.serial.disableRTS=true
@@ -5297,7 +5306,6 @@ fm-devkit.build.flash_mode=dio
 fm-devkit.build.boot=dio
 fm-devkit.build.partitions=default
 fm-devkit.build.defines=
-fm-devkit.build.esptool_extra=
 
 fm-devkit.menu.UploadSpeed.921600=921600
 fm-devkit.menu.UploadSpeed.921600.upload.speed=921600
@@ -5335,6 +5343,7 @@ frogboard.upload.tool=esptool_py
 frogboard.upload.maximum_size=1310720
 frogboard.upload.maximum_data_size=327680
 frogboard.upload.flags=
+frogboard.upload.extra_flags=
 
 frogboard.serial.disableDTR=true
 frogboard.serial.disableRTS=true
@@ -5350,7 +5359,6 @@ frogboard.build.flash_mode=dio
 frogboard.build.boot=dio
 frogboard.build.partitions=default
 frogboard.build.defines=
-frogboard.build.esptool_extra=
 
 frogboard.menu.PSRAM.disabled=Disabled
 frogboard.menu.PSRAM.disabled.build.defines=
@@ -5426,6 +5434,7 @@ esp32cam.upload.tool=esptool_py
 esp32cam.upload.maximum_size=3145728
 esp32cam.upload.maximum_data_size=327680
 esp32cam.upload.flags=
+esp32cam.upload.extra_flags=
 esp32cam.upload.speed=460800
 
 esp32cam.serial.disableDTR=true
@@ -5438,7 +5447,6 @@ esp32cam.build.board=ESP32_DEV
 esp32cam.build.flash_size=4MB
 esp32cam.build.partitions=huge_app
 esp32cam.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
-esp32cam.build.esptool_extra=
 esp32cam.build.code_debug=0
 
 esp32cam.menu.CPUFreq.240=240MHz (WiFi/BT)
@@ -5484,6 +5492,7 @@ sparkfun_lora_gateway_1-channel.upload.tool=esptool_py
 sparkfun_lora_gateway_1-channel.upload.maximum_size=1310720
 sparkfun_lora_gateway_1-channel.upload.maximum_data_size=294912
 sparkfun_lora_gateway_1-channel.upload.flags=
+sparkfun_lora_gateway_1-channel.upload.extra_flags=
 
 sparkfun_lora_gateway_1-channel.serial.disableDTR=true
 sparkfun_lora_gateway_1-channel.serial.disableRTS=true
@@ -5555,6 +5564,7 @@ twatch.upload.tool=esptool_py
 twatch.upload.maximum_size=6553600
 twatch.upload.maximum_data_size=4521984
 twatch.upload.wait_for_upload_port=true
+twatch.upload.extra_flags=
 
 twatch.serial.disableDTR=true
 twatch.serial.disableRTS=true
@@ -5578,7 +5588,6 @@ twatch.build.flash_mode=dio
 twatch.build.boot=dio
 twatch.build.partitions=default_16MB
 twatch.build.defines=
-twatch.build.esptool_extra=
 
 twatch.menu.PSRAM.enabled=Enabled
 twatch.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM -mfix-esp32-psram-cache-issue
@@ -5632,6 +5641,7 @@ d1_mini32.upload.tool=esptool_py
 d1_mini32.upload.maximum_size=1310720
 d1_mini32.upload.maximum_data_size=327680
 d1_mini32.upload.flags=
+d1_mini32.upload.extra_flags=
 
 d1_mini32.serial.disableDTR=true
 d1_mini32.serial.disableRTS=true
@@ -5647,7 +5657,6 @@ d1_mini32.build.flash_size=4MB
 d1_mini32.build.boot=dio
 d1_mini32.build.partitions=default
 d1_mini32.build.defines=
-d1_mini32.build.esptool_extra=
 
 d1_mini32.menu.FlashFreq.80=80MHz
 d1_mini32.menu.FlashFreq.80.build.flash_freq=80m
@@ -5703,6 +5712,7 @@ gpy.upload.tool=esptool_py
 gpy.upload.maximum_size=1310720
 gpy.upload.maximum_data_size=327680
 gpy.upload.flags=
+gpy.upload.extra_flags=
 
 gpy.serial.disableDTR=true
 gpy.serial.disableRTS=true
@@ -5759,6 +5769,7 @@ vintlabs-devkit-v1.upload.tool=esptool_py
 vintlabs-devkit-v1.upload.maximum_size=1310720
 vintlabs-devkit-v1.upload.maximum_data_size=327680
 vintlabs-devkit-v1.upload.flags=
+vintlabs-devkit-v1.upload.extra_flags=
 
 vintlabs-devkit-v1.serial.disableDTR=true
 vintlabs-devkit-v1.serial.disableRTS=true
@@ -5774,7 +5785,6 @@ vintlabs-devkit-v1.build.flash_size=4MB
 vintlabs-devkit-v1.build.boot=dio
 vintlabs-devkit-v1.build.partitions=default
 vintlabs-devkit-v1.build.defines=
-vintlabs-devkit-v1.build.esptool_extra=
 
 vintlabs-devkit-v1.menu.FlashFreq.80=80MHz
 vintlabs-devkit-v1.menu.FlashFreq.80.build.flash_freq=80m
@@ -5862,6 +5872,7 @@ honeylemon.upload.tool=esptool_py
 honeylemon.upload.maximum_size=1310720
 honeylemon.upload.maximum_data_size=327680
 honeylemon.upload.flags=
+honeylemon.upload.extra_flags=
 
 honeylemon.serial.disableDTR=true
 honeylemon.serial.disableRTS=true
@@ -5877,7 +5888,6 @@ honeylemon.build.flash_size=4MB
 honeylemon.build.boot=dio
 honeylemon.build.partitions=default
 honeylemon.build.defines=
-honeylemon.build.esptool_extra=
 
 honeylemon.menu.FlashFreq.80=80MHz
 honeylemon.menu.FlashFreq.80.build.flash_freq=80m
@@ -5907,6 +5917,7 @@ mgbot-iotik32a.upload.tool=esptool_py
 mgbot-iotik32a.upload.maximum_size=1310720
 mgbot-iotik32a.upload.maximum_data_size=327680
 mgbot-iotik32a.upload.flags=
+mgbot-iotik32a.upload.extra_flags=
 
 mgbot-iotik32a.serial.disableDTR=true
 mgbot-iotik32a.serial.disableRTS=true
@@ -5923,7 +5934,6 @@ mgbot-iotik32a.build.flash_mode=dio
 mgbot-iotik32a.build.boot=dio
 mgbot-iotik32a.build.partitions=default
 mgbot-iotik32a.build.defines=
-mgbot-iotik32a.build.esptool_extra=
 
 mgbot-iotik32a.menu.PSRAM.disabled=Disabled
 mgbot-iotik32a.menu.PSRAM.disabled.build.defines=
@@ -6046,6 +6056,7 @@ mgbot-iotik32b.upload.tool=esptool_py
 mgbot-iotik32b.upload.maximum_size=1310720
 mgbot-iotik32b.upload.maximum_data_size=327680
 mgbot-iotik32b.upload.flags=
+mgbot-iotik32b.upload.extra_flags=
 
 mgbot-iotik32b.serial.disableDTR=true
 mgbot-iotik32b.serial.disableRTS=true
@@ -6062,7 +6073,6 @@ mgbot-iotik32b.build.flash_mode=dio
 mgbot-iotik32b.build.boot=dio
 mgbot-iotik32b.build.partitions=default
 mgbot-iotik32b.build.defines=
-mgbot-iotik32b.build.esptool_extra=
 
 mgbot-iotik32b.menu.PSRAM.disabled=Disabled
 mgbot-iotik32b.menu.PSRAM.disabled.build.defines=
@@ -6184,6 +6194,7 @@ piranha_esp-32.upload.tool=esptool_py
 piranha_esp-32.upload.maximum_size=1310720
 piranha_esp-32.upload.maximum_data_size=327680
 piranha_esp-32.upload.flags=
+piranha_esp-32.upload.extra_flags=
 
 piranha_esp-32.serial.disableDTR=true
 piranha_esp-32.serial.disableRTS=true
@@ -6199,7 +6210,6 @@ piranha_esp-32.build.flash_size=4MB
 piranha_esp-32.build.boot=dio
 piranha_esp-32.build.partitions=default
 piranha_esp-32.build.defines=
-piranha_esp-32.build.esptool_extra=
 
 piranha_esp-32.menu.PartitionScheme.default=Default
 piranha_esp-32.menu.PartitionScheme.default.build.partitions=default
@@ -6251,6 +6261,7 @@ metro_esp-32.upload.tool=esptool_py
 metro_esp-32.upload.maximum_size=1310720
 metro_esp-32.upload.maximum_data_size=327680
 metro_esp-32.upload.flags=
+metro_esp-32.upload.extra_flags=
 
 metro_esp-32.serial.disableDTR=true
 metro_esp-32.serial.disableRTS=true
@@ -6266,7 +6277,6 @@ metro_esp-32.build.flash_size=4MB
 metro_esp-32.build.boot=dio
 metro_esp-32.build.partitions=default
 metro_esp-32.build.defines=
-metro_esp-32.build.esptool_extra=
 
 metro_esp-32.menu.PartitionScheme.default=Default
 metro_esp-32.menu.PartitionScheme.default.build.partitions=default
@@ -6317,6 +6327,7 @@ sensesiot_weizen.upload.tool=esptool_py
 sensesiot_weizen.upload.maximum_size=1310720
 sensesiot_weizen.upload.maximum_data_size=327680
 sensesiot_weizen.upload.flags=
+sensesiot_weizen.upload.extra_flags=
 
 sensesiot_weizen.serial.disableDTR=true
 sensesiot_weizen.serial.disableRTS=true
@@ -6332,7 +6343,6 @@ sensesiot_weizen.build.flash_size=4MB
 sensesiot_weizen.build.boot=dio
 sensesiot_weizen.build.partitions=default
 sensesiot_weizen.build.defines=
-sensesiot_weizen.build.esptool_extra=
 
 sensesiot_weizen.menu.FlashFreq.80=80MHz
 sensesiot_weizen.menu.FlashFreq.80.build.flash_freq=80m
@@ -6361,6 +6371,7 @@ kits-edu.upload.tool=esptool_py
 kits-edu.upload.maximum_size=1310720
 kits-edu.upload.maximum_data_size=327680
 kits-edu.upload.wait_for_upload_port=true
+kits-edu.upload.extra_flags=
 
 kits-edu.serial.disableDTR=true
 kits-edu.serial.disableRTS=true
@@ -6377,7 +6388,6 @@ kits-edu.build.flash_mode=dio
 kits-edu.build.boot=dio
 kits-edu.build.partitions=default
 kits-edu.build.defines=
-kits-edu.build.esptool_extra=
 
 kits-edu.menu.PartitionScheme.default=Default
 kits-edu.menu.PartitionScheme.default.build.partitions=default
@@ -6423,6 +6433,7 @@ mPython.upload.tool=esptool_py
 mPython.upload.maximum_size=1310720
 mPython.upload.maximum_data_size=327680
 mPython.upload.flags=
+mPython.upload.extra_flags=
 
 mPython.serial.disableDTR=true
 mPython.serial.disableRTS=true
@@ -6439,7 +6450,6 @@ mPython.build.flash_mode=dio
 mPython.build.boot=dio
 mPython.build.partitions=huge_app
 mPython.build.defines=
-mPython.build.esptool_extra=
 
 mPython.menu.PSRAM.disabled=Disabled
 mPython.menu.PSRAM.disabled.build.defines=
@@ -6535,6 +6545,7 @@ OpenKB.upload.tool=esptool_py
 OpenKB.upload.maximum_size=1310720
 OpenKB.upload.maximum_data_size=327680
 OpenKB.upload.wait_for_upload_port=true
+OpenKB.upload.extra_flags=
 
 OpenKB.serial.disableDTR=true
 OpenKB.serial.disableRTS=true
@@ -6550,7 +6561,6 @@ OpenKB.build.flash_size=4MB
 OpenKB.build.boot=dio
 OpenKB.build.partitions=default
 OpenKB.build.defines=
-OpenKB.build.esptool_extra=
 
 OpenKB.menu.FlashFreq.80=80MHz
 OpenKB.menu.FlashFreq.80.build.flash_freq=80m
@@ -6580,6 +6590,7 @@ wifiduino32.upload.tool=esptool_py
 wifiduino32.upload.maximum_size=1310720
 wifiduino32.upload.maximum_data_size=327680
 wifiduino32.upload.wait_for_upload_port=true
+wifiduino32.upload.extra_flags=
 
 wifiduino32.serial.disableDTR=true
 wifiduino32.serial.disableRTS=true
@@ -6595,7 +6606,6 @@ wifiduino32.build.flash_size=4MB
 wifiduino32.build.boot=dio
 wifiduino32.build.partitions=default
 wifiduino32.build.defines=
-wifiduino32.build.esptool_extra=
 
 wifiduino32.menu.PartitionScheme.default=Default
 wifiduino32.menu.PartitionScheme.default.build.partitions=default
@@ -6647,6 +6657,7 @@ ttgo-lora32-v21new.upload.tool=esptool_py
 ttgo-lora32-v21new.upload.maximum_size=1310720
 ttgo-lora32-v21new.upload.maximum_data_size=294912
 ttgo-lora32-v21new.upload.wait_for_upload_port=true
+ttgo-lora32-v21new.upload.extra_flags=
 
 ttgo-lora32-v21new.serial.disableDTR=true
 ttgo-lora32-v21new.serial.disableRTS=true
@@ -6755,6 +6766,7 @@ imbrios-logsens-v1p1.upload.tool=esptool_py
 imbrios-logsens-v1p1.upload.maximum_size=1310720
 imbrios-logsens-v1p1.upload.maximum_data_size=327680
 imbrios-logsens-v1p1.upload.wait_for_upload_port=true
+imbrios-logsens-v1p1.upload.extra_flags=
 
 imbrios-logsens-v1p1.serial.disableDTR=true
 imbrios-logsens-v1p1.serial.disableRTS=true
@@ -6770,7 +6782,6 @@ imbrios-logsens-v1p1.build.flash_size=4MB
 imbrios-logsens-v1p1.build.boot=dio
 imbrios-logsens-v1p1.build.partitions=default
 imbrios-logsens-v1p1.build.defines=
-imbrios-logsens-v1p1.build.esptool_extra=
 
 imbrios-logsens-v1p1.menu.FlashFreq.80=80MHz
 imbrios-logsens-v1p1.menu.FlashFreq.80.build.flash_freq=80m
@@ -6826,6 +6837,7 @@ healthypi4.upload.tool=esptool_py
 healthypi4.upload.maximum_size=1310720
 healthypi4.upload.maximum_data_size=327680
 healthypi4.upload.wait_for_upload_port=true
+healthypi4.upload.extra_flags=
 
 healthypi4.serial.disableDTR=true
 healthypi4.serial.disableRTS=true
@@ -6841,7 +6853,6 @@ healthypi4.build.flash_size=4MB
 healthypi4.build.boot=dio
 healthypi4.build.partitions=min_spiffs
 healthypi4.build.defines=
-healthypi4.build.esptool_extra=
 
 healthypi4.menu.FlashFreq.80=80MHz
 healthypi4.menu.FlashFreq.80.build.flash_freq=80m
