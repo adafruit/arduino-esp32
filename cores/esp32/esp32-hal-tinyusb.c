@@ -536,11 +536,22 @@ esp_err_t tinyusb_init(tinyusb_device_config_t *config) {
     tinyusb_config_t tusb_cfg = {
             .external_phy = false // In the most cases you need to use a `false` value
     };
+
     esp_err_t err = tinyusb_driver_install(&tusb_cfg);
+
+#if 1 // walkaround for v4.2 tinyusb init bug
+    // Note: IDF v4.2 has a bug that incorrectly check the tusb_init() returned value (bool instead of error code)
+    // https://github.com/espressif/esp-idf/blob/release/v4.2/components/tinyusb/port/esp32s2/src/tinyusb.c#L89
+    // This is due to a internal bug of tinyusb stack which is fixed recently.
+    // This is fixed in IDF v4.3 and should be reverted when 4.3 is released
+    err = ESP_OK;
+#endif
+
     if (err != ESP_OK) {
         initialized = false;
         return err;
     }
+
     xTaskCreate(usb_device_task, "usbd", 4096, NULL, configMAX_PRIORITIES - 1, NULL);
     return err;
 }
