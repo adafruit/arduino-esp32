@@ -5,12 +5,12 @@ GPIO Matrix and Pin Mux
 Introduction
 ------------
 
-This is a basic introduction on how the peripherals work in the ESP32. This tutorial can be used to understand
+This is a basic introduction to how the peripherals work in the ESP32. This tutorial can be used to understand
 how to define the peripheral usage and its corresponding pins.
 
 In some microcontrollers' architecture, the peripherals are attached to specific pins and cannot be redefined to another one.
 
-For example.
+For example:
 
 The *XYZ* MCU defines that the I2C peripheral SDA signal is the IO5 on the physical pin 10 and the SCL is on the IO6 and physical pin 11.
 
@@ -62,7 +62,7 @@ JTAG                            Dedicated GPIOs
 SD/SDIO/MMC HostController      Dedicated GPIOs
 Motor PWM                       Any GPIO
 SDIO/SPI SlaveController        Dedicated GPIOs
-UART                            Any GPIO
+UART                            Any GPIO[1]
 I2C                             Any GPIO
 I2S                             Any GPIO
 LED PWM                         Any GPIO
@@ -72,7 +72,10 @@ Parallel QSPI                   Dedicated GPIOs
 EMAC                            Dedicated GPIOs
 Pulse Counter                   Any GPIO
 TWAI                            Any GPIO
+USB                             Dedicated GPIOs
 ==============================  ===================================
+
+[1] except for the download/programming mode decided by the bootloader.
 
 This table is present on each datasheet provided by Espressif.
 
@@ -106,16 +109,11 @@ To change the pins, we must call the ``Wire.setPins(int sda, int scl);`` functio
 
 A similar approach also applies for the other peripherals.
 
+.. include:: ../common/datasheet.inc
+
 Resources
 ---------
 
-* `ESP32`_ (Datasheet)
-* `ESP32-S2`_ (Datasheet)
-* `ESP32-C3`_ (Datasheet)
-
 .. _Espressif Systems: https://www.espressif.com 
 .. _Espressif Product Selector: https://products.espressif.com/
-.. _ESP32: https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
-.. _ESP32-S2: https://www.espressif.com/sites/default/files/documentation/esp32-s2_datasheet_en.pdf
-.. _ESP32-C3: https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf
 .. _IO MUX GPIO: https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#iomuxgpio

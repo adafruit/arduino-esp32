@@ -88,12 +88,17 @@ void yield(void);
 #include "esp32-hal-timer.h"
 #include "esp32-hal-bt.h"
 #include "esp32-hal-psram.h"
+#include "esp32-hal-rgb-led.h"
 #include "esp32-hal-cpu.h"
 
 void analogWrite(uint8_t pin, int value);
+int8_t analogGetChannel(uint8_t pin);
 
 //returns chip temperature in Celsius
 float temperatureRead();
+
+//allows user to bypass SPI RAM test routine
+bool testSPIRAM(void);
 
 #if CONFIG_AUTOSTART_ARDUINO
 //enable/disable WDT for Arduino's setup and loop functions

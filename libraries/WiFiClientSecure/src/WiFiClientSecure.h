@@ -32,7 +32,7 @@ protected:
  
     int _lastError = 0;
     int _peek = -1;
-    int _timeout = 0;
+    int _timeout;
     bool _use_insecure;
     const char *_CA_cert;
     const char *_cert;
@@ -40,6 +40,7 @@ protected:
     const char *_pskIdent; // identity for PSK cipher suites
     const char *_psKey; // key in hex for PSK cipher suites
     const char **_alpn_protos;
+    bool _use_ca_bundle;
 
 public:
     WiFiClientSecure *next;
@@ -70,6 +71,7 @@ public:
     void setCertificate(const char *client_ca);
     void setPrivateKey (const char *private_key);
     bool loadCACert(Stream& stream, size_t size);
+    void setCACertBundle(const uint8_t * bundle);
     bool loadCertificate(Stream& stream, size_t size);
     bool loadPrivateKey(Stream& stream, size_t size);
     bool verify(const char* fingerprint, const char* domain_name);
@@ -77,7 +79,8 @@ public:
     void setAlpnProtocols(const char **alpn_protos);
     const mbedtls_x509_crt* getPeerCertificate() { return mbedtls_ssl_get_peer_cert(&sslclient->ssl_ctx); };
     bool getFingerprintSHA256(uint8_t sha256_result[32]) { return get_peer_fingerprint(sslclient, sha256_result); };
-    int setTimeout(uint32_t seconds){ return 0; }
+    int setTimeout(uint32_t seconds);
+    int setSocketOption(int option, char* value, size_t len);
 
     operator bool()
     {
