@@ -50,4 +50,24 @@ static const uint8_t RX = 44;
 static const uint8_t DAC1 = 17;
 static const uint8_t DAC2 = 18;
 
+
+#define PWDN_GPIO_NUM     -1 // connected through expander
+#define RESET_GPIO_NUM    -1 // connected through expander
+#define XCLK_GPIO_NUM      8
+#define SIOD_GPIO_NUM     SDA
+#define SIOC_GPIO_NUM     SCL
+
+#define Y9_GPIO_NUM        7
+#define Y8_GPIO_NUM        9
+#define Y7_GPIO_NUM       10
+#define Y6_GPIO_NUM       12
+#define Y5_GPIO_NUM       14
+#define Y4_GPIO_NUM       16
+#define Y3_GPIO_NUM       15
+#define Y2_GPIO_NUM       13
+#define VSYNC_GPIO_NUM     5
+#define HREF_GPIO_NUM      6
+#define PCLK_GPIO_NUM     11
+
+
 #endif /* Pins_Arduino_h */
