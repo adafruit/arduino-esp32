@@ -31,7 +31,7 @@ static const uint8_t TFT_RST       = 38;
 
 static const uint8_t SD_CS          = 2;
 static const uint8_t SD_CHIP_SELECT = 2;
-static const uint8_t SPEAKER        = 41;
+static const uint8_t SPEAKER        = 45;
 
 static const uint8_t SDA = 33;
 static const uint8_t SCL = 34;
