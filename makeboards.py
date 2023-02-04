@@ -453,6 +453,9 @@ make_board("esp32s2", "adafruit_feather_esp32s2", "", "ADAFRUIT_FEATHER_ESP32S2"
 make_board("esp32s2", "adafruit_feather_esp32s2_tft", "", "ADAFRUIT_FEATHER_ESP32S2_TFT", 4, 2,
            "Adafruit", 'Feather ESP32-S2 TFT', "0x239A", ["0x810F", "0x010F", "0x8110"])
 
+make_board("esp32s2", "adafruit_feather_esp32s2_reversetft", "", "ADAFRUIT_FEATHER_ESP32S2_REVTFT", 4, 2,
+           "Adafruit", 'Feather ESP32-S2 Reverse TFT', "0x239A", ["0x80ED", "0x00ED", "0x80EE"])
+
 make_board("esp32s2", "adafruit_qtpy_esp32s2", "", "ADAFRUIT_QTPY_ESP32S2", 4, 2,
            "Adafruit", 'QT Py ESP32-S2', "0x239A", ["0x8111", "0x0111", "0x8112"])
 
