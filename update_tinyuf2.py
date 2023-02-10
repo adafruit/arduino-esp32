@@ -4,7 +4,7 @@ import urllib.request
 import zipfile
 from multiprocessing import Pool
 
-version = '0.10.2'
+version = '0.12.3'
 print('version {}'.format(version))
 
 # variant name, tinyuf2 bootloader name
@@ -21,6 +21,7 @@ all_variant = [
     ['adafruit_feather_esp32s2_tft', ''],
     ['adafruit_feather_esp32s3', ''],
     ['adafruit_feather_esp32s3_nopsram', ''],
+    ['adafruit_feather_esp32s3_reversetft', 'adafruit_feather_esp32s3_reverse_tft'],
     ['adafruit_feather_esp32s3_tft', ''],
     ['adafruit_funhouse_esp32s2', ''],
     ['adafruit_magtag29_esp32s2', 'adafruit_magtag_29gray'],
@@ -33,7 +34,7 @@ all_variant = [
 def update_variant(v):
     variant = v[0]
     dl_name = v[1] if v[1] else v[0]
-    
+
     # Download from bootloader release
     name = 'tinyuf2-{}-{}.zip'.format(dl_name, version)
     url = 'https://github.com/adafruit/tinyuf2/releases/download/{}/tinyuf2-{}-{}.zip'.format(version, dl_name, version)
@@ -43,7 +44,7 @@ def update_variant(v):
     variant_path = 'variants/{}'.format(variant)
 
     # unzip (will overwrite old files)
-    with zipfile.ZipFile(variant, "r") as zf:        
+    with zipfile.ZipFile(variant, "r") as zf:
         zf.extract("bootloader.bin", variant_path)
         os.renames(os.path.join(variant_path, "bootloader.bin"), os.path.join(variant_path, "bootloader-tinyuf2.bin"))
         zf.extract("tinyuf2.bin", variant_path)

@@ -169,6 +169,7 @@ def build_menu_usb(mcu, name):
     upload_cdc = 'Internal USB'
     upload_uart = 'UART0'
     
+    # ESP32-S3
     if info['usb_mode']:
         require_otg = ' (Requires USB-OTG Mode)'
         upload_cdc = 'USB-OTG CDC (TinyUSB)'
@@ -176,7 +177,7 @@ def build_menu_usb(mcu, name):
         print('{}.menu.USBMode.default=USB-OTG (TinyUSB)'.format(name))
         print('{}.menu.USBMode.default.build.usb_mode=0'.format(name))
         print('{}.menu.USBMode.hwcdc=Hardware CDC and JTAG'.format(name))
-        print('{}.menu.USBMode.hwcdc.build.usb_mode=1'.format(name))                
+        print('{}.menu.USBMode.hwcdc.build.usb_mode=1'.format(name))
         print()
     
     if info['cdc_on_boot'] >= 0:
@@ -480,6 +481,9 @@ make_board("esp32s3", "adafruit_feather_esp32s3_nopsram", "", "ADAFRUIT_FEATHER_
 
 make_board("esp32s3", "adafruit_feather_esp32s3_tft", "", "ADAFRUIT_FEATHER_ESP32S3_TFT", 4, 2,
            "Adafruit", 'Feather ESP32-S3 TFT', "0x239A", ["0x811D", "0x011D", "0x811E"])
+
+make_board("esp32s3", "adafruit_feather_esp32s3_reversetft", "", "ADAFRUIT_FEATHER_ESP32S3_REVTFT", 4, 2,
+           "Adafruit", 'Feather ESP32-S3 Reverse TFT', "0x239A", ["0x8123", "0x0123", "0x8124"])
 
 make_board("esp32s3", "adafruit_qtpy_esp32s3_nopsram", "", "ADAFRUIT_QTPY_ESP32S3_NOPSRAM", 8, 0,
            "Adafruit", 'QT Py ESP32-S3 No PSRAM', "0x239A", ["0x8119", "0x0119", "0x811A"])
