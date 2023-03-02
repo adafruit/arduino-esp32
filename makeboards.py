@@ -240,7 +240,7 @@ def build_menu_partition(mcu, name, flash_size):
 
     if flash_size == 4:
         if info['native_usb']:
-            print("{}.menu.PartitionScheme.tinyuf2=TinyUF2 4MB (1.3MB APP/960KB FFAT)".format(name))
+            print("{}.menu.PartitionScheme.tinyuf2=TinyUF2 4MB (1.3MB APP/960KB FATFS)".format(name))
             print("{}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2".format(name))
             print("{}.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-4MB-tinyuf2".format(name))
             print("{}.menu.PartitionScheme.tinyuf2.upload.maximum_size=1441792".format(name))
@@ -272,7 +272,7 @@ def build_menu_partition(mcu, name, flash_size):
         print("{}.menu.PartitionScheme.min_spiffs.upload.maximum_size=1966080".format(name))
     elif flash_size == 8:
         if info['native_usb']:
-            print("{}.menu.PartitionScheme.tinyuf2=TinyUF2 8MB (2MB APP/3.7MB FFAT)".format(name))
+            print("{}.menu.PartitionScheme.tinyuf2=TinyUF2 8MB (2MB APP/3.7MB FATFS)".format(name))
             print("{}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2".format(name))
             print("{}.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-8MB-tinyuf2".format(name))
             print("{}.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152".format(name))
@@ -283,7 +283,7 @@ def build_menu_partition(mcu, name, flash_size):
         print("{}.menu.PartitionScheme.default_8MB.upload.maximum_size=3342336".format(name))
     elif flash_size == 16:
         if info['native_usb']:
-            print('{}.menu.PartitionScheme.tinyuf2=TinyUF2 16MB (2MB APP/11.6MB FFAT)'.format(name))
+            print('{}.menu.PartitionScheme.tinyuf2=TinyUF2 16MB (2MB APP/11.6MB FATFS)'.format(name))
             print('{}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2'.format(name))
             print('{}.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-16MB-tinyuf2'.format(name))
             print('{}.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152'.format(name))
