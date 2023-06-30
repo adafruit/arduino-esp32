@@ -4,16 +4,15 @@ import urllib.request
 import zipfile
 from multiprocessing import Pool
 
-version = '0.12.3'
+version = '0.15.0'
 print('version {}'.format(version))
 
 # variant name, tinyuf2 bootloader name
 
-'''
-all_variant = [
-    ['adafruit_feather_esp32s2', '']
-]
-'''
+# all_variant = [
+#     ['adafruit_qtpy_esp32s3_n4r2', '']
+# ]
+
 all_variant = [
     #  S2
     ['adafruit_feather_esp32s2', ''],
@@ -27,7 +26,8 @@ all_variant = [
     ['adafruit_magtag29_esp32s2', 'adafruit_magtag_29gray'],
     ['adafruit_metro_esp32s2', ''],
     ['adafruit_qtpy_esp32s2', ''],
-    ['adafruit_qtpy_esp32s3_nopsram', 'adafruit_qtpy_esp32s3']
+    ['adafruit_qtpy_esp32s3_nopsram', 'adafruit_qtpy_esp32s3'],
+    ['adafruit_qtpy_esp32s3_n4r2', ''],
 ]
 
 
