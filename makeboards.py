@@ -433,14 +433,15 @@ def make_board(mcu, name, variant, boarddefine, flash_size, psram_size, vendor, 
     build_menu_debug(mcu, name)
     build_menu_erase(mcu, name)
 
-
-make_board("esp32", "featheresp32", "feather_esp32", "FEATHER_ESP32", 4, 0,
-           "Adafruit", "ESP32 Feather", "", [])
-
-# ---------- ESP32 S2 -----------
+# ---------------------
+# Metro
+# ---------------------
 
 make_board("esp32s2", "adafruit_metro_esp32s2", "", "METRO_ESP32S2", 4, 2,
            "Adafruit", "Metro ESP32-S2", "0x239A", ["0x80DF", "0x00DF", "0x80E0"])
+
+make_board("esp32s3", "adafruit_metro_esp32s3", "", "METRO_ESP32S3", 16, 8,
+           "Adafruit", "Metro ESP32-S3", "0x239A", ["0x8145", "0x0145", "0x8146"])
 
 make_board("esp32s2", "adafruit_magtag29_esp32s2", "", "MAGTAG29_ESP32S2", 4, 2,
            "Adafruit", 'MagTag 2.9"', "0x239A", ["0x80E5", "0x00E5", "0x80E6"])
@@ -448,6 +449,18 @@ make_board("esp32s2", "adafruit_magtag29_esp32s2", "", "MAGTAG29_ESP32S2", 4, 2,
 make_board("esp32s2", "adafruit_funhouse_esp32s2", "", "FUNHOUSE_ESP32S2", 4, 2,
            "Adafruit", 'FunHouse', "0x239A", ["0x80F9", "0x00F9", "0x80FA"])
 
+# ---------------------
+# Feather
+# ---------------------
+
+# ESP32
+make_board("esp32", "featheresp32", "feather_esp32", "FEATHER_ESP32", 4, 0,
+           "Adafruit", "ESP32 Feather", "", [])
+
+make_board("esp32", "adafruit_feather_esp32_v2", "adafruit_feather_esp32_v2", "ADAFRUIT_FEATHER_ESP32_V2", 8, 2,
+           "Adafruit", "Feather ESP32 V2", "", [])
+
+# S2
 make_board("esp32s2", "adafruit_feather_esp32s2", "", "ADAFRUIT_FEATHER_ESP32S2", 4, 2,
            "Adafruit", 'Feather ESP32-S2', "0x239A", ["0x80EB", "0x00EB", "0x80EC"])
 
@@ -457,10 +470,7 @@ make_board("esp32s2", "adafruit_feather_esp32s2_tft", "", "ADAFRUIT_FEATHER_ESP3
 make_board("esp32s2", "adafruit_feather_esp32s2_reversetft", "", "ADAFRUIT_FEATHER_ESP32S2_REVTFT", 4, 2,
            "Adafruit", 'Feather ESP32-S2 Reverse TFT', "0x239A", ["0x80ED", "0x00ED", "0x80EE"])
 
-make_board("esp32", "adafruit_feather_esp32_v2", "adafruit_feather_esp32_v2", "ADAFRUIT_FEATHER_ESP32_V2", 8, 2,
-           "Adafruit", "Feather ESP32 V2", "", [])
 # S3
-
 make_board("esp32s3", "adafruit_feather_esp32s3", "", "ADAFRUIT_FEATHER_ESP32S3", 4, 2,
            "Adafruit", 'Feather ESP32-S3 2MB PSRAM', "0x239A", ["0x811B", "0x011B", "0x811C"])
 
@@ -473,7 +483,10 @@ make_board("esp32s3", "adafruit_feather_esp32s3_tft", "", "ADAFRUIT_FEATHER_ESP3
 make_board("esp32s3", "adafruit_feather_esp32s3_reversetft", "", "ADAFRUIT_FEATHER_ESP32S3_REVTFT", 4, 2,
            "Adafruit", 'Feather ESP32-S3 Reverse TFT', "0x239A", ["0x8123", "0x0123", "0x8124"])
 
-# QT PY
+# ---------------------
+# QT Py
+# ---------------------
+
 make_board("esp32", "adafruit_qtpy_esp32_pico", "adafruit_qtpy_esp32", "ADAFRUIT_QTPY_ESP32_PICO", 8, 2,
            "Adafruit", "QT Py ESP32", "", [])
 
