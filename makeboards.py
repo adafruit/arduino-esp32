@@ -46,7 +46,6 @@ mcu_dict = {
         'psram_opi': 1,
     },
 
-
     'esp32c3': {
         'maximum_data_size': 327680,
         'tarch': 'riscv32',
@@ -108,7 +107,7 @@ def build_upload(mcu, name, flash_size):
     print()
 
 
-def build_build(mcu, name, variant, flash_size, boarddefine):
+def build_build(mcu, name, variant, flash_size, boarddefine, psram_type):
     info = mcu_dict[mcu]
 
     print(f"{name}.build.tarch={info['tarch']}")
@@ -141,7 +140,10 @@ def build_build(mcu, name, variant, flash_size, boarddefine):
 
     if info['psram_opi']:
         print(f'{name}.build.flash_type=qio')
-        print(f'{name}.build.psram_type=qspi')
+        if psram_type == 'opi':
+            print(f'{name}.build.psram_type=opi')
+        else:
+            print(f'{name}.build.psram_type=qspi')
         print(f'{name}.build.memory_type={{build.flash_type}}_{{build.psram_type}}')
 
     print()
@@ -209,24 +211,33 @@ def build_menu_usb(mcu, name):
         print()
 
 
-def build_menu_psram(mcu, name, psram_size):
+def build_menu_psram(mcu, name, psram_size, psram_type):
     info = mcu_dict[mcu]
 
-    enabled_defines = "{}.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM".format(name)
+    enabled_defines = f"{name}.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM"
     if mcu == 'esp32':
         enabled_defines += ' -mfix-esp32-psram-cache-issue -mfix-esp32-psram-cache-strategy=memw'
 
     if psram_size > 0:
         if info['psram_opi']:
-            print(f"{name}.menu.PSRAM.enabled=QSPI PSRAM")
-            print(enabled_defines)
-            print(f"{name}.menu.PSRAM.enabled.build.psram_type=qspi")
-            print(f"{name}.menu.PSRAM.disabled=Disabled")
-            print(f"{name}.menu.PSRAM.disabled.build.defines=")
-            print(f"{name}.menu.PSRAM.disabled.build.psram_type=qspi")
-            print(f"{name}.menu.PSRAM.opi=OPI PSRAM")
-            print(f"{name}.menu.PSRAM.opi.build.defines=-DBOARD_HAS_PSRAM")
-            print(f"{name}.menu.PSRAM.opi.build.psram_type=opi")
+            if psram_type == 'opi':
+                print(f"{name}.menu.PSRAM.opi=OPI PSRAM")
+                print(f"{name}.menu.PSRAM.opi.build.defines=-DBOARD_HAS_PSRAM")
+                print(f"{name}.menu.PSRAM.opi.build.psram_type=opi")
+                print(f"{name}.menu.PSRAM.disabled=Disabled")
+                print(f"{name}.menu.PSRAM.disabled.build.defines=")
+                print(f"{name}.menu.PSRAM.disabled.build.psram_type=opi")
+            else:
+                # print all option qspi/disabled/opi
+                print(f"{name}.menu.PSRAM.enabled=QSPI PSRAM")
+                print(enabled_defines)
+                print(f"{name}.menu.PSRAM.enabled.build.psram_type=qspi")
+                print(f"{name}.menu.PSRAM.disabled=Disabled")
+                print(f"{name}.menu.PSRAM.disabled.build.defines=")
+                print(f"{name}.menu.PSRAM.disabled.build.psram_type=qspi")
+                print(f"{name}.menu.PSRAM.opi=OPI PSRAM")
+                print(f"{name}.menu.PSRAM.opi.build.defines=-DBOARD_HAS_PSRAM")
+                print(f"{name}.menu.PSRAM.opi.build.psram_type=opi")
         else:
             print(f"{name}.menu.PSRAM.enabled=Enabled")
             print(enabled_defines)
@@ -417,15 +428,15 @@ def build_menu_erase(mcu, name):
     print(f"{name}.menu.EraseFlash.all.upload.erase_cmd=-e")
     print()
 
-def make_board(mcu, name, variant, boarddefine, flash_size, psram_size, vendor, product, vid, pid_list):
+def make_board(mcu, name, variant, boarddefine, flash_size, psram_size, psram_type, vendor, product, vid, pid_list):
     if variant == "":
         variant = name
     build_header(name, vendor, product, vid, pid_list)
     build_upload(mcu, name, flash_size)
-    build_build(mcu, name, variant, flash_size, boarddefine)
+    build_build(mcu, name, variant, flash_size, boarddefine, psram_type)
     build_loop(mcu, name)
     build_menu_usb(mcu, name)
-    build_menu_psram(mcu, name, psram_size)
+    build_menu_psram(mcu, name, psram_size, psram_type)
     build_menu_partition(mcu, name, flash_size)
     build_menu_freq(mcu, name)
     build_menu_flash(mcu, name, flash_size)
@@ -437,16 +448,20 @@ def make_board(mcu, name, variant, boarddefine, flash_size, psram_size, vendor, 
 # Metro
 # ---------------------
 
-make_board("esp32s2", "adafruit_metro_esp32s2", "", "METRO_ESP32S2", 4, 2,
+make_board("esp32s2", "adafruit_metro_esp32s2", "", "METRO_ESP32S2",
+           4, 2, '',
            "Adafruit", "Metro ESP32-S2", "0x239A", ["0x80DF", "0x00DF", "0x80E0"])
 
-make_board("esp32s3", "adafruit_metro_esp32s3", "", "METRO_ESP32S3", 16, 8,
+make_board("esp32s3", "adafruit_metro_esp32s3", "", "METRO_ESP32S3",
+           16, 8, 'opi',
            "Adafruit", "Metro ESP32-S3", "0x239A", ["0x8145", "0x0145", "0x8146"])
 
-make_board("esp32s2", "adafruit_magtag29_esp32s2", "", "MAGTAG29_ESP32S2", 4, 2,
+make_board("esp32s2", "adafruit_magtag29_esp32s2", "", "MAGTAG29_ESP32S2",
+           4, 2, '',
            "Adafruit", 'MagTag 2.9"', "0x239A", ["0x80E5", "0x00E5", "0x80E6"])
 
-make_board("esp32s2", "adafruit_funhouse_esp32s2", "", "FUNHOUSE_ESP32S2", 4, 2,
+make_board("esp32s2", "adafruit_funhouse_esp32s2", "", "FUNHOUSE_ESP32S2",
+           4, 2, '',
            "Adafruit", 'FunHouse', "0x239A", ["0x80F9", "0x00F9", "0x80FA"])
 
 # ---------------------
@@ -454,57 +469,73 @@ make_board("esp32s2", "adafruit_funhouse_esp32s2", "", "FUNHOUSE_ESP32S2", 4, 2,
 # ---------------------
 
 # ESP32
-make_board("esp32", "featheresp32", "feather_esp32", "FEATHER_ESP32", 4, 0,
+make_board("esp32", "featheresp32", "feather_esp32", "FEATHER_ESP32",
+           4, 0, '',
            "Adafruit", "ESP32 Feather", "", [])
 
-make_board("esp32", "adafruit_feather_esp32_v2", "adafruit_feather_esp32_v2", "ADAFRUIT_FEATHER_ESP32_V2", 8, 2,
+make_board("esp32", "adafruit_feather_esp32_v2", "adafruit_feather_esp32_v2", "ADAFRUIT_FEATHER_ESP32_V2",
+           8, 2, '',
            "Adafruit", "Feather ESP32 V2", "", [])
 
 # S2
-make_board("esp32s2", "adafruit_feather_esp32s2", "", "ADAFRUIT_FEATHER_ESP32S2", 4, 2,
+make_board("esp32s2", "adafruit_feather_esp32s2", "", "ADAFRUIT_FEATHER_ESP32S2",
+           4, 2, '',
            "Adafruit", 'Feather ESP32-S2', "0x239A", ["0x80EB", "0x00EB", "0x80EC"])
 
-make_board("esp32s2", "adafruit_feather_esp32s2_tft", "", "ADAFRUIT_FEATHER_ESP32S2_TFT", 4, 2,
+make_board("esp32s2", "adafruit_feather_esp32s2_tft", "", "ADAFRUIT_FEATHER_ESP32S2_TFT",
+           4, 2, '',
            "Adafruit", 'Feather ESP32-S2 TFT', "0x239A", ["0x810F", "0x010F", "0x8110"])
 
-make_board("esp32s2", "adafruit_feather_esp32s2_reversetft", "", "ADAFRUIT_FEATHER_ESP32S2_REVTFT", 4, 2,
+make_board("esp32s2", "adafruit_feather_esp32s2_reversetft", "", "ADAFRUIT_FEATHER_ESP32S2_REVTFT",
+           4, 2, '',
            "Adafruit", 'Feather ESP32-S2 Reverse TFT', "0x239A", ["0x80ED", "0x00ED", "0x80EE"])
 
 # S3
-make_board("esp32s3", "adafruit_feather_esp32s3", "", "ADAFRUIT_FEATHER_ESP32S3", 4, 2,
+make_board("esp32s3", "adafruit_feather_esp32s3", "", "ADAFRUIT_FEATHER_ESP32S3",
+           4, 2, '',
            "Adafruit", 'Feather ESP32-S3 2MB PSRAM', "0x239A", ["0x811B", "0x011B", "0x811C"])
 
-make_board("esp32s3", "adafruit_feather_esp32s3_nopsram", "", "ADAFRUIT_FEATHER_ESP32S3_NOPSRAM", 8, 0,
+make_board("esp32s3", "adafruit_feather_esp32s3_nopsram", "", "ADAFRUIT_FEATHER_ESP32S3_NOPSRAM",
+           8, 0, '',
            "Adafruit", 'Feather ESP32-S3 No PSRAM', "0x239A", ["0x8113", "0x0113", "0x8114"])
 
-make_board("esp32s3", "adafruit_feather_esp32s3_tft", "", "ADAFRUIT_FEATHER_ESP32S3_TFT", 4, 2,
+make_board("esp32s3", "adafruit_feather_esp32s3_tft", "", "ADAFRUIT_FEATHER_ESP32S3_TFT",
+           4, 2, '',
            "Adafruit", 'Feather ESP32-S3 TFT', "0x239A", ["0x811D", "0x011D", "0x811E"])
 
-make_board("esp32s3", "adafruit_feather_esp32s3_reversetft", "", "ADAFRUIT_FEATHER_ESP32S3_REVTFT", 4, 2,
+make_board("esp32s3", "adafruit_feather_esp32s3_reversetft", "", "ADAFRUIT_FEATHER_ESP32S3_REVTFT",
+           4, 2, '',
            "Adafruit", 'Feather ESP32-S3 Reverse TFT', "0x239A", ["0x8123", "0x0123", "0x8124"])
 
 # ---------------------
 # QT Py
 # ---------------------
 
-make_board("esp32", "adafruit_qtpy_esp32_pico", "adafruit_qtpy_esp32", "ADAFRUIT_QTPY_ESP32_PICO", 8, 2,
+make_board("esp32", "adafruit_qtpy_esp32_pico", "adafruit_qtpy_esp32", "ADAFRUIT_QTPY_ESP32_PICO",
+           8, 2, '',
            "Adafruit", "QT Py ESP32", "", [])
 
-make_board("esp32c3", "adafruit_qtpy_esp32c3", "", "ADAFRUIT_QTPY_ESP32C3", 4, 0,
+make_board("esp32c3", "adafruit_qtpy_esp32c3", "", "ADAFRUIT_QTPY_ESP32C3",
+           4, 0, '',
            "Adafruit", "QT Py ESP32-C3", "0x303a", ["0x1001"])
 
-make_board("esp32s2", "adafruit_qtpy_esp32s2", "", "ADAFRUIT_QTPY_ESP32S2", 4, 2,
+make_board("esp32s2", "adafruit_qtpy_esp32s2", "", "ADAFRUIT_QTPY_ESP32S2",
+           4, 2, '',
            "Adafruit", 'QT Py ESP32-S2', "0x239A", ["0x8111", "0x0111", "0x8112"])
 
-make_board("esp32s3", "adafruit_qtpy_esp32s3_nopsram", "", "ADAFRUIT_QTPY_ESP32S3_NOPSRAM", 8, 0,
+make_board("esp32s3", "adafruit_qtpy_esp32s3_nopsram", "", "ADAFRUIT_QTPY_ESP32S3_NOPSRAM",
+           8, 0, '',
            "Adafruit", 'QT Py ESP32-S3 No PSRAM', "0x239A", ["0x8119", "0x0119", "0x811A"])
 
-make_board("esp32s3", "adafruit_qtpy_esp32s3_n4r2", "", "ADAFRUIT_QTPY_ESP32S3_N4R2", 4, 2,
+make_board("esp32s3", "adafruit_qtpy_esp32s3_n4r2", "", "ADAFRUIT_QTPY_ESP32S3_N4R2",
+           4, 2, '',
            "Adafruit", 'QT Py ESP32-S3 (4M Flash 2M PSRAM)', "0x239A", ["0x8143", "0x0143", "0x8144"])
 
 # --
-make_board("esp32", "adafruit_itsybitsy_esp32", "", "ADAFRUIT_ITSYBITSY_ESP32", 8, 2,
+make_board("esp32", "adafruit_itsybitsy_esp32", "", "ADAFRUIT_ITSYBITSY_ESP32",
+           8, 2, '',
            "Adafruit", "ItsyBitsy ESP32", "", [])
 
-make_board("esp32s3", "adafruit_matrixportal_esp32s3", "", "ADAFRUIT_MATRIXPORTAL_ESP32S3", 8, 2,
+make_board("esp32s3", "adafruit_matrixportal_esp32s3", "", "ADAFRUIT_MATRIXPORTAL_ESP32S3",
+           8, 2, '',
            "Adafruit", 'MatrixPortal ESP32-S3', "0x239A", ["0x8125", "0x0125", "0x8126"])
