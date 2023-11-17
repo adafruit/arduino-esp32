@@ -246,16 +246,42 @@ def build_menu_psram(mcu, name, psram_size, psram_type):
         print()
 
 
-def build_menu_partition(mcu, name, flash_size):
+def build_menu_partition(mcu, name, flash_size, noota_first):
     info = mcu_dict[mcu]
 
     if flash_size == 4:
         if info['native_usb']:
-            print(f"{name}.menu.PartitionScheme.tinyuf2=TinyUF2 4MB (1.3MB APP/960KB FATFS)")
-            print(f"{name}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2")
-            print(f"{name}.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-4MB-tinyuf2")
-            print(f"{name}.menu.PartitionScheme.tinyuf2.upload.maximum_size=1441792")
-            print(f'{name}.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x2d0000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"')
+            # TinyUF2 with ota
+            tinyuf2_partition = (
+                f"{name}.menu.PartitionScheme.tinyuf2=TinyUF2 4MB (1.3MB APP/960KB FATFS)\n"
+                f"{name}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2\n"
+                f"{name}.menu.PartitionScheme.tinyuf2.build.partitions=tinyuf2-partitions-4MB\n"
+                f"{name}.menu.PartitionScheme.tinyuf2.upload.maximum_size=1441792\n"
+                f'{name}.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x2d0000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"'
+            )
+            # TinyUF2 without ota
+            tinyuf2_noota_partition = (
+                f"{name}.menu.PartitionScheme.tinyuf2_noota=TinyUF2 4MB No OTA (2.7MB APP/960KB FATFS)\n"
+                f"{name}.menu.PartitionScheme.tinyuf2_noota.build.custom_bootloader=bootloader-tinyuf2\n"
+                f"{name}.menu.PartitionScheme.tinyuf2_noota.build.partitions=tinyuf2-partitions-4MB-noota\n"
+                f"{name}.menu.PartitionScheme.tinyuf2_noota.upload.maximum_size=2883584\n"
+                f'{name}.menu.PartitionScheme.tinyuf2_noota.upload.extra_flags=0x2d0000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"'
+            )
+            # TinyUF2 4MB with 3MB OTA
+            # tinyuf2_ota3mb_partition = (
+            #     f"{name}.menu.PartitionScheme.tinyuf2_app3m5=TinyUF2 4MB Large App (3.5MB APP/256KB FATFS)\n"
+            #     f"{name}.menu.PartitionScheme.tinyuf2_app3m5.build.custom_bootloader=bootloader-tinyuf2\n"
+            #     f"{name}.menu.PartitionScheme.tinyuf2_app3m5.build.partitions=tinyuf2-partitions-4MB-app3M5\n"
+            #     f"{name}.menu.PartitionScheme.tinyuf2_app3m5.upload.maximum_size=3604480\n"
+            #     f'{name}.menu.PartitionScheme.tinyuf2_app3m5.upload.extra_flags=0x380000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"'
+            # )
+            if noota_first:
+                print(tinyuf2_noota_partition)
+                print(tinyuf2_partition)
+            else:
+                print(tinyuf2_partition)
+                print(tinyuf2_noota_partition)
+            # print(tinyuf2_ota3mb_partition)
 
         print(f"{name}.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)")
         print(f"{name}.menu.PartitionScheme.default.build.partitions=default")
@@ -283,22 +309,56 @@ def build_menu_partition(mcu, name, flash_size):
         print(f"{name}.menu.PartitionScheme.min_spiffs.upload.maximum_size=1966080")
     elif flash_size == 8:
         if info['native_usb']:
-            print(f"{name}.menu.PartitionScheme.tinyuf2=TinyUF2 8MB (2MB APP/3.7MB FATFS)")
-            print(f"{name}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2")
-            print(f"{name}.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-8MB-tinyuf2")
-            print(f"{name}.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152")
-            print(f'{name}.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"')
+            # TinyUF2 with ota
+            tinyuf2_partition = (
+                f"{name}.menu.PartitionScheme.tinyuf2=TinyUF2 8MB (2MB APP/3.7MB FATFS)\n"
+                f"{name}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2\n"
+                f"{name}.menu.PartitionScheme.tinyuf2.build.partitions=tinyuf2-partitions-8MB\n"
+                f"{name}.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152\n"
+                f'{name}.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"'
+            )
+            # TinyUF2 without ota
+            tinyuf2_noota_partition = (
+                f"{name}.menu.PartitionScheme.tinyuf2_noota=TinyUF2 8MB No OTA (4MB APP/3.7MB FATFS)\n"
+                f"{name}.menu.PartitionScheme.tinyuf2_noota.build.custom_bootloader=bootloader-tinyuf2\n"
+                f"{name}.menu.PartitionScheme.tinyuf2_noota.build.partitions=tinyuf2-partitions-8MB-noota\n"
+                f"{name}.menu.PartitionScheme.tinyuf2_noota.upload.maximum_size=4194304\n"
+                f'{name}.menu.PartitionScheme.tinyuf2_noota.upload.extra_flags=0x410000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"'
+            )
+            if noota_first:
+                print(tinyuf2_noota_partition)
+                print(tinyuf2_partition)
+            else:
+                print(tinyuf2_partition)
+                print(tinyuf2_noota_partition)
 
         print(f"{name}.menu.PartitionScheme.default_8MB=Default (3MB APP/1.5MB SPIFFS)")
         print(f"{name}.menu.PartitionScheme.default_8MB.build.partitions=default_8MB")
         print(f"{name}.menu.PartitionScheme.default_8MB.upload.maximum_size=3342336")
     elif flash_size == 16:
         if info['native_usb']:
-            print(f'{name}.menu.PartitionScheme.tinyuf2=TinyUF2 16MB (2MB APP/11.6MB FATFS)')
-            print(f'{name}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2')
-            print(f'{name}.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-16MB-tinyuf2')
-            print(f'{name}.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152')
-            print(f'{name}.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"')
+            # TinyUF2 with ota
+            tinyuf2_partition = (
+                f'{name}.menu.PartitionScheme.tinyuf2=TinyUF2 16MB (2MB APP/11.6MB FATFS)\n'
+                f'{name}.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2\n'
+                f'{name}.menu.PartitionScheme.tinyuf2.build.partitions=tinyuf2-partitions-16MB\n'
+                f'{name}.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152\n'
+                f'{name}.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"'
+            )
+            # TinyUF2 without ota
+            tinyuf2_noota_partition = (
+                f'{name}.menu.PartitionScheme.tinyuf2_noota=TinyUF2 16MB No OTA(4MB APP/11.6MB FATFS)\n'
+                f'{name}.menu.PartitionScheme.tinyuf2_noota.build.custom_bootloader=bootloader-tinyuf2\n'
+                f'{name}.menu.PartitionScheme.tinyuf2_noota.build.partitions=tinyuf2-partitions-16MB-noota\n'
+                f'{name}.menu.PartitionScheme.tinyuf2_noota.upload.maximum_size=4194304\n'
+                f'{name}.menu.PartitionScheme.tinyuf2_noota.upload.extra_flags=0x410000 "{{runtime.platform.path}}/variants/{{build.variant}}/tinyuf2.bin"'
+            )
+            if noota_first:
+                print(tinyuf2_noota_partition)
+                print(tinyuf2_partition)
+            else:
+                print(tinyuf2_partition)
+                print(tinyuf2_noota_partition)
 
         print(f'{name}.menu.PartitionScheme.default_16MB=Default (6.25MB APP/3.43MB SPIFFS)')
         print(f'{name}.menu.PartitionScheme.default_16MB.build.partitions=default_16MB')
@@ -367,12 +427,6 @@ def build_menu_flash(mcu, name, flash_size):
             print(f"{name}.menu.FlashMode.dio=DIO")
             print(f"{name}.menu.FlashMode.dio.build.flash_mode=dio")
             print(f"{name}.menu.FlashMode.dio.build.boot=dio")
-            print(f"{name}.menu.FlashMode.qout=QOUT")
-            print(f"{name}.menu.FlashMode.qout.build.flash_mode=dout")
-            print(f"{name}.menu.FlashMode.qout.build.boot=qout")
-            print(f"{name}.menu.FlashMode.dout=DOUT")
-            print(f"{name}.menu.FlashMode.dout.build.flash_mode=dout")
-            print(f"{name}.menu.FlashMode.dout.build.boot=dout")
             print()
 
         print(f"{name}.menu.FlashFreq.80=80MHz")
@@ -421,6 +475,7 @@ def build_menu_debug(mcu, name):
     print(f"{name}.menu.DebugLevel.verbose.build.code_debug=5")
     print()
 
+
 def build_menu_erase(mcu, name):
     print(f"{name}.menu.EraseFlash.none=Disabled")
     print(f"{name}.menu.EraseFlash.none.upload.erase_cmd=")
@@ -428,7 +483,18 @@ def build_menu_erase(mcu, name):
     print(f"{name}.menu.EraseFlash.all.upload.erase_cmd=-e")
     print()
 
-def make_board(mcu, name, variant, boarddefine, flash_size, psram_size, psram_type, vendor, product, vid, pid_list):
+
+def build_menu_zigbee(mcu, name):
+    print(f"{name}.menu.ZigbeeMode.default=Disabled")
+    print(f"{name}.menu.ZigbeeMode.default.build.zigbee_mode=")
+    print(f"{name}.menu.ZigbeeMode.default.build.zigbee_libs=")
+    print(f"{name}.menu.ZigbeeMode.zczr=Zigbee ZCZR (coordinator)")
+    print(f"{name}.menu.ZigbeeMode.zczr.build.zigbee_mode=-DZIGBEE_MODE_ZCZR")
+    print(f"{name}.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_command -lzboss_stack.zczr.trace -lzboss_stack.zczr -lzboss_port")
+    print()
+
+
+def make_board(mcu, name, variant, boarddefine, flash_size, psram_size, psram_type, noota_first, vendor, product, vid, pid_list):
     if variant == "":
         variant = name
     build_header(name, vendor, product, vid, pid_list)
@@ -437,31 +503,33 @@ def make_board(mcu, name, variant, boarddefine, flash_size, psram_size, psram_ty
     build_loop(mcu, name)
     build_menu_usb(mcu, name)
     build_menu_psram(mcu, name, psram_size, psram_type)
-    build_menu_partition(mcu, name, flash_size)
+    build_menu_partition(mcu, name, flash_size, noota_first)
     build_menu_freq(mcu, name)
     build_menu_flash(mcu, name, flash_size)
     build_menu_uploadspeed(mcu, name)
     build_menu_debug(mcu, name)
     build_menu_erase(mcu, name)
+    build_menu_zigbee(mcu, name)
+
 
 # ---------------------
 # Metro
 # ---------------------
 
 make_board("esp32s2", "adafruit_metro_esp32s2", "", "METRO_ESP32S2",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", "Metro ESP32-S2", "0x239A", ["0x80DF", "0x00DF", "0x80E0"])
 
 make_board("esp32s3", "adafruit_metro_esp32s3", "", "METRO_ESP32S3",
-           16, 8, 'opi',
+           16, 8, 'opi', False,
            "Adafruit", "Metro ESP32-S3", "0x239A", ["0x8145", "0x0145", "0x8146"])
 
 make_board("esp32s2", "adafruit_magtag29_esp32s2", "", "MAGTAG29_ESP32S2",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'MagTag 2.9"', "0x239A", ["0x80E5", "0x00E5", "0x80E6"])
 
 make_board("esp32s2", "adafruit_funhouse_esp32s2", "", "FUNHOUSE_ESP32S2",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'FunHouse', "0x239A", ["0x80F9", "0x00F9", "0x80FA"])
 
 # ---------------------
@@ -470,41 +538,41 @@ make_board("esp32s2", "adafruit_funhouse_esp32s2", "", "FUNHOUSE_ESP32S2",
 
 # ESP32
 make_board("esp32", "featheresp32", "feather_esp32", "FEATHER_ESP32",
-           4, 0, '',
+           4, 0, '', False,
            "Adafruit", "ESP32 Feather", "", [])
 
 make_board("esp32", "adafruit_feather_esp32_v2", "adafruit_feather_esp32_v2", "ADAFRUIT_FEATHER_ESP32_V2",
-           8, 2, '',
+           8, 2, '', False,
            "Adafruit", "Feather ESP32 V2", "", [])
 
 # S2
 make_board("esp32s2", "adafruit_feather_esp32s2", "", "ADAFRUIT_FEATHER_ESP32S2",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'Feather ESP32-S2', "0x239A", ["0x80EB", "0x00EB", "0x80EC"])
 
 make_board("esp32s2", "adafruit_feather_esp32s2_tft", "", "ADAFRUIT_FEATHER_ESP32S2_TFT",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'Feather ESP32-S2 TFT', "0x239A", ["0x810F", "0x010F", "0x8110"])
 
 make_board("esp32s2", "adafruit_feather_esp32s2_reversetft", "", "ADAFRUIT_FEATHER_ESP32S2_REVTFT",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'Feather ESP32-S2 Reverse TFT', "0x239A", ["0x80ED", "0x00ED", "0x80EE"])
 
 # S3
 make_board("esp32s3", "adafruit_feather_esp32s3", "", "ADAFRUIT_FEATHER_ESP32S3",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'Feather ESP32-S3 2MB PSRAM', "0x239A", ["0x811B", "0x011B", "0x811C"])
 
 make_board("esp32s3", "adafruit_feather_esp32s3_nopsram", "", "ADAFRUIT_FEATHER_ESP32S3_NOPSRAM",
-           8, 0, '',
+           8, 0, '', False,
            "Adafruit", 'Feather ESP32-S3 No PSRAM', "0x239A", ["0x8113", "0x0113", "0x8114"])
 
 make_board("esp32s3", "adafruit_feather_esp32s3_tft", "", "ADAFRUIT_FEATHER_ESP32S3_TFT",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'Feather ESP32-S3 TFT', "0x239A", ["0x811D", "0x011D", "0x811E"])
 
 make_board("esp32s3", "adafruit_feather_esp32s3_reversetft", "", "ADAFRUIT_FEATHER_ESP32S3_REVTFT",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'Feather ESP32-S3 Reverse TFT', "0x239A", ["0x8123", "0x0123", "0x8124"])
 
 # ---------------------
@@ -512,30 +580,38 @@ make_board("esp32s3", "adafruit_feather_esp32s3_reversetft", "", "ADAFRUIT_FEATH
 # ---------------------
 
 make_board("esp32", "adafruit_qtpy_esp32_pico", "adafruit_qtpy_esp32", "ADAFRUIT_QTPY_ESP32_PICO",
-           8, 2, '',
+           8, 2, '', False,
            "Adafruit", "QT Py ESP32", "", [])
 
 make_board("esp32c3", "adafruit_qtpy_esp32c3", "", "ADAFRUIT_QTPY_ESP32C3",
-           4, 0, '',
+           4, 0, '', False,
            "Adafruit", "QT Py ESP32-C3", "0x303a", ["0x1001"])
 
 make_board("esp32s2", "adafruit_qtpy_esp32s2", "", "ADAFRUIT_QTPY_ESP32S2",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'QT Py ESP32-S2', "0x239A", ["0x8111", "0x0111", "0x8112"])
 
 make_board("esp32s3", "adafruit_qtpy_esp32s3_nopsram", "", "ADAFRUIT_QTPY_ESP32S3_NOPSRAM",
-           8, 0, '',
+           8, 0, '', False,
            "Adafruit", 'QT Py ESP32-S3 No PSRAM', "0x239A", ["0x8119", "0x0119", "0x811A"])
 
 make_board("esp32s3", "adafruit_qtpy_esp32s3_n4r2", "", "ADAFRUIT_QTPY_ESP32S3_N4R2",
-           4, 2, '',
+           4, 2, '', False,
            "Adafruit", 'QT Py ESP32-S3 (4M Flash 2M PSRAM)', "0x239A", ["0x8143", "0x0143", "0x8144"])
 
 # --
 make_board("esp32", "adafruit_itsybitsy_esp32", "", "ADAFRUIT_ITSYBITSY_ESP32",
-           8, 2, '',
+           8, 2, '', False,
            "Adafruit", "ItsyBitsy ESP32", "", [])
 
 make_board("esp32s3", "adafruit_matrixportal_esp32s3", "", "ADAFRUIT_MATRIXPORTAL_ESP32S3",
-           8, 2, '',
+           8, 2, '', False,
            "Adafruit", 'MatrixPortal ESP32-S3', "0x239A", ["0x8125", "0x0125", "0x8126"])
+
+make_board("esp32s3", "adafruit_camera_esp32s3", "", "ADAFRUIT_CAMERA_ESP32S3",
+           4, 2, 'qspi', True,
+           "Adafruit", 'pyCamera S3', "0x239A", ["0x0117", "0x8117", "0x8118"])
+
+make_board("esp32s3", "adafruit_qualia_s3_rgb666", "", "QUALIA_S3_RGB666",
+           16, 8, 'opi', False,
+           "Adafruit", 'Qualia ESP32-S3 RGB666', "0x239A", ["0x8147", "0x0147", "0x8148"])
