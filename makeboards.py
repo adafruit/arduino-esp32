@@ -73,6 +73,9 @@ def build_header(name, vendor, product, vid, pid_list):
     for i in range(len(pid_list)):
         print(f"{name}.vid.{i}={vid}")
         print(f"{name}.pid.{i}={pid_list[i]}")
+    for i in range(len(pid_list)):
+        print(f"{name}.upload_port.{i}.vid={vid}")
+        print(f"{name}.upload_port.{i}.pid={pid_list[i]}")
     print()
 
 
@@ -147,6 +150,7 @@ def build_build(mcu, name, variant, flash_size, boarddefine, psram_type):
         print(f'{name}.build.memory_type={{build.flash_type}}_{{build.psram_type}}')
 
     print()
+
 
 def build_loop(mcu, name):
     info = mcu_dict[mcu]
@@ -490,7 +494,7 @@ def build_menu_zigbee(mcu, name):
     print(f"{name}.menu.ZigbeeMode.default.build.zigbee_libs=")
     print(f"{name}.menu.ZigbeeMode.zczr=Zigbee ZCZR (coordinator)")
     print(f"{name}.menu.ZigbeeMode.zczr.build.zigbee_mode=-DZIGBEE_MODE_ZCZR")
-    print(f"{name}.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_command -lzboss_stack.zczr.trace -lzboss_stack.zczr -lzboss_port")
+    print(f"{name}.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_command -lzboss_stack.zczr -lzboss_port")
     print()
 
 
@@ -585,7 +589,7 @@ make_board("esp32", "adafruit_qtpy_esp32_pico", "adafruit_qtpy_esp32", "ADAFRUIT
 
 make_board("esp32c3", "adafruit_qtpy_esp32c3", "", "ADAFRUIT_QTPY_ESP32C3",
            4, 0, '', False,
-           "Adafruit", "QT Py ESP32-C3", "0x303a", ["0x1001"])
+           "Adafruit", "QT Py ESP32-C3", "", [])
 
 make_board("esp32s2", "adafruit_qtpy_esp32s2", "", "ADAFRUIT_QTPY_ESP32S2",
            4, 2, '', False,
