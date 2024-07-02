@@ -31,6 +31,12 @@ static const uint8_t RX = 21;
 static const uint8_t SDA = 41;
 static const uint8_t SCL = 42;
 
+// not broken out
+static const uint8_t SS = 4;
+static const uint8_t MOSI = 5;
+static const uint8_t SCK = 6;
+static const uint8_t MISO = 7;
+
 static const uint8_t FAN = 33;
 
 #endif /* Pins_Arduino_h */
