@@ -18,6 +18,8 @@ static const uint8_t LED_BUILTIN = 15;
 
 static const uint8_t TX = 16;
 static const uint8_t RX = 17;
+#define TX1 TX
+#define RX1 RX
 
 static const uint8_t SDA = 19;
 static const uint8_t SCL = 18;
