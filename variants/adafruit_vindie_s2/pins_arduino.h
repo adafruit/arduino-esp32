@@ -28,8 +28,8 @@ static const uint8_t RX = 21;
 #define TX1 TX
 #define RX1 RX
 
-static const uint8_t SDA = 11;
-static const uint8_t SCL = 12;
+static const uint8_t SDA = 12;
+static const uint8_t SCL = 11;
 
 // not broken out
 static const uint8_t SS = 4;
