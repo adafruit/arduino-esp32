@@ -4,7 +4,7 @@ import zipfile
 from multiprocessing import Pool
 
 version = "0.20.1"
-print("version {}".format(version))
+print("version", version)
 
 # variant name, tinyuf2 bootloader name
 
