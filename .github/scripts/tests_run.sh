@@ -9,21 +9,7 @@ function run_test() {
     local sketchname=$(basename $sketchdir)
     local result=0
     local error=0
-
-    # If the target or platform is listed as false, skip the sketch. Otherwise, include it.
-    if [ -f $sketchdir/ci.json ]; then
-        is_target=$(jq -r --arg target $target '.targets[$target]' $sketchdir/ci.json)
-        selected_platform=$(jq -r --arg platform $platform '.platforms[$platform]' $sketchdir/ci.json)
-    else
-        is_target="true"
-        selected_platform="true"
-    fi
-
-    if [[ $is_target == "false" ]] || [[ $selected_platform == "false" ]]; then
-      printf "\033[93mSkipping $sketchname test for $target, platform: $platform\033[0m\n"
-      printf "\n\n\n"
-      return 0
-    fi
+    local sdkconfig_path
 
     if [ $options -eq 0 ] && [ -f $sketchdir/ci.json ]; then
         len=`jq -r --arg target $target '.fqbn[$target] | length' $sketchdir/ci.json`
@@ -32,6 +18,37 @@ function run_test() {
         fi
     else
         len=1
+    fi
+
+    if [ $len -eq 1 ]; then
+        sdkconfig_path="$HOME/.arduino/tests/$sketchname/build.tmp/sdkconfig"
+    else
+        sdkconfig_path="$HOME/.arduino/tests/$sketchname/build0.tmp/sdkconfig"
+    fi
+
+    if [ -f $sketchdir/ci.json ]; then
+        # If the target or platform is listed as false, skip the sketch. Otherwise, include it.
+        is_target=$(jq -r --arg target $target '.targets[$target]' $sketchdir/ci.json)
+        selected_platform=$(jq -r --arg platform $platform '.platforms[$platform]' $sketchdir/ci.json)
+
+        if [[ $is_target == "false" ]] || [[ $selected_platform == "false" ]]; then
+            printf "\033[93mSkipping $sketchname test for $target, platform: $platform\033[0m\n"
+            printf "\n\n\n"
+            return 0
+        fi
+    fi
+
+    if [ ! -f $sdkconfig_path ]; then
+        printf "\033[93mSketch $sketchname not built\nMight be due to missing target requirements or build failure\033[0m\n"
+        printf "\n\n\n"
+        return 0
+    fi
+
+    local right_target=$(grep -E "^CONFIG_IDF_TARGET=\"$target\"$" "$sdkconfig_path")
+    if [ -z "$right_target" ]; then
+        printf "\033[91mError: Sketch $sketchname compiled for different target\n\033[0m\n"
+        printf "\n\n\n"
+        return 1
     fi
 
     if [ $len -eq 1 ]; then
@@ -69,6 +86,10 @@ function run_test() {
             if [[ -f "$sketchdir/scenario.yaml" ]]; then
                 extra_args+=" --wokwi-scenario $sketchdir/scenario.yaml"
             fi
+            if [[ -f "$sketchdir/diagram.$target.json" ]]; then
+                extra_args+=" --wokwi-diagram $sketchdir/diagram.$target.json"
+            fi
+
         elif [ $platform == "qemu" ]; then
             PATH=$HOME/qemu/bin:$PATH
             extra_args="--embedded-services qemu --qemu-image-path $build_dir/$sketchname.ino.merged.bin"
@@ -85,15 +106,17 @@ function run_test() {
             extra_args="--embedded-services esp,arduino"
         fi
 
+        rm $sketchdir/diagram.json 2>/dev/null || true
+
         result=0
-        printf "\033[95mpytest tests --build-dir $build_dir -k test_$sketchname --junit-xml=$report_file $extra_args\033[0m\n"
-        bash -c "set +e; pytest tests --build-dir $build_dir -k test_$sketchname --junit-xml=$report_file $extra_args; exit \$?" || result=$?
+        printf "\033[95mpytest $sketchdir/test_$sketchname.py --build-dir $build_dir --junit-xml=$report_file $extra_args\033[0m\n"
+        bash -c "set +e; pytest $sketchdir/test_$sketchname.py --build-dir $build_dir --junit-xml=$report_file $extra_args; exit \$?" || result=$?
         printf "\n"
         if [ $result -ne 0 ]; then
             result=0
             printf "\033[95mRetrying test: $sketchname -- Config: $i\033[0m\n"
-            printf "\033[95mpytest tests --build-dir $build_dir -k test_$sketchname --junit-xml=$report_file $extra_args\033[0m\n"
-            bash -c "set +e; pytest tests --build-dir $build_dir -k test_$sketchname --junit-xml=$report_file $extra_args; exit \$?" || result=$?
+            printf "\033[95mpytest $sketchdir/test_$sketchname.py --build-dir $build_dir --junit-xml=$report_file $extra_args\033[0m\n"
+            bash -c "set +e; pytest $sketchdir/test_$sketchname.py --build-dir $build_dir --junit-xml=$report_file $extra_args; exit \$?" || result=$?
             printf "\n"
             if [ $result -ne 0 ]; then
               printf "\033[91mFailed test: $sketchname -- Config: $i\033[0m\n\n"
@@ -128,6 +151,10 @@ while [ ! -z "$1" ]; do
     -W )
         shift
         wokwi_timeout=$1
+        if [[ -z $WOKWI_CLI_TOKEN ]]; then
+            echo "Wokwi CLI token is not set"
+            exit 1
+        fi
         platform="wokwi"
         ;;
     -o )
@@ -204,7 +231,8 @@ else
   fi
 
   set +e
-  ${COUNT_SKETCHES} $test_folder $target
+  # Ignore requirements as we don't have the libs. The requirements will be checked in the run_test function
+  ${COUNT_SKETCHES} "$test_folder" "$target" "1"
   sketchcount=$?
   set -e
   sketches=$(cat sketches.txt)

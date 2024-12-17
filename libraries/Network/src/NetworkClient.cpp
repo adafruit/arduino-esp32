@@ -148,9 +148,13 @@ public:
 
   void clear() {
     if (r_available()) {
-      fillBuffer();
+      _pos = _fill;
+      while (fillBuffer()) {
+        _pos = _fill;
+      }
     }
-    _pos = _fill;
+    _pos = 0;
+    _fill = 0;
   }
 };
 
@@ -369,7 +373,9 @@ int NetworkClient::read() {
   return data;
 }
 
-void NetworkClient::flush() {}
+void NetworkClient::flush() {
+  clear();
+}
 
 size_t NetworkClient::write(const uint8_t *buf, size_t size) {
   int res = 0;
@@ -543,7 +549,7 @@ uint8_t NetworkClient::connected() {
   }
   if (_connected) {
     uint8_t dummy;
-    int res = recv(fd(), &dummy, 0, MSG_DONTWAIT);
+    int res = recv(fd(), &dummy, 1, MSG_DONTWAIT | MSG_PEEK);
     // avoid unused var warning by gcc
     (void)res;
     // recv only sets errno if res is <= 0

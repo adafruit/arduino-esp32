@@ -1,3 +1,17 @@
+// Copyright 2024 Espressif Systems (Shanghai) PTE LTD
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "OThreadCLI.h"
 #include "OThreadCLI_Util.h"
 
@@ -49,7 +63,7 @@ bool otDeviceSetup(
   }
   if (i != nCmds1) {
     log_e("Sorry, OpenThread Network setup failed!");
-    neopixelWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... failed!
+    rgbLedWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... failed!
     return false;
   }
   Serial.println("OpenThread started.\r\nWaiting for activating correct Device Role.");
@@ -63,7 +77,7 @@ bool otDeviceSetup(
   Serial.println();
   if (!tries) {
     log_e("Sorry, Device Role failed by timeout! Current Role: %s.", otGetStringDeviceRole());
-    neopixelWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... failed!
+    rgbLedWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... failed!
     return false;
   }
   Serial.printf("Device is %s.\r\n", otGetStringDeviceRole());
@@ -74,17 +88,17 @@ bool otDeviceSetup(
   }
   if (i != nCmds2) {
     log_e("Sorry, OpenThread CoAP setup failed!");
-    neopixelWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... failed!
+    rgbLedWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... failed!
     return false;
   }
   Serial.println("OpenThread setup done. Node is ready.");
   // all fine! LED goes and stays Blue
-  neopixelWrite(RGB_BUILTIN, 0, 0, 64);  // BLUE ... Swtich is ready!
+  rgbLedWrite(RGB_BUILTIN, 0, 0, 64);  // BLUE ... Switch is ready!
   return true;
 }
 
 void setupNode() {
-  // tries to set the Thread Network node and only returns when succeded
+  // tries to set the Thread Network node and only returns when succeeded
   bool startedCorrectly = false;
   while (!startedCorrectly) {
     startedCorrectly |= otDeviceSetup(
@@ -138,19 +152,19 @@ bool otCoapPUT(bool lampState) {
   return false;
 }
 
-// this fucntion is used by the Switch mode to check the BOOT Button and send the user action to the Lamp node
+// this function is used by the Switch mode to check the BOOT Button and send the user action to the Lamp node
 void checkUserButton() {
   static long unsigned int lastPress = 0;
   const long unsigned int debounceTime = 500;
-  static bool lastLampState = true;  // first button press will turn the Lamp OFF from inital Green
+  static bool lastLampState = true;  // first button press will turn the Lamp OFF from initial Green
 
   pinMode(USER_BUTTON, INPUT_PULLUP);  // C6/H2 User Button
   if (millis() > lastPress + debounceTime && digitalRead(USER_BUTTON) == LOW) {
     lastLampState = !lastLampState;
     if (!otCoapPUT(lastLampState)) {  // failed: Lamp Node is not responding due to be off or unreachable
       // timeout from the CoAP PUT message... restart the node.
-      neopixelWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... something failed!
-      Serial.println("Reseting the Node as Switch... wait.");
+      rgbLedWrite(RGB_BUILTIN, 255, 0, 0);  // RED ... something failed!
+      Serial.println("Resetting the Node as Switch... wait.");
       // start over...
       setupNode();
     }
@@ -161,7 +175,7 @@ void checkUserButton() {
 void setup() {
   Serial.begin(115200);
   // LED starts RED, indicating not connected to Thread network.
-  neopixelWrite(RGB_BUILTIN, 64, 0, 0);
+  rgbLedWrite(RGB_BUILTIN, 64, 0, 0);
   OThreadCLI.begin(false);     // No AutoStart is necessary
   OThreadCLI.setTimeout(250);  // waits 250ms for the OpenThread CLI response
   setupNode();

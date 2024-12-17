@@ -64,28 +64,27 @@ Supported Operating Systems
 ---------------------------
 
 +-------------------+-------------------+-------------------+
-| |windows-logo|    | |linux-logo|      | |macos-logo|      |
+| |windows-logo|    | |linux-logo|      | |macOS-logo|      |
 +-------------------+-------------------+-------------------+
 | Windows           | Linux             | macOS             |
 +-------------------+-------------------+-------------------+
 
 .. |windows-logo| image:: ../_static/logo_windows.png
 .. |linux-logo| image:: ../_static/logo_linux.png
-.. |macos-logo| image:: ../_static/logo_macos.png
+.. |macOS-logo| image:: ../_static/logo_macos.png
 
 Supported IDEs
 ---------------------------
 
 Here is the list of supported IDE for Arduino ESP32 support integration.
 
-+-------------------+-------------------+
-| |arduino-logo|    | |pio-logo|        |
-+-------------------+-------------------+
-| Arduino IDE       | PlatformIO        |
-+-------------------+-------------------+
++-------------------+
+| |arduino-logo|    |
++-------------------+
+| Arduino IDE       |
++-------------------+
 
 .. |arduino-logo| image:: ../_static/logo_arduino.png
-.. |pio-logo| image:: ../_static/logo_pio.png
 
 See `Installing Guides <installing.html>`_ for more details on how to install the Arduino ESP32 support.
 
