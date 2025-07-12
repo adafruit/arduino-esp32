@@ -33632,7 +33632,7 @@ atmegazero_esp32s2.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM
 
 atmegazero_esp32s2.menu.PartitionScheme.tinyuf2=TinyUF2 16MB (2MB APP/11.6MB FFAT)
 atmegazero_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2
-atmegazero_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-16MB-tinyuf2
+atmegazero_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_partitions=tinyuf2-partitions-16MB
 atmegazero_esp32s2.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152
 atmegazero_esp32s2.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 atmegazero_esp32s2.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
@@ -35159,7 +35159,7 @@ XIAO_ESP32S3.menu.PartitionScheme.max_app_8MB.build.partitions=max_app_8MB
 XIAO_ESP32S3.menu.PartitionScheme.max_app_8MB.upload.maximum_size=8257536
 XIAO_ESP32S3.menu.PartitionScheme.tinyuf2=TinyUF2 8MB (2MB APP/3.7MB FFAT)
 XIAO_ESP32S3.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2
-XIAO_ESP32S3.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-8MB-tinyuf2
+XIAO_ESP32S3.menu.PartitionScheme.tinyuf2.build.custom_partitions=tinyuf2-partitions-8MB
 XIAO_ESP32S3.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152
 XIAO_ESP32S3.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 
@@ -35656,7 +35656,7 @@ department_of_alchemy_minimain_esp32s2.menu.PSRAM.disabled.build.defines=
 
 department_of_alchemy_minimain_esp32s2.menu.PartitionScheme.tinyuf2=TinyUF2 4MB (1.3MB APP/960KB FFAT)
 department_of_alchemy_minimain_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2
-department_of_alchemy_minimain_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-4MB-tinyuf2
+department_of_alchemy_minimain_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_partitions=tinyuf2-partitions-4MB
 department_of_alchemy_minimain_esp32s2.menu.PartitionScheme.tinyuf2.upload.maximum_size=1441792
 department_of_alchemy_minimain_esp32s2.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 department_of_alchemy_minimain_esp32s2.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
@@ -36845,7 +36845,7 @@ cytron_maker_feather_aiot_s3.menu.PSRAM.disabled.build.psram_type=qspi
 
 cytron_maker_feather_aiot_s3.menu.PartitionScheme.tinyuf2=TinyUF2 8MB (2MB APP/3.7MB FFAT)
 cytron_maker_feather_aiot_s3.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2
-cytron_maker_feather_aiot_s3.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-8MB-tinyuf2
+cytron_maker_feather_aiot_s3.menu.PartitionScheme.tinyuf2.build.custom_partitions=tinyuf2-partitions-8MB
 cytron_maker_feather_aiot_s3.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152
 cytron_maker_feather_aiot_s3.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 cytron_maker_feather_aiot_s3.menu.PartitionScheme.default_8MB=Default (3MB APP/1.5MB SPIFFS)
@@ -37018,7 +37018,7 @@ redpill_esp32s3.menu.PSRAM.opi.build.psram_type=opi
 
 redpill_esp32s3.menu.PartitionScheme.tinyuf2=TinyUF2 8MB (2MB APP/3.7MB FFAT)
 redpill_esp32s3.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2
-redpill_esp32s3.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-8MB-tinyuf2
+redpill_esp32s3.menu.PartitionScheme.tinyuf2.build.custom_partitions=tinyuf2-partitions-8MB
 redpill_esp32s3.menu.PartitionScheme.tinyuf2.upload.maximum_size=2097152
 redpill_esp32s3.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x410000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 redpill_esp32s3.menu.PartitionScheme.default_8MB=Default (3MB APP/1.5MB SPIFFS)
@@ -40184,7 +40184,7 @@ sensebox_mcu_esp32s2.menu.PSRAM.disabled.build.defines=
 
 sensebox_mcu_esp32s2.menu.PartitionScheme.tinyuf2=TinyUF2 4MB (1.3MB APP/960KB FATFS)
 sensebox_mcu_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_bootloader=bootloader-tinyuf2
-sensebox_mcu_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_partitions=partitions-4MB-tinyuf2
+sensebox_mcu_esp32s2.menu.PartitionScheme.tinyuf2.build.custom_partitions=tinyuf2-partitions-4MB
 sensebox_mcu_esp32s2.menu.PartitionScheme.tinyuf2.upload.maximum_size=1441792
 sensebox_mcu_esp32s2.menu.PartitionScheme.tinyuf2.upload.extra_flags=0x2d0000 "{runtime.platform.path}/variants/{build.variant}/tinyuf2.bin"
 sensebox_mcu_esp32s2.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
