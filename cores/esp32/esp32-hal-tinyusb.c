@@ -398,7 +398,7 @@ __attribute__((weak)) uint16_t const *tud_descriptor_string_cb(uint8_t index, ui
 /**
  * @brief Invoked when received GET BOS DESCRIPTOR request.
  */
-uint8_t const *tud_descriptor_bos_cb(void) {
+__attribute__((weak)) uint8_t const *tud_descriptor_bos_cb(void) {
   //log_v("");
   return tinyusb_bos_descriptor;
 }
@@ -410,7 +410,7 @@ __attribute__((weak)) bool tinyusb_vendor_control_request_cb(uint8_t rhport, uin
 /**
  * @brief Handle WebUSB and Vendor requests.
  */
-bool tud_vendor_control_xfer_cb(uint8_t rhport, uint8_t stage, tusb_control_request_t const *request) {
+__attribute__((weak)) bool tud_vendor_control_xfer_cb(uint8_t rhport, uint8_t stage, tusb_control_request_t const *request) {
   if (WEBUSB_ENABLED && (request->bRequest == VENDOR_REQUEST_WEBUSB || (request->bRequest == VENDOR_REQUEST_MICROSOFT && request->wIndex == 7))) {
     // we only care for SETUP stage
     if (stage == CONTROL_STAGE_SETUP) {
