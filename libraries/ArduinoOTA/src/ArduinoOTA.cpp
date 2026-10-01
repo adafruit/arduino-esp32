@@ -16,6 +16,7 @@
 #define LWIP_OPEN_SRC
 #endif
 #include <functional>
+#include <inttypes.h>
 #include "ArduinoOTA.h"
 #include "NetworkClient.h"
 #include "ESPmDNS.h"
@@ -28,7 +29,7 @@
 
 ArduinoOTAClass::ArduinoOTAClass(UpdateClass *updater)
   : _updater(updater), _port(0), _initialized(false), _rebootOnSuccess(true), _mdnsEnabled(true), _state(OTA_IDLE), _size(0), _cmd(0), _ota_port(0),
-    _ota_timeout(1000), _start_callback(NULL), _end_callback(NULL), _error_callback(NULL), _progress_callback(NULL)
+    _ota_timeout(1000), _prepare_callback(NULL), _start_callback(NULL), _end_callback(NULL), _error_callback(NULL), _progress_callback(NULL)
 #ifdef UPDATE_SIGN
     ,
     _sign(NULL)
@@ -38,6 +39,11 @@ ArduinoOTAClass::ArduinoOTAClass(UpdateClass *updater)
 
 ArduinoOTAClass::~ArduinoOTAClass() {
   end();
+}
+
+ArduinoOTAClass &ArduinoOTAClass::onPrepare(THandlerFunction fn) {
+  _prepare_callback = fn;
+  return *this;
 }
 
 ArduinoOTAClass &ArduinoOTAClass::onStart(THandlerFunction fn) {
@@ -167,7 +173,12 @@ void ArduinoOTAClass::begin() {
     _port = 3232;
   }
 
+#if CONFIG_LWIP_IPV6
+  // Bind dual-stack (::) so IPv4 and IPv6 OTA invites are accepted
+  if (!_udp_ota.begin(IN6ADDR_ANY, _port)) {
+#else
   if (!_udp_ota.begin(_port)) {
+#endif
     log_e("udp bind failed");
     return;
   }
@@ -176,7 +187,7 @@ void ArduinoOTAClass::begin() {
     char tmp[20];
     uint8_t mac[6];
     Network.macAddress(mac);
-    sprintf(tmp, "esp32-%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    snprintf(tmp, sizeof(tmp), "esp32-%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     _hostname = tmp;
   }
 #ifdef CONFIG_MDNS_MAX_INTERFACES
@@ -187,7 +198,7 @@ void ArduinoOTAClass::begin() {
 #endif
   _initialized = true;
   _state = OTA_IDLE;
-  log_i("OTA server at: %s.local:%u", _hostname.c_str(), _port);
+  log_i("OTA server at: %s.local:%d", _hostname.c_str(), _port);
 }
 
 int ArduinoOTAClass::parseInt() {
@@ -323,6 +334,10 @@ void ArduinoOTAClass::_runUpdate() {
     return;
   }
 
+  if (_prepare_callback) {
+    _prepare_callback();
+  }
+
 #ifdef UPDATE_SIGN
   // Install signature verification if enabled
   if (_sign) {
@@ -379,8 +394,8 @@ void ArduinoOTAClass::_runUpdate() {
     }
     if (!waited) {
       if (written && tried++ < 3) {
-        log_i("Try[%u]: %u", tried, written);
-        if (!client.printf("%lu", written)) {
+        log_i("Try[%" PRIu32 "]: %" PRIu32, tried, written);
+        if (!client.printf("%" PRIu32, written)) {
           log_e("failed to respond");
           _state = OTA_IDLE;
           break;
@@ -396,7 +411,7 @@ void ArduinoOTAClass::_runUpdate() {
       return;
     }
     if (!available) {
-      log_e("No Data: %u", waited);
+      log_e("No Data: %lu", (unsigned long)waited);
       _state = OTA_IDLE;
       break;
     }
@@ -407,7 +422,7 @@ void ArduinoOTAClass::_runUpdate() {
     }
     size_t r = client.read(buf, available);
     if (r != available) {
-      log_w("didn't read enough! %u != %u", r, available);
+      log_w("didn't read enough! %lu != %lu", (unsigned long)r, (unsigned long)available);
       if ((int32_t)r < 0) {
         delay(1);
         continue;  //let's not try to write 4 gigabytes when client.read returns -1
@@ -417,9 +432,9 @@ void ArduinoOTAClass::_runUpdate() {
     written = _updater->write(buf, r);
     if (written > 0) {
       if (written != r) {
-        log_w("didn't write enough! %u != %u", written, r);
+        log_w("didn't write enough! %" PRIu32 " != %lu", (unsigned long)written, r);
       }
-      if (!client.printf("%lu", written)) {
+      if (!client.printf("%" PRIu32, written)) {
         log_w("failed to respond");
       }
       total += written;

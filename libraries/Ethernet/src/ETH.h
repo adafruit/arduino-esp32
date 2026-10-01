@@ -129,6 +129,18 @@ typedef emac_rmii_clock_mode_t eth_clock_mode_t;
 
 #define ETH_PHY_ADDR_AUTO ESP_ETH_PHY_ADDR_AUTO
 
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(6, 0, 0)
+#if defined __has_include && __has_include("esp_eth_phy_dm9051.h")
+#define CONFIG_ETH_SPI_ETHERNET_DM9051 1
+#endif
+#if defined __has_include && __has_include("esp_eth_phy_w5500.h")
+#define CONFIG_ETH_SPI_ETHERNET_W5500 1
+#endif
+#if defined __has_include && __has_include("esp_eth_phy_ksz8851snl.h")
+#define CONFIG_ETH_SPI_ETHERNET_KSZ8851SNL 1
+#endif
+#endif
+
 typedef enum {
 #if CONFIG_ETH_USE_ESP32_EMAC
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 4, 0)
@@ -196,6 +208,9 @@ public:
   // This function must be called before `begin()`
   void setTaskStackSize(size_t size);
 
+  // Set the polling period (ms) used by the W5500 MAC when no IRQ pin is set. Must be called before `begin()`.
+  void setPollPeriod(uint32_t poll_period_ms);
+
   // ETH Handle APIs
   bool fullDuplex() const;
   bool setFullDuplex(bool on);
@@ -209,6 +224,15 @@ public:
   uint32_t phyAddr() const;
 
   esp_eth_handle_t handle() const;
+
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 5, 0)
+  bool addMacFilter(uint8_t *mac_addr);
+  bool removeMacFilter(uint8_t *mac_addr);
+  bool addMulticastFilter(IPAddress address);
+  bool removeMulticastFilter(IPAddress address);
+  // ON by default
+  bool receiveAllMulticast(bool on);
+#endif
 
 #if ETH_SPI_SUPPORTS_CUSTOM
   static esp_err_t _eth_spi_read(void *ctx, uint32_t cmd, uint32_t addr, void *data, uint32_t data_len);
@@ -241,7 +265,7 @@ private:
   bool _auto_negotiation;
 #if ETH_SPI_SUPPORTS_CUSTOM
   SPIClass *_spi;
-  char _cs_str[10];
+  char _cs_str[12];
 #endif
   uint8_t _spi_freq_mhz;
   int8_t _pin_cs;
@@ -251,12 +275,13 @@ private:
   int8_t _pin_miso;
   int8_t _pin_mosi;
 #if CONFIG_ETH_USE_ESP32_EMAC
-  int8_t _pin_mcd;
+  int8_t _pin_mdc;
   int8_t _pin_mdio;
   int8_t _pin_power;
   int8_t _pin_rmii_clock;
 #endif /* CONFIG_ETH_USE_ESP32_EMAC */
   size_t _task_stack_size;
+  uint32_t _poll_period_ms;
   network_event_handle_t _eth_connected_event_handle;
 
   static bool ethDetachBus(void *bus_pointer);

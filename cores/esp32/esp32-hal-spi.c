@@ -30,7 +30,11 @@
 #include "hal/clk_gate_ll.h"
 #endif
 #include "esp32-hal-periman.h"
+#include "esp_clk_tree.h"
 #include "esp_private/periph_ctrl.h"
+#if !CONFIG_IDF_TARGET_ESP32 && !CONFIG_IDF_TARGET_ESP32S2
+#include "hal/spi_ll.h"
+#endif
 
 #include "esp_system.h"
 #include "esp_intr_alloc.h"
@@ -62,7 +66,6 @@
 #elif CONFIG_IDF_TARGET_ESP32P4
 #include "esp32p4/rom/ets_sys.h"
 #include "esp32p4/rom/gpio.h"
-#include "hal/spi_ll.h"
 #include "hal/clk_tree_ll.h"
 
 // ESP32P4 SPI clock source frequencies
@@ -76,6 +79,18 @@
 #include "esp32c61/rom/gpio.h"
 #else
 #error Target CONFIG_IDF_TARGET is not supported
+#endif
+
+// APB_CLK is only a valid SPI clock source on the ESP32, S2, S3 and C3. The other targets have
+// their own source mux, in which the XTAL is the option that is always available and, unlike the
+// PLL taps, is neither gated nor rescaled by a CPU frequency change. The ESP32-P4 is left out
+// because it picks between the XTAL and the SPLL on its own, see spiFrequencyToClockDiv().
+#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#define ARDUINO_SPI_CLK_SRC         SPI_CLK_SRC_APB
+#define ARDUINO_SPI_CLK_FOLLOWS_APB 1
+#elif !defined(CONFIG_IDF_TARGET_ESP32P4)
+#define ARDUINO_SPI_CLK_SRC         SPI_CLK_SRC_XTAL
+#define ARDUINO_SPI_CLK_FOLLOWS_APB 0
 #endif
 
 struct spi_struct_t {
@@ -685,8 +700,31 @@ void spiSetBitOrder(spi_t *spi, uint8_t bitOrder) {
   SPI_MUTEX_UNLOCK();
 }
 
+#ifdef ARDUINO_SPI_CLK_SRC
+// Frequency of the clock source the peripheral is configured with, which is what the divider
+// math has to be based on. Asking the IDF keeps this right for every target: it resolves to the
+// current APB_CLK frequency where the source is APB_CLK, and to the measured crystal frequency
+// where it is the XTAL.
+static uint32_t spiSourceFrequency(void) {
+  uint32_t freq_hz = 0;
+  if (esp_clk_tree_src_get_freq_hz((soc_module_clk_t)ARDUINO_SPI_CLK_SRC, ESP_CLK_TREE_SRC_FREQ_PRECISION_CACHED, &freq_hz) != ESP_OK || freq_hz == 0) {
+    log_e("Could not read the SPI source clock frequency");
+    // Fall back to the source the peripheral was pinned to, since guessing the other one would
+    // put the divider math right back where it was before this frequency was read from the IDF
+#if ARDUINO_SPI_CLK_FOLLOWS_APB
+    return getApbFrequency();
+#else
+    return getXtalFrequencyMhz() * 1000000;
+#endif
+  }
+  return freq_hz;
+}
+#endif
+
 static void _on_apb_change(void *arg, apb_change_ev_t ev_type, uint32_t old_apb, uint32_t new_apb) {
   spi_t *spi = (spi_t *)arg;
+  (void)old_apb;
+  (void)new_apb;
   if (ev_type == APB_BEFORE_CHANGE) {
     SPI_MUTEX_LOCK();
     while (spi->dev->cmd.usr);
@@ -699,7 +737,12 @@ static void _on_apb_change(void *arg, apb_change_ev_t ev_type, uint32_t old_apb,
     // Use _spiSetClockDivInternal to ensure clock source is updated if needed
     _spiSetClockDivInternal(spi, new_clockDiv);
 #else
+#if ARDUINO_SPI_CLK_FOLLOWS_APB
+    // The source moved with APB_CLK, so rescale the divider to keep the frequency the user asked
+    // for. Where the peripheral runs from the XTAL instead, its clock is unaffected by the change
+    // and touching the divider would only walk it away from that frequency.
     spi->dev->clock.val = spiFrequencyToClockDiv(spi, old_apb / ((spi->dev->clock.clkdiv_pre + 1) * (spi->dev->clock.clkcnt_n + 1)));
+#endif
 #endif
     SPI_MUTEX_UNLOCK();
   }
@@ -744,7 +787,7 @@ void spiStopBus(spi_t *spi) {
 
 spi_t *spiStartBus(uint8_t spi_num, uint32_t clockDiv, uint8_t dataMode, uint8_t bitOrder) {
   if (spi_num >= SPI_COUNT) {
-    log_e("SPI bus index %d is out of range", spi_num);
+    log_e("SPI bus index %u is out of range", spi_num);
     return NULL;
   }
 
@@ -765,6 +808,9 @@ spi_t *spiStartBus(uint8_t spi_num, uint32_t clockDiv, uint8_t dataMode, uint8_t
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32S2
+#ifndef DPORT_PERIP_RST_EN_REG
+#define DPORT_PERIP_RST_EN_REG DPORT_PERIP_RST_EN0_REG
+#endif
   if (spi_num == FSPI) {
     DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, DPORT_SPI2_CLK_EN);
     DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, DPORT_SPI2_RST);
@@ -773,6 +819,21 @@ spi_t *spiStartBus(uint8_t spi_num, uint32_t clockDiv, uint8_t dataMode, uint8_t
     DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, DPORT_SPI3_RST);
   }
 #elif CONFIG_IDF_TARGET_ESP32S3
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(6, 0, 0)
+  if (spi_num == FSPI) {
+    PERIPH_RCC_ATOMIC() {
+      spi_ll_enable_bus_clock(SPI2_HOST, true);
+      spi_ll_reset_register(SPI2_HOST);
+      spi_ll_enable_clock(SPI2_HOST, true);
+    }
+  } else if (spi_num == HSPI) {
+    PERIPH_RCC_ATOMIC() {
+      spi_ll_enable_bus_clock(SPI3_HOST, true);
+      spi_ll_reset_register(SPI3_HOST);
+      spi_ll_enable_clock(SPI3_HOST, true);
+    }
+  }
+#else
   if (spi_num == FSPI) {
     periph_ll_reset(PERIPH_SPI2_MODULE);
     periph_ll_enable_clk_clear_rst(PERIPH_SPI2_MODULE);
@@ -780,6 +841,7 @@ spi_t *spiStartBus(uint8_t spi_num, uint32_t clockDiv, uint8_t dataMode, uint8_t
     periph_ll_reset(PERIPH_SPI3_MODULE);
     periph_ll_enable_clk_clear_rst(PERIPH_SPI3_MODULE);
   }
+#endif
 #elif CONFIG_IDF_TARGET_ESP32
   if (spi_num == HSPI) {
     DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, DPORT_SPI2_CLK_EN);
@@ -794,6 +856,7 @@ spi_t *spiStartBus(uint8_t spi_num, uint32_t clockDiv, uint8_t dataMode, uint8_t
 #elif CONFIG_IDF_TARGET_ESP32P4
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(6, 0, 0)
   if (spi_num == FSPI) {
     PERIPH_RCC_ACQUIRE_ATOMIC(PERIPH_GPSPI2_MODULE, ref_count) {
       if (ref_count == 0) {
@@ -815,10 +878,31 @@ spi_t *spiStartBus(uint8_t spi_num, uint32_t clockDiv, uint8_t dataMode, uint8_t
       }
     }
   }
+#else
+  if (spi_num == FSPI) {
+    PERIPH_RCC_ATOMIC() {
+      spi_ll_enable_bus_clock(SPI2_HOST, true);
+      spi_ll_reset_register(SPI2_HOST);
+      spi_ll_enable_clock(SPI2_HOST, true);
+    }
+  } else if (spi_num == HSPI) {
+    PERIPH_RCC_ATOMIC() {
+      spi_ll_enable_bus_clock(SPI3_HOST, true);
+      spi_ll_reset_register(SPI3_HOST);
+      spi_ll_enable_clock(SPI3_HOST, true);
+    }
+  }
+#endif
 #pragma GCC diagnostic pop
-#elif defined(__PERIPH_CTRL_ALLOW_LEGACY_API)
+#elif defined(__PERIPH_CTRL_ALLOW_LEGACY_API) && ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(6, 0, 0)
   periph_ll_reset(PERIPH_SPI2_MODULE);
   periph_ll_enable_clk_clear_rst(PERIPH_SPI2_MODULE);
+#else
+  PERIPH_RCC_ATOMIC() {
+    spi_ll_enable_bus_clock(SPI2_HOST, true);
+    spi_ll_reset_register(SPI2_HOST);
+    spi_ll_enable_clock(SPI2_HOST, true);
+  }
 #endif
 
   SPI_MUTEX_LOCK();
@@ -838,6 +922,12 @@ spi_t *spiStartBus(uint8_t spi_num, uint32_t clockDiv, uint8_t dataMode, uint8_t
   spi->dev->dma_conf.rx_seg_trans_clr_en = 1;
   spi->dev->dma_conf.dma_seg_trans_en = 0;
 #endif
+#endif
+#if defined(ARDUINO_SPI_CLK_SRC) && !CONFIG_IDF_TARGET_ESP32 && !CONFIG_IDF_TARGET_ESP32S2
+  // Pin the peripheral to the source spiSourceFrequency() reports instead of relying on the
+  // reset value of the mux. The bus is idle here, so the switch cannot disturb a transfer.
+  // The ESP32 and the S2 have no mux to begin with and are always clocked from APB_CLK.
+  spi_ll_set_clk_source((spi_dev_t *)spi->dev, ARDUINO_SPI_CLK_SRC);
 #endif
   spi->dev->user.usr_mosi = 1;
   spi->dev->user.usr_miso = 1;
@@ -1709,22 +1799,23 @@ typedef union {
   };
 } spiClk_t;
 
-#define ClkRegToFreq(reg) (apb_freq / (((reg)->clkdiv_pre + 1) * ((reg)->clkcnt_n + 1)))
+#define ClkRegToFreq(reg) (src_freq / (((reg)->clkdiv_pre + 1) * ((reg)->clkcnt_n + 1)))
 
 uint32_t spiClockDivToFrequency(spi_t *spi, uint32_t clockDiv) {
-  uint32_t apb_freq = getApbFrequency();
 #if defined(CONFIG_IDF_TARGET_ESP32P4)
   // ESP32P4: Use the actual clock source being used by this SPI instance
+  uint32_t src_freq;
   if (spi && spi->clk_src == 1) {
     // SPLL is being used
-    apb_freq = SPI_P4_SPLL_FREQ_HZ;
+    src_freq = SPI_P4_SPLL_FREQ_HZ;
   } else {
     // XTAL is being used (default or if spi is NULL)
-    apb_freq = getXtalFrequencyMhz() * 1000000;
+    src_freq = getXtalFrequencyMhz() * 1000000;
   }
 #else
-  // For non-ESP32P4 targets, ignore spi parameter; always use system APB frequency.
+  // For non-ESP32P4 targets, ignore spi parameter; the whole bus shares one source.
   (void)spi;
+  uint32_t src_freq = spiSourceFrequency();
 #endif
   spiClk_t reg = {clockDiv};
   return ClkRegToFreq(&reg);
@@ -1856,9 +1947,9 @@ uint32_t spiFrequencyToClockDiv(spi_t *spi, uint32_t freq) {
   // Return divider for the clock source that gives closest match
   return best_div;
 #else
-  // Non-ESP32P4: Only use APB clock, spi parameter unused.
+  // Non-ESP32P4: the peripheral stays on the source picked at bus init, spi parameter unused.
   (void)spi;  // Suppress unused parameter warning
-  return _spiFrequencyToClockDivWithSource(freq, getApbFrequency());
+  return _spiFrequencyToClockDivWithSource(freq, spiSourceFrequency());
 #endif
 }
 

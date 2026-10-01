@@ -15,6 +15,7 @@
 // Disable the automatic pin remapping of the API calls in this file
 #define ARDUINO_CORE_BUILD
 
+#include "Arduino.h"
 #include "sd_diskio.h"
 #include "esp_system.h"
 #include "esp32-hal-periman.h"
@@ -54,6 +55,10 @@ typedef enum {
   READ_OCR = 58,
   CRC_ON_OFF = 59
 } ardu_sdcard_command_t;
+
+// Align with ESP-IDF sdmmc SPI init (ACMD41 timeout must be >1s per SD spec)
+static constexpr uint32_t sd_go_idle_delay_ms = 20;
+static constexpr uint32_t sd_op_cond_timeout_ms = 3000;
 
 typedef struct {
   uint8_t ssPin;
@@ -469,12 +474,12 @@ private:
  * the SD card specification. It performs card detection, type identification,
  * and configuration for SPI mode operation.
  *
- * The initialization sequence follows the SD card protocol:
+ * The initialization sequence follows the SD card protocol (SPI mode, aligned with IDF):
  * 1. Power-up sequence with 74+ clock cycles
- * 2. GO_IDLE_STATE command to reset the card
- * 3. CRC_ON_OFF to enable/disable CRC checking
+ * 2. Two GO_IDLE_STATE attempts to enter SPI mode
+ * 3. CRC_ON_OFF to enable CRC checking (with retry)
  * 4. SEND_IF_COND to identify SDHC/SDXC cards
- * 5. APP_OP_COND to set operating conditions
+ * 5. APP_OP_COND / SEND_OP_COND (SPI args; timeout >1s)
  * 6. Card type detection (SD/SDHC/MMC)
  * 7. Final configuration and sector count retrieval
  *
@@ -506,9 +511,19 @@ DSTATUS ff_sd_initialize(uint8_t pdrv) {
     card->spi->transfer(0XFF);
   }
 
-  // Step 2: Select the card and send GO_IDLE_STATE command
-  // This command resets the card to idle state and enables SPI mode
-  // Fix mount issue - sdWait fail ignored before command GO_IDLE_STATE
+  // Step 2: Perform two GO_IDLE_STATE (CMD0) attempts in SPI mode.
+  // Per SD Simplified Spec (figure 4-1) / IDF: some cards enter SD mode on the
+  // first attempt, so the first response may fail; the second must succeed.
+  // (sdCommand may also retry internally on no-token/CRC errors.)
+  // Fix mount issue - sdWait fail ignored before each CMD0 attempt
+  digitalWrite(card->ssPin, LOW);
+  if (!sdWait(pdrv, 500)) {
+    log_w("sdWait fail ignored, card initialize continues");
+  }
+  (void)sdCommand(pdrv, GO_IDLE_STATE, 0, NULL);
+  sdDeselectCard(pdrv);
+  delay(sd_go_idle_delay_ms);
+
   digitalWrite(card->ssPin, LOW);
   if (!sdWait(pdrv, 500)) {
     log_w("sdWait fail ignored, card initialize continues");
@@ -519,10 +534,16 @@ DSTATUS ff_sd_initialize(uint8_t pdrv) {
     goto unknown_card;
   }
   sdDeselectCard(pdrv);
+  delay(sd_go_idle_delay_ms);
 
   // Step 3: Configure CRC checking
-  // Enable CRC for data transfers in SPI mode (required for reliable communication)
+  // Enable CRC for data transfers in SPI mode (required for reliable communication).
+  // Some cards reject the first CRC_ON_OFF; retry once (same as IDF).
   token = sdTransaction(pdrv, CRC_ON_OFF, 1, NULL);
+  if (token != 1 && token != 0x5) {
+    delay(10);
+    token = sdTransaction(pdrv, CRC_ON_OFF, 1, NULL);
+  }
   if (token == 0x5) {
     // Old card that doesn't support CRC - disable CRC checking
     card->supports_crc = false;
@@ -536,7 +557,7 @@ DSTATUS ff_sd_initialize(uint8_t pdrv) {
   if (sdTransaction(pdrv, SEND_IF_COND, 0x1AA, &resp) == 1) {
     // Card responded to SEND_IF_COND - likely SDHC/SDXC
     if ((resp & 0xFFF) != 0x1AA) {
-      log_w("SEND_IF_COND failed: %03X", resp & 0xFFF);
+      log_w("SEND_IF_COND failed: %03" PRIX32, (uint32_t)(resp & 0xFFF));
       goto unknown_card;
     }
 
@@ -546,12 +567,13 @@ DSTATUS ff_sd_initialize(uint8_t pdrv) {
       goto unknown_card;
     }
 
-    // Send APP_OP_COND to set operating conditions for SDHC/SDXC
-    // Wait up to 1 second for the card to become ready
+    // Send APP_OP_COND to set operating conditions for SDHC/SDXC.
+    // In SPI mode only HCS (bit 30) is valid; voltage bits must be 0 (same as IDF).
+    // Timeout must be >1s per SD spec (IDF uses ~3s).
     start = millis();
     do {
-      token = sdTransaction(pdrv, APP_OP_COND, 0x40100000, NULL);
-    } while (token == 1 && (millis() - start) < 1000);
+      token = sdTransaction(pdrv, APP_OP_COND, 0x40000000, NULL);
+    } while (token == 1 && (millis() - start) < sd_op_cond_timeout_ms);
 
     if (token) {
       log_w("APP_OP_COND failed: %u", token);
@@ -576,20 +598,20 @@ DSTATUS ff_sd_initialize(uint8_t pdrv) {
       goto unknown_card;
     }
 
-    // Try SD card initialization first
+    // Try SD card initialization first (SPI mode: ACMD41 arg must be 0)
     start = millis();
     do {
-      token = sdTransaction(pdrv, APP_OP_COND, 0x100000, NULL);
-    } while (token == 0x01 && (millis() - start) < 1000);
+      token = sdTransaction(pdrv, APP_OP_COND, 0, NULL);
+    } while (token == 0x01 && (millis() - start) < sd_op_cond_timeout_ms);
 
     if (!token) {
       card->type = CARD_SD;  // Standard SD card
     } else {
-      // Try MMC card initialization
+      // Try MMC card initialization (SPI mode: CMD1 arg must be 0)
       start = millis();
       do {
-        token = sdTransaction(pdrv, SEND_OP_COND, 0x100000, NULL);
-      } while (token != 0x00 && (millis() - start) < 1000);
+        token = sdTransaction(pdrv, SEND_OP_COND, 0, NULL);
+      } while (token != 0x00 && (millis() - start) < sd_op_cond_timeout_ms);
 
       if (token == 0x00) {
         card->type = CARD_MMC;  // MMC card
@@ -795,7 +817,14 @@ bool sdcard_mount(uint8_t pdrv, const char *path, uint8_t max_files, bool format
 
   FATFS *fs;
   char drv[3] = {(char)('0' + pdrv), ':', 0};
+
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(6, 0, 0)
   esp_err_t err = esp_vfs_fat_register(path, drv, max_files, &fs);
+#else
+  esp_vfs_fat_conf_t conf = {.base_path = path, .fat_drive = drv, .max_files = max_files};
+  esp_err_t err = esp_vfs_fat_register(&conf, &fs);
+#endif
+
   if (err == ESP_ERR_INVALID_STATE) {
     log_e("esp_vfs_fat_register failed 0x(%x): SD is registered.", err);
     return false;

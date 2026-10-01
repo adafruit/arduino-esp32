@@ -1,4 +1,21 @@
 /*
+ * Copyright 2017-2026 Espressif Systems (Shanghai) PTE LTD
+ * Copyright 2017 Neil Kolban
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
  * BLESecurity.h
  *
  *  Created on: Dec 17, 2017
@@ -105,6 +122,8 @@ public:
   static uint32_t generateRandomPassKey();
   static void regenPassKeyOnConnect(bool enable = false);
   static void resetSecurity();
+  static void setForceAuthentication(bool force);
+  static bool getForceAuthentication();
   static void waitForAuthenticationComplete(uint32_t timeoutMs = 10000);
   static void signalAuthenticationComplete();
 
@@ -214,9 +233,15 @@ public:
    ***************************************************************************/
 
 #if defined(CONFIG_NIMBLE_ENABLED)
-  // This callback is called when the authentication is complete.
-  // Status can be checked in the desc parameter.
+  // This callback is called when the authentication completed successfully.
+  // The resulting security state can be checked in the desc parameter.
   virtual void onAuthenticationComplete(ble_gap_conn_desc *desc);
+
+  // This callback is called when the authentication completes, successfully or not.
+  // status is 0 on success, otherwise a BLE_HS_* error code.
+  // The default implementation forwards successful authentications to the overload above,
+  // so overriding only that one keeps the success-only semantics.
+  virtual void onAuthenticationComplete(ble_gap_conn_desc *desc, int status);
 #endif
 
 };  // BLESecurityCallbacks
