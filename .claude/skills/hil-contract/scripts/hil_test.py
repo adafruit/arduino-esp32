@@ -18,8 +18,9 @@ flash, restore, gdb and check take --bundle DIR, a record bundle `hil_remote.py 
 
 The last stdout line of every command but lock is JSON. Exits: 0 pass, 1 a board failed or did not run (cleaned up
 or untouched), 2 refused before any hardware access, 3 a session command (--under-hold) whose hold the lock record
-shows no live holder of, 4 a cleanup failed (logged in the board's cleanup log, the board released); restore --release
-5 the hold may still stand, 6 the restore failed (the hold released).
+shows no live holder of, 4 a cleanup failed, logged in the board's cleanup log (run and commission release the board, a
+session command keeps its hold); restore --release 5 the hold may still stand, 6 the restore failed (the hold
+released).
 
 This file is the core's HIL profile for agentrc's arduino_hil.py (the `arduino` skill): its tests over the HIL
 sketches' serial protocol on the DUT's USB-OTG CDC (test/hil/core_cdc/core_cdc.ino, test/hil/core_timing/
