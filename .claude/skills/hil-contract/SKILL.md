@@ -97,40 +97,44 @@ On the dev PC with the board: `python3 $H/hil_test.py run [-b BOARD]... test/hil
 
 ## Reservation
 
-As the `arduino` skill's Locks: the board lock `/tmp/tinyusb-hil-locks/<name>.lock` and the pending kind
-`arduino-hil` are shared with tinyusb, tinyuf2 and Adafruit TinyUSB Arduino. `hil_test.py run` and `commission` lock
-each board themselves; a manual session holds it under a reason unique to its attempt,
-`arduino-hil session <attempt dir> <token>`. Cleanup state is `core_cdc` flashed and checked, every child proven
-ended, and the hold released.
+As the `arduino` skill's Locks: the board lock `/tmp/tinyusb-hil-locks/<name>.lock` and its cleanup log
+`<name>.cleanup.jsonl` are shared with tinyusb, tinyuf2 and Adafruit TinyUSB Arduino. `hil_test.py run` and
+`commission` lock each board themselves, and the lock ends with them; a manual session holds it under a reason unique
+to its attempt, `arduino-hil session <attempt dir> <token>`, until `session close`. Cleanup state is `core_cdc`
+flashed and checked and every child proven ended; a cleanup that cannot prove it is logged as a failure in the
+board's cleanup log, and the board is released all the same.
 
 ## Results
 
-`hil_test.py run` writes `hil_report.json` (schema `arduino-esp32-core-hil`) with the same rows, exits, verdicts and
-delegated output (`hil_test.py report`) as Adafruit TinyUSB Arduino's contract; `firmware.fqbns` names each sketch's
-FQBN. The caller retries a fail once under a new run id, per the `hil` Caller rules.
+`hil_test.py run` writes `hil_report.json` (schema `arduino-esp32-core-hil`) with the same rows, verdicts and
+delegated output (`hil_test.py report`) as Adafruit TinyUSB Arduino's contract, and the exits in `hil_test.py`'s
+docstring (4: a cleanup failed, logged, the board released); `firmware.fqbns` names each sketch's FQBN, and
+`previousCleanupFailure` an earlier task's failure on the board still open. The caller retries a fail once under a new
+run id, per the `hil` Caller rules.
 
 ## Recovery
 
-Recovery needs a separate dispatch naming the board. It applies to a report row with `cleanup.holder` (exit 4), a
-protected record left by a run that died, a board's `arduino-hil` pending-session record, and a session whose `close`
-failed. The dispatch carries the board, the failed report (or session id), the holder token and the receipts. Run
-each command on ci.lan in the failed run's attempt dir (`ssh ci.lan 'cd ~/hil-remote/arduino-esp32/<id> && python3
-.claude/skills/hil-contract/scripts/hil_test.py ...'`), adding `--staged manifest.json` to `restore`; on a dev PC,
-from the checkout. When the failed tree's firmware or harness is the defect, run the restore from a newly staged tree
-of the fixed commit (a `hil_remote.py run` of the held board stages one and reports it locked), with `--report`
-naming the failed run's report by absolute path; the hold, its token and the receipts stay the failed run's.
+Recovery needs a separate dispatch naming the board. It applies to a board's open cleanup failure (a run's exit 4, a
+row's `previousCleanupFailure`, `hil_test.py lock status`), a `session close` that did not release, and an older
+helper's cleanup holder (`role: cleanup-holder`), which never frees on its own. The dispatch carries the board, the
+failed report (or session id) and the failure's receipts. Run each command on ci.lan in the failed run's attempt dir
+(`ssh ci.lan 'cd ~/hil-remote/arduino-esp32/<id> && python3 .claude/skills/hil-contract/scripts/hil_test.py ...'`),
+adding `--staged manifest.json` to `restore`; on a dev PC, from the checkout. When the failed tree's firmware or
+harness is the defect, run the restore from a newly staged tree of the fixed commit, with `--report` naming the failed
+run's report by absolute path.
 
-1. `hil_test.py lock status`, and `hil_test.py report <run dir> -b <board>` for the row's holder token and receipts.
-2. A live cleanup holder (reason `hil_test.py`): restore under it, R = `hil_test.py`. A dead holder or a protected
-   record: `hil_test.py lock hold --take-over <board> --reason recovery-<id>` prints token T; R = `recovery-<id>`.
-3. `hil_test.py restore -b <board> --build-record build/hil/<board>.build.json --under-hold R --report
-   <run dir>/hil_report.json <roster>`. It refuses while a child of the failed run is not proven ended: stop and
-   report that receipt.
-4. Once the restore passed, `hil_test.py lock release --token <the holder's token, or T>`. On failure, keep the hold
-   and report.
+1. `hil_test.py lock status` for the board's holder and open failures, and `hil_test.py report <run dir> -b <board>`
+   for the row's receipts.
+2. An older helper's cleanup holder: its project's `hil_test.py lock release --token <token>`, from that project's
+   attempt dir; a refusal names the open receipt: stop and report it.
+3. `hil_test.py lock hold <board> --reason recovery-<id>`, then `hil_test.py restore -b <board> --build-record
+   build/hil/<board>.build.json --under-hold recovery-<id> --report <run dir>/hil_report.json --release <roster>`. It
+   refuses while a child of the failed run is not proven ended: report that receipt. Exit 0 restored the board and
+   marked restored each open failure whose children are proven ended; 6 the restore failed, logged, the hold released;
+   5 the hold may still stand. Report a 5 or a 6.
 
-A failed `session close` keeps its hold: once its pending children are proven ended, run `hil_remote.py session close
-<id>` again; if that fails too, keep the hold and report. esptool writes the build's `flash_args` images (bootloader,
+A `session close` that did not release (exit 5): once its pending children are proven ended, run `hil_remote.py
+session close <id>` again; if that fails too, report. esptool writes the build's `flash_args` images (bootloader,
 partition table, `boot_app0`, application) within the board's 4 MB span; the battery keeps no state across sketches,
 so restoring `core_cdc` is the whole cleanup.
 
