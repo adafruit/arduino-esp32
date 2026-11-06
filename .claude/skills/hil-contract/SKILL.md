@@ -13,9 +13,8 @@ its docstring:
 
 - `hil_test.py`: the harness on the host with the boards (this core's profile and tests).
 - `hil_remote.py`: drives the harness on ci.lan from the dev PC that built the firmware.
-- `agentrc_pin.py`: which agentrc both load their shared scripts from: the installed one
-  (`${AGENTRC_DIR:-$HOME/.claude}`) on a dev PC, never fetched; in CI the commit `test/hil/agentrc.json` pins; on the
-  rig, the copy `hil_remote.py` staged. It refuses an agentrc without core mode.
+- `agentrc_pin.py`: which agentrc both load their shared scripts from (its docstring: dev PC, CI and rig differ); it
+  refuses an agentrc without core mode.
 
 ```bash
 H=.claude/skills/hil-contract/scripts
@@ -77,15 +76,15 @@ python3 .claude/skills/build/scripts/check_build.py --board <board> --shared --r
 
 The harness admits a record only as the `arduino` skill's "The HIL build record" entry says. A manual flash or GDB
 session also takes an experimental record (`--experimental`). Every sketch of a rig board compiles in the farm's
-USB-switch fixture (`test/hil/esp32_ts3usb30.cpp`): it drives GPIO47 high from `initVariant()`, which the TS3USB30
-reads as D = D2, the DUT side (datasheet SCDS237F, Table 1, with OE low).
+USB-switch fixture, `test/hil/esp32_ts3usb30.cpp`, which routes the DUT's OTG port to ci.lan.
 
 ## Execution
 
 Budgets, the remote run and the manual session commands are those of Adafruit TinyUSB Arduino's HIL contract
-(adafruit/Adafruit_TinyUSB_Arduino, `.claude/skills/hil-contract/SKILL.md`, Execution), with this core's names: the attempt dir is `~/hil-remote/arduino-esp32/<id>`, local records and collections live under
-`build/.hil-remote/` (upstream's `.gitignore` ignores `/build`), `check --test` takes `cdc` (default) or `timing`,
-`session close` restores `core_cdc`.
+(adafruit/Adafruit_TinyUSB_Arduino, `.claude/skills/hil-contract/SKILL.md`, Execution), with this core's names: the
+attempt dir is `~/hil-remote/arduino-esp32/<id>`, local records and collections live under `build/.hil-remote/`
+(upstream's `.gitignore` ignores `/build`), `check --test` takes `cdc` (default) or `timing`, `session close` restores
+`core_cdc`.
 
 ```bash
 python3 $H/hil_remote.py run --run-id <id> [-b BOARD]...
@@ -137,12 +136,12 @@ so restoring `core_cdc` is the whole cleanup.
 
 ## Debug
 
-A GDB session (`hil_test.py gdb`, or `session exec <id> gdb`) runs Espressif's OpenOCD (`openocd-esp32`) on the board's USB-Serial-JTAG
-(`debug`: `tool` `openocd-esp32`, `uid` its MAC with colons, `usb_port`) with Espressif's gdb for the chip
-(`riscv32-esp-elf-gdb` for the P4, `xtensa-esp32s3-elf-gdb` for the S3). On the ESP32-P4 the USB-Serial-JTAG runs
-beside the high-speed OTG the sketches use (datasheet 4.2.2.11), so any record's sketch can be debugged. On the
-ESP32-S3 the OTG and the USB-Serial-JTAG share the one internal PHY (TRM 33.4.1): a TinyUSB sketch leaves no JTAG,
-and the roster has no S3 `debug` route (Limits).
+A GDB session (`hil_test.py gdb`, or `session exec <id> gdb`) runs Espressif's OpenOCD (`openocd-esp32`) on the
+board's USB-Serial-JTAG (`debug`: `tool` `openocd-esp32`, `uid` its MAC with colons, `usb_port`) with Espressif's
+gdb for the chip (`riscv32-esp-elf-gdb` for the P4, `xtensa-esp32s3-elf-gdb` for the S3). On the ESP32-P4 the
+USB-Serial-JTAG runs beside the high-speed OTG the sketches use (datasheet 4.2.2.11), so any record's sketch can be
+debugged. On the ESP32-S3 the OTG and the USB-Serial-JTAG share the one internal PHY (TRM 33.4.1): a TinyUSB sketch
+leaves no JTAG, and the roster has no S3 `debug` route (Limits).
 
 ## Limits
 
@@ -163,4 +162,5 @@ and the roster has no S3 `debug` route (Limits).
 - **Commissioning:** ci.lan's `espressif_p4_function_ev` (uid `0` at `11-1.1`, `303a:0002`) ran the battery on
   2026-11-06: `cdc` and `timing` passed (`f_cpu` 360 MHz) and `core_cdc` was restored; a GDB session listed the
   FreeRTOS tasks over the USB-Serial-JTAG and the board passed `cdc` after it. `espressif_s3_devkitm` (uid
-  `84F703C084E4` at `11-1.3`, `303a:1001`) is not yet run: pending.
+  `84F703C084E4` at `11-1.3`, `303a:1001`) ran the battery on 2026-11-06: `cdc` and `timing` passed (`f_cpu`
+  240 MHz) and `core_cdc` was restored.

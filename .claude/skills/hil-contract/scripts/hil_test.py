@@ -142,13 +142,13 @@ def session(dev, deadline, run_dir, nonce, check):
         (Path(run_dir) / f"core-{nonce}.log").write_text("\n".join(log) + "\n")
 
 
-def info_problem(console, nonce, stack, board):
+def info_problem(console, nonce, board):
     """'' when INFO reports the expected USB stack and the board's chip family, else why not; the INFO fields."""
     words = console.ask(f"INFO {nonce}", nonce)
     if words[0] != "HIL_INFO":
         return f'INFO answered {" ".join(words)}', {}
     got = fields(words)
-    want = {"stack": stack, "chip": chip_of(board)}
+    want = {"stack": STACK, "chip": chip_of(board)}
     wrong = {k: got.get(k) for k, v in want.items() if v and got.get(k) != v}
     return (f"INFO {wrong} != {want}" if wrong else ""), got
 
@@ -174,7 +174,7 @@ def test_cdc(dev, nonce, deadline, tracker, run_dir, board):
     """core_cdc: INFO names the TinyUSB stack and the chip, ECHO returns every byte across packet bounds."""
 
     def check(console, tty):
-        why, got = info_problem(console, nonce + "i", STACK, board)
+        why, got = info_problem(console, nonce + "i", board)
         if why:
             return False, f"{tty}: {why}"
         ok, detail = echo(console, nonce)
@@ -201,7 +201,7 @@ def test_timing(dev, nonce, deadline, tracker, run_dir, board):
     each other, and delay(DELAY_MS) measures DELAY_MS within the bound (TIMING_TOLERANCE, coarse)."""
 
     def check(console, tty):
-        why, info = info_problem(console, nonce + "i", STACK, board)
+        why, info = info_problem(console, nonce + "i", board)
         if why:
             return False, f"{tty}: {why}"
         a, a0, a1 = timed(console, f"TIME {nonce}a", nonce + "a", "time")
@@ -213,7 +213,8 @@ def test_timing(dev, nonce, deadline, tracker, run_dir, board):
         except (KeyError, ValueError):
             return False, f"{tty}: TIME replies {a}, {b}"
         # the DUT read its clock somewhere inside each exchange: the elapsed host time lies in [b0 - a1, b1 - a0]
-        why = timing_problem(ms, (b0 - a1) * 1000, (b1 - a0) * 1000)
+        lo, hi = (b0 - a1) * 1000, (b1 - a0) * 1000
+        why = timing_problem(ms, lo, hi)
         if why:
             return False, f"{tty}: millis() {why}"
         if abs(us / 1000 - ms) > 2:
@@ -229,7 +230,7 @@ def test_timing(dev, nonce, deadline, tracker, run_dir, board):
         return (
             True,
             f'{tty}: f_cpu={info.get("f_cpu")}: millis {ms} ms over '
-            f"host [{(b0 - a1) * 1000:.1f}, {(b1 - a0) * 1000:.1f}] ms, micros {us} us, delay({DELAY_MS}) "
+            f"host [{lo:.1f}, {hi:.1f}] ms, micros {us} us, delay({DELAY_MS}) "
             f"{delay_us} us",
         )
 

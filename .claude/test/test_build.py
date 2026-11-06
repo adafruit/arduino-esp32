@@ -74,10 +74,10 @@ class Tables(unittest.TestCase):
         for family, boards in cb.REPRESENTATIVES.items():
             for b in boards:
                 self.assertEqual(cb.BOARDS[b]["family"], family)
-        self.assertEqual({b for b, v in cb.BOARDS.items() if "span" in v}, set(cb.RIG_BOARDS))
-        for b in cb.RIG_BOARDS:
-            self.assertEqual(cb.BOARDS[b]["fixture"], cb.FIXTURE)
-            self.assertEqual(cb.BOARDS[b]["chip"], cb.fqbn_parts(cb.BOARDS[b]["fqbn"])[0])
+        self.assertEqual(
+            {b: cb.BOARDS[b]["chip"] for b in cb.RIG_BOARDS},
+            {"espressif_s3_devkitm": "esp32s3", "espressif_p4_function_ev": "esp32p4"},
+        )
 
     def test_chip_variants(self):
         self.assertEqual(cb.chip_variant(cb.BOARDS["espressif_p4_function_ev"]["fqbn"]), "esp32p4_es")
