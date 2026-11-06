@@ -334,6 +334,12 @@ class Identity(unittest.TestCase):
         self.assertEqual(self.commands("esp32s3"), "303a:1001")
         self.assertEqual(self.commands("esp32p4"), "303a:0002")
 
+    def test_variant_read_from_this_checkout_once_the_builds_sketchbook_is_gone(self):
+        d = Path(self.tmp.name)
+        argv = ["g++", "-I/gone/build/.arduino-cli-1/sketchbook/hardware/espressif/esp32/variants/esp32s3"]
+        (d / "compile_commands.json").write_text(json.dumps([{"file": "/gone/cores/esp32/USB.cpp", "arguments": argv}]))
+        self.assertEqual(cb.vid_pid(d), "303a:1001")
+
     def test_compile_flags_win(self):
         self.assertEqual(self.commands("esp32s3", "-DUSB_VID=0x239A", "-DUSB_PID=0x8113"), "239a:8113")
 
