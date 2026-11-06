@@ -66,26 +66,25 @@ def ci_fqbn(target, options):
 BOARDS = {t: {"fqbn": ci_fqbn(t, o), "family": t, "filters": t} for t, o in CI_TARGETS.items()}
 CI_BOARDS = tuple(BOARDS)
 FIXTURE = "test/hil/esp32_ts3usb30.cpp"
-# the farm boards, named as in agentrc's board registry, on the USB-OTG (TinyUSB) stack with CDC on boot; `span` is
-# the 4 MB SPI flash esptool writes (FlashSize), `chip` esptool's --chip, the fixture routes their OTG port to ci.lan.
-# ChipVariant prev3 ("Before v3.00") covers the farm P4's revision.
-BOARDS["espressif_s3_devkitm"] = {
-    "fqbn": f"{PLATFORM}:esp32s3:USBMode=default,CDCOnBoot=cdc,FlashSize=4M,PSRAM=disabled",
-    "family": "esp32s3",
-    "filters": "esp32s3",
-    "span": (0, 0x400000),
-    "chip": "esp32s3",
-    "fixture": FIXTURE,
-}
-BOARDS["espressif_p4_function_ev"] = {
-    "fqbn": f"{PLATFORM}:esp32p4:USBMode=default,CDCOnBoot=cdc,FlashSize=4M,ChipVariant=prev3",
-    "family": "esp32p4",
-    "filters": "esp32p4",
-    "span": (0, 0x400000),
-    "chip": "esp32p4",
-    "fixture": FIXTURE,
-}
-RIG_BOARDS = ("espressif_s3_devkitm", "espressif_p4_function_ev")
+
+
+def rig(target, options):
+    """A farm board on the USB-OTG (TinyUSB) stack with CDC on boot: `span` is the 4 MB SPI flash esptool writes
+    (FlashSize), `chip` esptool's --chip; the fixture routes its OTG port to ci.lan."""
+    return {
+        "fqbn": f"{PLATFORM}:{target}:{options}",
+        "family": target,
+        "filters": target,
+        "span": (0, 0x400000),
+        "chip": target,
+        "fixture": FIXTURE,
+    }
+
+
+# named as in agentrc's board registry; ChipVariant prev3 ("Before v3.00") covers the farm P4's revision
+BOARDS["espressif_s3_devkitm"] = rig("esp32s3", "USBMode=default,CDCOnBoot=cdc,FlashSize=4M,PSRAM=disabled")
+BOARDS["espressif_p4_function_ev"] = rig("esp32p4", "USBMode=default,CDCOnBoot=cdc,FlashSize=4M,ChipVariant=prev3")
+RIG_BOARDS = tuple(b for b, e in BOARDS.items() if "span" in e)
 # menu keys a rig board keeps over a sketch's fqbn_append: its flash, chip revision and USB wiring are the hardware's
 RIG_KEYS = ("FlashSize", "ChipVariant", "USBMode", "CDCOnBoot")
 # Xtensa and RISC-V, each through a rig board and one CI target: what a shared change builds. S2, C3, C5 and H2 build
@@ -109,14 +108,10 @@ NOTHING = (
     ".claude/",
     ".github/",
     ".agents",
-    "AGENTS.md",
-    "CLAUDE.md",
     "docs/",
     ".gitlab",
-    ".gitlab-ci.yml",
     ".readthedocs.yaml",
     ".vale",
-    ".vale.ini",
     ".codespellrc",
     ".editorconfig",
     ".flake8",
@@ -127,10 +122,6 @@ NOTHING = (
     ".shellcheckrc",
     ".pre-commit-config.yaml",
     ".pre-commit-agent.yaml",
-    "LICENSE.md",
-    "CODE_OF_CONDUCT.md",
-    "CONTRIBUTING.md",
-    "SECURITY.md",
     "package.json",
 )
 # outside both contracts: no arduino-cli build here makes or runs them
@@ -146,7 +137,6 @@ UNCOVERED = {
     "tools/pre-commit/": "pre-commit helpers",
 }
 CI_SCRIPTS = (".github/scripts/socs_config.sh", ".github/scripts/sketch_utils.sh")
-CI_YML_KEYS = {"requires", "requires_any", "targets", "fqbn", "fqbn_append"}
 EXTRA_DEPENDENCIES = ()  # no sketch's ci.yml names `libs`
 CONTRACT_FILES = (
     ".claude/skills/build/scripts/check_build.py",
@@ -247,15 +237,21 @@ def ci_yml(example):
     return data
 
 
+@functools.lru_cache(maxsize=None)
 def meets(requirement, config):
     """sketch_utils.sh check_requirements: `grep -E "^<requirement>"` over the sdkconfig."""
     return bool(re.search("^" + requirement, config, re.M))
 
 
+def full_fqbn(ci, target):
+    """The sketch's first sorted full `fqbn` for `target`, the one CI builds; None without one."""
+    return min((ci.get("fqbn") or {}).get(target) or (), default=None)
+
+
 def requested(ci, target):
-    """{menu: option} the sketch asks of `target`: its first sorted full `fqbn`, else its fqbn_append."""
-    full = sorted((ci.get("fqbn") or {}).get(target) or ())
-    return fqbn_parts(full[0])[1] if full else fqbn_parts(f"x:x:x:{fqbn_append(ci, target)}")[1]
+    """The options the sketch asks of `target`: its full `fqbn`'s, else its fqbn_append."""
+    full = full_fqbn(ci, target)
+    return merge_options(*full.split(":", 3)[3:]) if full else fqbn_append(ci, target)
 
 
 def exclude(board, example):
@@ -279,7 +275,7 @@ def exclude(board, example):
         return True
     if board in CI_BOARDS:
         return False
-    asked = requested(ci, target)
+    asked = dict(o.split("=", 1) for o in requested(ci, target).split(",") if o)
     return any(k in asked and asked[k] != v for k, v in options.items() if k in RIG_KEYS)
 
 
@@ -301,15 +297,14 @@ def fqbn(board, example):
     ci = ci_yml(example) if example.startswith(SKETCH_ROOTS) else {}
     if not ci:
         return base
-    target, options = fqbn_parts(base)
-    if board in CI_BOARDS:
-        full = sorted((ci.get("fqbn") or {}).get(target) or ())
-        if full:
-            target, options = fqbn_parts(full[0])
-            return ci_fqbn(target, ",".join(f"{k}={v}" for k, v in options.items()))
-        return ci_fqbn(target, merge_options(CI_TARGETS[target], fqbn_append(ci, target)))
-    asked = ",".join(f"{k}={v}" for k, v in requested(ci, target).items())
-    return f"{PLATFORM}:{target}:" + merge_options(",".join(f"{k}={v}" for k, v in options.items()), asked)
+    target = fqbn_parts(base)[0]
+    asked = requested(ci, target)
+    if board not in CI_BOARDS:
+        return f"{PLATFORM}:{target}:" + merge_options(base.split(":", 3)[3], asked)
+    full = full_fqbn(ci, target)
+    if full:
+        return ci_fqbn(fqbn_parts(full)[0], asked)
+    return ci_fqbn(target, merge_options(CI_TARGETS[target], asked))
 
 
 def variant_boards(variant):

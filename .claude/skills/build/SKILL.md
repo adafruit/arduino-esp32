@@ -7,8 +7,7 @@ description: The Arduino ESP32 core build contract. Use when a change must be ve
 
 `scripts/check_build.py` is the entry point for verifying a change; agents and workflows call it rather than composing
 `arduino-cli compile` lines. It is this core's profile for agentrc's `arduino` skill (`arduino_build.py`) in core
-mode, loaded from the installed agentrc (`${AGENTRC_DIR:-$HOME/.claude}`), never fetched; CI fetches the commit
-`test/hil/agentrc.json` pins. `.claude/skills/hil-contract/scripts/agentrc_pin.py check` names the one in use. That
+mode, loaded from the agentrc `.claude/skills/hil-contract/scripts/agentrc_pin.py` selects (`check` names it). That
 skill's page ("A core") is the shared behavior: the isolated arduino-cli environment that makes this checkout the
 `espressif:esp32` platform whatever is installed or linked under `~/Arduino/hardware`, bundled libraries as the
 core's own and the record. This page is what is this core's.
@@ -45,13 +44,14 @@ pass with no build or test run is "nothing to build": say so in `notes`. Exit 3 
 
 - **Selection is the script's**, first match per path; `paths[].reason` says why:
   - a changed file of a bundled library's sketch builds that sketch wherever it is eligible;
-  - `cores/`, `tools/` (partitions, `gen_esp32part.py`, the prebuilt libraries) and
-    `package/package_esp32_index.template.json` (the toolchain and ESP-IDF pin: rerun `get.py` first) build every
-    representative;
+  - `cores/`, `tools/` (partitions, `gen_esp32part.py`) and `package/package_esp32_index.template.json` (the
+    toolchain and ESP-IDF pin: rerun `get.py` first) build every representative;
+  - `tools/esp32-arduino-libs/<chip variant>/` the boards in the table building that variant (any other is
+    uncovered);
   - `variants/<v>/` the boards in the table on that variant (only the CI targets' and the rig boards'; any other
     variant is uncovered); `boards.txt` and `platform.txt` every CI target and both rig boards;
-  - a bundled library's source builds its sketches and those of every bundled library that includes its headers,
-    transitively, on the representatives;
+  - a bundled library's source builds, on the representatives, its sketches, those of every bundled library that
+    includes its headers (transitively) and every sketch including one of those libraries;
   - `.github/scripts/socs_config.sh` and `sketch_utils.sh` run the contract tests, which hold the board table and the
     FQBN rules to them; the rest of `.github/`, `docs/` and repo metadata build nothing;
   - `tests/` (upstream's pytest-embedded validation), `idf_component_examples/`, the ESP-IDF component files,
@@ -59,15 +59,15 @@ pass with no build or test run is "nothing to build": say so in `notes`. Exit 3 
 - **Boards** (`BOARDS`): CI's targets (`socs_config.sh` `CORE_SOCS`: `esp32`, `esp32c3`, `esp32c5`, `esp32c6`,
   `esp32h2`, `esp32p4`, `esp32s2`, `esp32s3`) with `sketch_utils.sh`'s default options as CI runs them (`CI=true`, so
   P4 builds `CDCOnBoot=default`), and the rig boards `espressif_s3_devkitm` and `espressif_p4_function_ev`: USB-OTG
-  (TinyUSB) with CDC on boot, `FlashSize=4M`, the P4 `ChipVariant=prev3`, each with the farm's USB-switch fixture
+  (TinyUSB) with CDC on boot, `FlashSize=4M`, the P4 `ChipVariant=prev3`, each built with the farm's fixture
   `test/hil/esp32_ts3usb30.cpp`. Representatives: both rig boards, `esp32` and `esp32c6` (Xtensa and RISC-V twice).
 - **Sketches** are every `.ino` dir under `libraries/`, as CI scans them, filtered and configured by their `ci.yml` as
   `sketch_utils.sh` reads it: `targets: {<chip>: false}` skips that target; `requires` (all) and `requires_any` (one)
   are anchored regular expressions over the build's `tools/esp32-arduino-libs/<chip variant>/sdkconfig` (the rig P4's
   is `esp32p4_es`); `fqbn_append` (a string, or a map with `default`) adds menu options over the target's; a full
-  `fqbn` list replaces them. A rig board keeps its `FlashSize`, `ChipVariant`, `USBMode` and `CDCOnBoot` over a
-  sketch's `fqbn_append`. A `ci.yml` key this profile does not read refuses the build. The contract tests pin the
-  sketches no board builds (`unbuildable_examples()`).
+  `fqbn` list replaces them. A rig board takes the sketch's options over its own, but excludes a sketch that asks a
+  different `FlashSize`, `ChipVariant`, `USBMode` or `CDCOnBoot`. A `ci.yml` key this profile does not read refuses
+  the build. The contract tests pin the sketches no board builds (`unbuildable_examples()`).
 - **Cost**: each compile takes about 30 CPU seconds. A `cores/` change selects about 1100 compiles, `boards.txt`
   about 2800: pass `-j` near the host's core count. While iterating, narrow with `--board`/`--example`
   (`narrowed: true`, the change's selection unverified), then run the full selection before a PR.
