@@ -69,6 +69,8 @@ static void handle(char *line) {
 }
 
 void setup() {
+  // the default 256-byte queue drops input while loop() waits for TX room: USBCDC::_onRX gives a full queue 10 ticks
+  Serial.setRxBufferSize(ECHO_MAX + 64);
   Serial.begin(115200);
 }
 
