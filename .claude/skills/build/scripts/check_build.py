@@ -433,9 +433,11 @@ def vid_pid(build_dir, board=None, roster_entry=None):
         return None
     variant = ""
     for arg in argv:
-        m = re.match(r"-I(.*/variants/[^/]+)$", arg)
-        if m and (Path(m.group(1)) / "pins_arduino.h").is_file():
-            variant += (Path(m.group(1)) / "pins_arduino.h").read_text(errors="replace")
+        # the compile's variant dir is under the build's own sketchbook, gone once it ends: this checkout's by name
+        m = re.match(r"-I.*/variants/([^/]+)$", arg)
+        header = ROOT / "variants" / m.group(1) / "pins_arduino.h" if m else None
+        if header and header.is_file():
+            variant += header.read_text(errors="replace")
     # USB.cpp's fallbacks: USB_ESPRESSIF_VID (esp32-hal-tinyusb.h) and its own USB_PID
     source = (ROOT / "cores/esp32/USB.cpp").read_text() + (ROOT / "cores/esp32/esp32-hal-tinyusb.h").read_text()
     fallbacks = {
