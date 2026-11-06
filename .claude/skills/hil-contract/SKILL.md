@@ -82,8 +82,8 @@ reads as D = D2, the DUT side (datasheet SCDS237F, Table 1, with OE low).
 
 ## Execution
 
-Budgets, the remote run and the manual session commands are Adafruit TinyUSB Arduino's HIL contract's, with this
-core's names: the attempt dir is `~/hil-remote/arduino-esp32/<id>`, local records and collections live under
+Budgets, the remote run and the manual session commands are those of Adafruit TinyUSB Arduino's HIL contract
+(adafruit/Adafruit_TinyUSB_Arduino, `.claude/skills/hil-contract/SKILL.md`, Execution), with this core's names: the attempt dir is `~/hil-remote/arduino-esp32/<id>`, local records and collections live under
 `build/.hil-remote/` (upstream's `.gitignore` ignores `/build`), `check --test` takes `cdc` (default) or `timing`,
 `session close` restores `core_cdc`.
 
@@ -112,9 +112,28 @@ FQBN. The caller retries a fail once under a new run id, per the `hil` Caller ru
 
 ## Recovery
 
-Adafruit TinyUSB Arduino's Recovery, run in this core's attempt dir with its roster and records. esptool writes the
-build's `flash_args` images (bootloader, partition table, `boot_app0`, application) within the board's 4 MB span;
-the battery keeps no state across sketches, so restoring `core_cdc` is the whole cleanup.
+Recovery needs a separate dispatch naming the board. It applies to a report row with `cleanup.holder` (exit 4), a
+protected record left by a run that died, a board's `arduino-hil` pending-session record, and a session whose `close`
+failed. The dispatch carries the board, the failed report (or session id), the holder token and the receipts. Run
+each command on ci.lan in the failed run's attempt dir (`ssh ci.lan 'cd ~/hil-remote/arduino-esp32/<id> && python3
+.claude/skills/hil-contract/scripts/hil_test.py ...'`), adding `--staged manifest.json` to `restore`; on a dev PC,
+from the checkout. When the failed tree's firmware or harness is the defect, run the restore from a newly staged tree
+of the fixed commit (a `hil_remote.py run` of the held board stages one and reports it locked), with `--report`
+naming the failed run's report by absolute path; the hold, its token and the receipts stay the failed run's.
+
+1. `hil_test.py lock status`, and `hil_test.py report <run dir> -b <board>` for the row's holder token and receipts.
+2. A live cleanup holder (reason `hil_test.py`): restore under it, R = `hil_test.py`. A dead holder or a protected
+   record: `hil_test.py lock hold --take-over <board> --reason recovery-<id>` prints token T; R = `recovery-<id>`.
+3. `hil_test.py restore -b <board> --build-record build/hil/<board>.build.json --under-hold R --report
+   <run dir>/hil_report.json <roster>`. It refuses while a child of the failed run is not proven ended: stop and
+   report that receipt.
+4. Once the restore passed, `hil_test.py lock release --token <the holder's token, or T>`. On failure, keep the hold
+   and report.
+
+A failed `session close` keeps its hold: once its pending children are proven ended, run `hil_remote.py session close
+<id>` again; if that fails too, keep the hold and report. esptool writes the build's `flash_args` images (bootloader,
+partition table, `boot_app0`, application) within the board's 4 MB span; the battery keeps no state across sketches,
+so restoring `core_cdc` is the whole cleanup.
 
 ## Debug
 

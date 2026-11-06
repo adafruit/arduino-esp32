@@ -3,15 +3,15 @@
 
 SKILL.md beside this directory is the contract. The rig gets binaries only: the harness, the roster, the build records
 with their images and the agentrc files the harness loads, each pinned by digest in manifest.json, in a create-only
-attempt dir <base>/<run-id> (agentrc hil_remote_core). Local records and collections live under .hil-remote/.
+attempt dir <base>/<run-id> (agentrc hil_remote_core). Local records and collections live under build/.hil-remote/.
 
   hil_remote.py run --run-id ID [--host H] [--roster R] [-b BOARD]... [-t TEST]...
       stage HEAD's clean build records and launch `hil_test.py run` detached; prints the launch JSON
-  hil_remote.py wait ID [--timeout S]      until done (collected into .hil-remote/ID), or the timeout
+  hil_remote.py wait ID [--timeout S]      until done (collected into build/.hil-remote/ID), or the timeout
   hil_remote.py collect ID                 fetch whatever the attempt has now, whatever its state
   hil_remote.py session open --run-id ID -b BOARD [--host H] [--roster R]
       stage the board's clean record and take a hold on the board under a reason unique to the attempt
-      (`arduino-hil session DIR TOKEN`, kept in .hil-remote/ID.session.json)
+      (`arduino-hil session DIR TOKEN`, kept in build/.hil-remote/ID.session.json)
   hil_remote.py session stage ID RECORD...    stage records (experimental too) into a new bundle; prints its options
   hil_remote.py session exec ID flash|gdb|restore|console|check OPTS...  hil_test.py's command under the hold
   hil_remote.py session exec ID exec [--timeout S] -- ARGV...
