@@ -1,0 +1,28 @@
+{
+  "boards": [
+    {
+      "name": "espressif_s3_devkitm",
+      "uid": "84F703C084E4",
+      "usb_port": "11-1.3",
+      "probe": "3ea619acd1cdeb11a0a0b806e93fd3f1",
+      "arduino": {
+        "tests": ["cdc", "timing"]
+      }
+    },
+    {
+      "name": "espressif_p4_function_ev",
+      "uid": "0",
+      "usb_port": "11-1.1",
+      "probe": "4ea4f48f6bc3ee11bbb9d00f9e1b1c54",
+      "debug": {
+        "openocd": "-f board/esp32p4-builtin.cfg",
+        "tool": "openocd-esp32",
+        "uid": "60:55:F9:F9:87:15",
+        "usb_port": "11-1.2"
+      },
+      "arduino": {
+        "tests": ["cdc", "timing"]
+      }
+    }
+  ]
+}

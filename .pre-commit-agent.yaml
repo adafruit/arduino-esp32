@@ -1,0 +1,13 @@
+# Agent contract tests (CLAUDE.md); upstream's .pre-commit-config.yaml formats and lints these files too.
+# Run: pre-commit run --config .pre-commit-agent.yaml --all-files
+repos:
+  - repo: local
+    hooks:
+      - id: agent-contract-tests
+        name: agent contract tests
+        # the installed agentrc on a dev PC; in CI the pinned one, fetched first
+        entry: python3 .claude/skills/hil-contract/scripts/agentrc_pin.py test
+        language: python
+        additional_dependencies: [pyserial==3.5, PyYAML==6.0.2]
+        pass_filenames: false
+        always_run: true
