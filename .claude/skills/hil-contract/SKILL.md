@@ -137,3 +137,11 @@ and the roster has no S3 `debug` route (Limits).
   harness's DUT identity check.
 - **Identity:** this core's TinyUSB stack reports the S3's MAC as its USB serial and `0` on the P4 (`USB.cpp`
   `USB_SERIAL`); each board is also pinned by its `usb_port`.
+- **CDC receive queue:** `core_cdc` sizes `Serial`'s receive queue to hold a whole echo. Under the default 256 bytes
+  the P4 returned 896 of 1000 echoed bytes (run `esp32core-1`, 2026-11-06): `USBCDC::_onRX` drops input when the
+  queue stays full for 10 ticks, presumably while `loop()` waits for TX room that the same USB task must free. The
+  battery does not exercise that path.
+- **Commissioning:** ci.lan's `espressif_p4_function_ev` (uid `0` at `11-1.1`, `303a:0002`) ran the battery on
+  2026-11-06: `cdc` and `timing` passed (`f_cpu` 360 MHz) and `core_cdc` was restored; a GDB session listed the
+  FreeRTOS tasks over the USB-Serial-JTAG and the board passed `cdc` after it. `espressif_s3_devkitm` (uid
+  `84F703C084E4` at `11-1.3`, `303a:1001`) is not yet run: pending.
