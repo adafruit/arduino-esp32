@@ -3,9 +3,10 @@
 ## Working Rules
 
 - Espressif's Arduino core (the `espressif:esp32` board package), maintained upstream at espressif/arduino-esp32.
-  Agent support lives only on branch `hathach/agent` of adafruit/arduino-esp32, as commits touching only paths
-  upstream lacks: this file, `AGENTS.md`, `.agents`, `.claude/`, `test/hil/` and `.pre-commit-agent.yaml`. None of
-  them goes upstream (PRs and Follow-ups).
+  Agent support lives only on adafruit/arduino-esp32's agent branches, as commits touching only paths upstream
+  lacks: this file, `AGENTS.md`, `.agents`, `.claude/`, `test/hil/` and `.pre-commit-agent.yaml`. None of them goes
+  upstream (PRs and Follow-ups). `hathach/agent-master` carries them over Espressif's `master` and moves with it;
+  `hathach/agent-<tag>` (e.g. `hathach/agent-3.3.12`) over a release tag, frozen once that release is validated.
 - No standalone build: sketches compile against this checkout as the `espressif:esp32` platform through the build
   contract's isolated arduino-cli environment, never the installed board package or the `~/Arduino/hardware` link.
   Each checkout or worktree needs its toolchains and prebuilt ESP-IDF libraries first: `cd tools && python3 get.py`
@@ -52,8 +53,9 @@
 
 ## PRs and Follow-ups
 
-- Topic work branches from `hathach/agent` at a recorded tip `A` over upstream commit `U`, keeping a ref on the
+- Topic work branches from an agent branch at a recorded tip `A` over upstream commit `U`, keeping a ref on the
   tested commit `X`. An upstream PR head is `git rebase --onto U A` of a copy of the topic: its full tree must equal
   `X`'s outside the agent paths above (modes and gitlinks included), and its evidence says "HIL-tested at `X`;
   firmware sources identical to `Y`". Publishing over a newer upstream than `U` rebuilds and reruns HIL.
-- Before rebasing `hathach/agent` onto a new upstream commit, check upstream still lacks every agent path.
+- Before rebasing `hathach/agent-master` onto a newer `master`, or starting `hathach/agent-<tag>` for a new release,
+  check upstream still lacks every agent path, then rebuild and rerun HIL there.
