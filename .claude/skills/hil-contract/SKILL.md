@@ -150,15 +150,14 @@ leaves no JTAG, and the roster has no S3 `debug` route (Limits).
   other chip, USB-Serial-JTAG CDC (`USBMode=hwcdc`), UART, Wi-Fi, BLE, I2C, SPI, ADC, PWM and every other peripheral
   (no fixture wired), PSRAM, the second-stage bootloader beyond booting the image, OTA, cold power-on, and every other
   variant; those build only.
-- **S3 debug:** pending. It needs a `USBMode=hwcdc` image, whose USB-Serial-JTAG enumerates with the MAC with colons
-  as its serial, while the roster's `uid` is the TinyUSB CDC's MAC without them: a flash of such an image fails the
-  harness's DUT identity check.
+- **S3 debug:** pending (hathach/agentrc#487). It needs a `USBMode=hwcdc` image, which the rig board's FQBN does not
+  select, and whose USB-Serial-JTAG serial is the MAC with colons, not the roster `uid` (Identity): the harness finds no
+  DUT under it, so `flash` passes ("the image may not run USB") and `check` fails.
 - **Identity:** this core's TinyUSB stack reports the S3's MAC as its USB serial and `0` on the P4 (`USB.cpp`
   `USB_SERIAL`); each board is also pinned by its `usb_port`.
 - **CDC receive queue:** `core_cdc` sizes `Serial`'s receive queue to hold a whole echo. Under the default 256 bytes
-  the P4 returned 896 of 1000 echoed bytes (run `esp32core-1`, 2026-11-06): `USBCDC::_onRX` drops input when the
-  queue stays full for 10 ticks, presumably while `loop()` waits for TX room that the same USB task must free. The
-  battery does not exercise that path.
+  the P4 returned 896 of 1000 echoed bytes (run `esp32core-1`, 2026-11-06), presumably dropped by `USBCDC::_onRX`
+  once the queue stayed full for 10 ticks (adafruit/arduino-esp32#26). The battery does not exercise that path.
 - **Commissioning:** ci.lan's `espressif_p4_function_ev` (uid `0` at `11-1.1`, `303a:0002`) ran the battery on
   2026-11-06: `cdc` and `timing` passed (`f_cpu` 360 MHz) and `core_cdc` was restored; a GDB session listed the
   FreeRTOS tasks over the USB-Serial-JTAG and the board passed `cdc` after it. `espressif_s3_devkitm` (uid
