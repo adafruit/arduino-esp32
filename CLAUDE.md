@@ -59,3 +59,5 @@
   firmware sources identical to `Y`". Publishing over a newer upstream than `U` rebuilds and reruns HIL.
 - Before rebasing `hathach/agent-master` onto a newer `master`, or starting `hathach/agent-<tag>` for a new release,
   check upstream still lacks every agent path, then rebuild and rerun HIL there.
+- Follow-up issues, core defects included, go to adafruit/arduino-esp32's tracker, never espressif/arduino-esp32's
+  unless the user names it; agentrc tooling defects go to hathach/agentrc. This names the tracker, not a grant to file.
