@@ -31,7 +31,9 @@ INSTALL_HINT = (
 )
 MANIFEST = "manifest.json"
 PROFILE_API = 1  # arduino_build.py's PROFILE_API: the engines' profile interface these profiles implement
-FEATURE = "core"  # arduino_build.py's PROFILE_FEATURES entry for core mode (PLATFORM profiles), beyond API 1
+# arduino_build.py's PROFILE_FEATURES entries these profiles need beyond API 1: core mode (PLATFORM) and
+# arduino_hil's shared core battery (hil_test.py's CORE_TESTS)
+FEATURES = ("core", "battery")
 # the agentrc engines the contracts run; their FILES closures are what a staged rig tree carries and a record binds
 ENGINES = (
     "skills/arduino/scripts/arduino_build.py",
@@ -224,7 +226,7 @@ def checkout_of(r, files):
 
 def selected():
     """(source, root, closure) of the selected agentrc, refusing a missing closure file or engines implementing
-    another profile API than PROFILE_API before any is loaded."""
+    another profile API than PROFILE_API or lacking one of FEATURES before any is loaded."""
     src = source()
     r = {"staged": lambda: ROOT / "agentrc", "pin": checkout, "installed": installed}[src]()
     files = closure(r, ENGINES)
@@ -235,10 +237,11 @@ def selected():
             f"agentrc that does, or move this core to the API it has",
             INSTALL_HINT,
         )
-    if FEATURE not in (literal(r, ENGINES[0], "PROFILE_FEATURES") or ()):
+    missing = [f for f in FEATURES if f not in (literal(r, ENGINES[0], "PROFILE_FEATURES") or ())]
+    if missing:
         raise PinError(
-            f"agentrc at {r} has no core mode ({ENGINES[0]} PROFILE_FEATURES lacks {FEATURE!r}): use an "
-            "agentrc that builds an Arduino core",
+            f"agentrc at {r} lacks profile features {missing} ({ENGINES[0]} PROFILE_FEATURES): use an "
+            "agentrc that has them",
             INSTALL_HINT,
         )
     return src, r, files

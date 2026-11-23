@@ -11,10 +11,11 @@ Adafruit SPIFlash, whose HIL contracts have the same commands, budgets and sessi
 core's. Its Reservation and Recovery follow the lock model of the agentrc it pins, which those contracts may not yet.
 Manual runs only: no CI job runs this battery. Scripts, all in `scripts/`, each with its usage in its docstring:
 
-- `hil_test.py`: the harness on the host with the boards (this core's profile and tests).
+- `hil_test.py`: the harness on the host with the boards (this core's profile; its tests are agentrc's shared core
+  battery).
 - `hil_remote.py`: drives the harness on ci.lan from the dev PC that built the firmware.
 - `agentrc_pin.py`: which agentrc both load their shared scripts from (its docstring: dev PC, CI and rig differ); it
-  refuses an agentrc without core mode.
+  refuses an agentrc without core mode or the shared core battery.
 
 ```bash
 H=.claude/skills/hil-contract/scripts
@@ -51,9 +52,9 @@ a reply line carrying its command's random tag (a missing, stale or other reply 
   `ECHO` of 1, 63, 64, 65, 511, 512, 513 and 1000 random bytes (either side of a full- and a high-speed bulk packet)
   must return every byte as sent, then a `PASS` line with their length and crc32.
 - `timing` (`test/hil/core_timing/`): `millis()` read twice 3 s apart must lie within the host's monotonic bracket of
-  the two exchanges widened by 1%, `micros()` must agree with `millis()` within 2 ms, and `delay(1000)` measured by
-  `micros()` must take 1000 to 1002 ms, widened by 1%. A coarse functional bound, no clock accuracy claim; `INFO`
-  reports `f_cpu` for the record.
+  the two exchanges widened by 1% and by 1 ms (one `millis()` tick), `micros()` must agree with `millis()` within 2 ms,
+  and `delay(1000)` measured by `micros()` must take 1000 to 1002 ms, widened the same way. A coarse functional bound,
+  no clock accuracy claim; `INFO` reports `f_cpu` for the record.
 
 `-b` narrows the boards. The PR-scoped selector is the build contract's:
 
