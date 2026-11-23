@@ -14,8 +14,9 @@ Manual runs only: no CI job runs this battery. Scripts, all in `scripts/`, each 
 - `hil_test.py`: the harness on the host with the boards (this core's profile; its tests are agentrc's shared core
   battery).
 - `hil_remote.py`: drives the harness on ci.lan from the dev PC that built the firmware.
-- `agentrc_pin.py`: which agentrc both load their shared scripts from (its docstring: dev PC, CI and rig differ); it
-  refuses an agentrc without core mode or the shared core battery.
+- `agentrc_pin.py`: which agentrc both load their shared scripts from (its docstring: dev PC, CI and rig differ), a
+  verbatim copy of agentrc's `skills/arduino/scripts/agentrc_pin.py` configured by `test/hil/agentrc.json`; its
+  `features` refuse an agentrc without core mode or the shared core battery.
 
 ```bash
 H=.claude/skills/hil-contract/scripts
