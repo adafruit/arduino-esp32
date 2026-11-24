@@ -471,10 +471,10 @@ def main(argv=None):
             raise ProfileError(f"{LIBS_DIR} missing: install the tools ({GET_HINT})")
         return eng.main(argv)
     except agentrc_pin.PinError as e:
-        print(json.dumps({"version": 2, "pass": False, "error": str(e), "remedy": e.remedy}))
+        print(json.dumps({"version": 3, "pass": False, "error": str(e), "remedy": e.remedy}))
         return 2
     except ProfileError as e:
-        print(json.dumps({"version": 2, "pass": False, "error": str(e)}))
+        print(json.dumps({"version": 3, "pass": False, "error": str(e)}))
         return 2
 
 
