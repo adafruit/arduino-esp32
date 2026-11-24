@@ -204,21 +204,64 @@ class Rosters(unittest.TestCase):
         roster = E.load_roster(ROOT / "test/hil/ci.json")
         self.assertEqual(sorted(roster), sorted(ht.BUILD.RIG_BOARDS))
         for name, board in roster.items():
-            self.assertEqual(board["arduino"]["tests"], list(ht.ROLE_TESTS["device"]), name)
+            self.assertEqual(board["arduino"]["tests"], list(ht.ROLE_TESTS[E.role(name)]), name)
             self.assertIn("usb_port", board, name)
+
+    def test_each_rig_boards_record_admits_every_sketch_under_the_checked_in_roster(self):
+        # admit() picks an identity for every recorded sketch before any operation: one it cannot name refuses the
+        # whole record (battery, flash, restore, gdb); the record's own integrity checks are stubbed
+        roster = ROOT / "test/hil/ci.json"
+        want = {
+            "espressif_s3_devkitm": {
+                "test/hil/core_cdc": "84F703C084E4",
+                "test/hil/core_timing": "84F703C084E4",
+                "core_cdc_hwcdc": "84:F7:03:C0:84:E4",
+            },
+            "espressif_p4_function_ev": {"test/hil/core_cdc": "0", "test/hil/core_timing": "0"},
+        }
+        for board, uids in want.items():
+            sketches = {
+                s: {
+                    "image": "esptool",
+                    "sha256": {},
+                    "elf": f"{s}.elf",
+                    "vidPid": "303a:1001",
+                    "fqbn": E.B.fqbn(board, s),
+                }
+                for s in E.B.hil_sketches(board)
+            }
+            rec = {
+                "role": E.role(board),
+                "fqbn": ht.BUILD.BOARDS[board]["fqbn"],
+                "sketches": sketches,
+                "roster": {"sha256": E.B.sha256(roster)},
+            }
+            with tempfile.TemporaryDirectory() as d, mock.patch.object(
+                E, "record_problems", return_value=[]
+            ), mock.patch.object(E, "git_identity", return_value=("0" * 40, "")):
+                path = Path(d) / "record.json"
+                path.write_text(json.dumps(rec))
+                _, images = E.admit(path, board, roster, d)
+            self.assertEqual({s: i["uid"] for s, i in images.items()}, uids, board)
 
     def test_example_roster_names_a_profile_board(self):
         boards = json.loads((ROOT / "test/hil/local.example.json").read_text())["boards"]
         for b in boards:
             self.assertIn("span", ht.BUILD.BOARDS[b["name"]])
-            self.assertEqual(b["arduino"]["tests"], list(ht.ROLE_TESTS["device"]))
+            self.assertEqual(b["arduino"]["tests"], list(ht.ROLE_TESTS[E.role(b["name"])]))
 
 
 class Profile(unittest.TestCase):
     def test_tests_and_sketches_agree(self):
-        sketches = {Path(E.B.sketch_id(s)).name for s in ht.BUILD.HIL_SKETCHES["device"]}
-        # the engine's bind() checks the restore and the roles; the S3's GDB image has no test yet
-        self.assertEqual(set(ht.TESTS.values()) | {"core_cdc_hwcdc"}, sketches)
+        # the engine's bind() checks the restore and the roles; only the S3 builds its GDB image, which has no test yet
+        sketches = {b: {Path(s).name for s in E.B.hil_sketches(b)} for b in ht.BUILD.RIG_BOARDS}
+        self.assertEqual(
+            sketches,
+            {
+                "espressif_s3_devkitm": set(ht.TESTS.values()) | {"core_cdc_hwcdc"},
+                "espressif_p4_function_ev": set(ht.TESTS.values()),
+            },
+        )
 
     def test_remote_records_stay_under_the_ignored_build_dir(self):
         self.assertTrue(ht.REMOTE_RUNS.startswith("build/"))

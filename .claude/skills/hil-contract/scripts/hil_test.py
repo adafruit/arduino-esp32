@@ -40,8 +40,9 @@ import agentrc_pin  # noqa: E402
 import check_build as BUILD  # noqa: E402
 
 TESTS = {"cdc": "core_cdc", "timing": "core_timing"}
-ROLE_TESTS = {"device": tuple(TESTS)}
-RESTORE_TEST = {"device": "cdc"}
+# device_hwcdc (the S3) runs the same battery; its record also carries the GDB image (check_build.HIL_SKETCHES)
+ROLE_TESTS = {"device": tuple(TESTS), "device_hwcdc": tuple(TESTS)}
+RESTORE_TEST = {"device": "cdc", "device_hwcdc": "cdc"}
 REPORT_SCHEMA = "arduino-esp32-core-hil"
 # hil_remote.py (agentrc arduino_remote.py); its local records go under /build, which upstream's .gitignore ignores
 REMOTE_BASE = "~/hil-remote/arduino-esp32"

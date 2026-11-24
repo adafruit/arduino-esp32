@@ -144,8 +144,9 @@ board's USB-Serial-JTAG (`debug`: `tool` `openocd-esp32`, `uid` its MAC with col
 gdb for the chip (`riscv32-esp-elf-gdb` for the P4, `xtensa-esp32s3-elf-gdb` for the S3). On the ESP32-P4 the
 USB-Serial-JTAG runs beside the high-speed OTG the sketches use (datasheet 4.2.2.11), so any record's sketch can be
 debugged. On the ESP32-S3 the OTG and the USB-Serial-JTAG share the one internal PHY (TRM 33.4.1): a TinyUSB sketch
-leaves no JTAG, so the S3's `debug` route, on the DUT's own `usb_port`, debugs only `core_cdc_hwcdc` (`core_cdc`
-built `USBMode=hwcdc`, a named build in each rig board's record), and `gdb` refuses any other sketch.
+leaves no JTAG. **S3 hwcdc-only rule:** the S3's `debug` route, on the DUT's own `usb_port`, debugs only
+`core_cdc_hwcdc` (`core_cdc` built `USBMode=hwcdc`, a named build only the S3's role `device_hwcdc` records), whose
+USB-Serial-JTAG enumerates as the roster `uids` `hwcdc` serial, the MAC with colons; `gdb` refuses any other sketch.
 
 ## Limits
 
@@ -154,12 +155,11 @@ built `USBMode=hwcdc`, a named build in each rig board's record), and `gdb` refu
   other chip, USB-Serial-JTAG CDC (`USBMode=hwcdc`), UART, Wi-Fi, BLE, I2C, SPI, ADC, PWM and every other peripheral
   (no fixture wired), PSRAM, the second-stage bootloader beyond booting the image, OTA, cold power-on, and every other
   variant; those build only.
-- **S3 debug:** only under `core_cdc_hwcdc`, flashed in a manual session for GDB. No harness test runs that image yet
-  (`cdc` requires `stack=tinyusb`): a follow-up. The P4's record carries it too, refused there: its roster has no
-  `uids`.
+- **S3 debug:** Debug's S3 hwcdc-only rule; `core_cdc_hwcdc` is flashed in a manual session. No harness test runs that
+  image yet (`cdc` requires `stack=tinyusb`): a follow-up.
 - **Identity:** this core's TinyUSB stack reports the S3's MAC as its USB serial and `0` on the P4 (`USB.cpp`
-  `USB_SERIAL`); the S3's USB-Serial-JTAG (`303a:1001`) reports the MAC with colons, its `uids` `hwcdc` entry. Each
-  board is also pinned by its `usb_port`.
+  `USB_SERIAL`); the S3's hwcdc image has its own serial (Debug's S3 hwcdc-only rule). Each board is also pinned by
+  its `usb_port`.
 - **CDC receive queue:** `core_cdc` sizes `Serial`'s receive queue to hold a whole echo. Under the default 256 bytes
   the P4 returned 896 of 1000 echoed bytes (run `esp32core-1`, 2026-11-06), presumably dropped by `USBCDC::_onRX`
   once the queue stayed full for 10 ticks (adafruit/arduino-esp32#26). The battery does not exercise that path.

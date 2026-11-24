@@ -82,7 +82,10 @@ def rig(target, options):
 
 
 # named as in agentrc's board registry; ChipVariant prev3 ("Before v3.00") covers the farm P4's revision
-BOARDS["espressif_s3_devkitm"] = rig("esp32s3", "USBMode=default,CDCOnBoot=cdc,FlashSize=4M,PSRAM=disabled")
+BOARDS["espressif_s3_devkitm"] = {
+    **rig("esp32s3", "USBMode=default,CDCOnBoot=cdc,FlashSize=4M,PSRAM=disabled"),
+    "role": "device_hwcdc",
+}
 BOARDS["espressif_p4_function_ev"] = rig("esp32p4", "USBMode=default,CDCOnBoot=cdc,FlashSize=4M,ChipVariant=prev3")
 RIG_BOARDS = tuple(b for b, e in BOARDS.items() if "span" in e)
 # menu keys a rig board keeps over a sketch's fqbn_append: its flash, chip revision and USB wiring are the hardware's
@@ -95,9 +98,15 @@ REPRESENTATIVES = {
     "esp32p4": ["espressif_p4_function_ev"],
     "esp32c6": ["esp32c6"],
 }
-# the sketches a HIL record carries, the first also the restoration image: it writes no flash
+# the sketches a HIL record carries, the first also the restoration image: it writes no flash. The S3's role adds
+# its GDB image (hil-contract SKILL.md, Debug); a P4 record without it needs no roster uids
 HIL_SKETCHES = {
-    "device": ("test/hil/core_cdc", "test/hil/core_timing", {"core_cdc_hwcdc": ("test/hil/core_cdc", "USBMode=hwcdc")})
+    "device": ("test/hil/core_cdc", "test/hil/core_timing"),
+    "device_hwcdc": (
+        "test/hil/core_cdc",
+        "test/hil/core_timing",
+        {"core_cdc_hwcdc": ("test/hil/core_cdc", "USBMode=hwcdc")},
+    ),
 }
 CONTRACT_TESTS = {
     "build": ".claude/test/test_build.py",
