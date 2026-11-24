@@ -3,6 +3,13 @@
     {
       "name": "espressif_s3_devkitm",
       "uid": "84F703C084E4",
+      "uids": {"default": "84F703C084E4", "hwcdc": "84:F7:03:C0:84:E4"},
+      "debug": {
+        "openocd": "-f board/esp32s3-builtin.cfg",
+        "tool": "openocd-esp32",
+        "uid": "84:F7:03:C0:84:E4",
+        "usb_port": "11-1.3"
+      },
       "usb_port": "11-1.3",
       "probe": "3ea619acd1cdeb11a0a0b806e93fd3f1",
       "arduino": {

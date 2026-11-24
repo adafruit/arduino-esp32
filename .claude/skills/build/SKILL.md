@@ -73,7 +73,8 @@ pass with no build or test run is "nothing to build": say so in `notes`. Exit 3 
   (`narrowed: true`, the change's selection unverified), then run the full selection before a PR.
 - **A HIL record** (`--board B --shared --record FILE --hil-config ROSTER`, by convention
   `build/hil/<board>.build.json`) is the HIL contract's build receipt; each sketch's VID:PID is `USB.cpp`'s
-  `USB_VID`/`USB_PID` (a `-D` flag, the variant's `pins_arduino.h`, else `USB.cpp`'s 303a:0002).
+  `USB_VID`/`USB_PID` (a `-D` flag, the variant's `pins_arduino.h`, else `USB.cpp`'s 303a:0002). The S3's record
+  (role `device_hwcdc`) also carries `core_cdc_hwcdc`, its GDB image (HIL contract, Debug).
 - **Private dirs for parallel agents.** Each build uses `build/agent-<pid>/<board>/<sketch path>`, removed when it
   passes; `--shared` builds into `build/hil/<board>/<sketch>` under `build/hil/.lock` and keeps it for flashing.
 - **Printing a command is not verification.** A verdict is the JSON of a run that happened; an agent that cannot run
