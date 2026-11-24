@@ -96,7 +96,9 @@ REPRESENTATIVES = {
     "esp32c6": ["esp32c6"],
 }
 # the sketches a HIL record carries, the first also the restoration image: it writes no flash
-HIL_SKETCHES = {"device": ("test/hil/core_cdc", "test/hil/core_timing")}
+HIL_SKETCHES = {
+    "device": ("test/hil/core_cdc", "test/hil/core_timing", {"core_cdc_hwcdc": ("test/hil/core_cdc", "USBMode=hwcdc")})
+}
 CONTRACT_TESTS = {
     "build": ".claude/test/test_build.py",
     "hil": ".claude/test/test_hil.py",

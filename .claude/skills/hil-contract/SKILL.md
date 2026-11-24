@@ -16,7 +16,7 @@ Manual runs only: no CI job runs this battery. Scripts, all in `scripts/`, each 
 - `hil_remote.py`: drives the harness on ci.lan from the dev PC that built the firmware.
 - `agentrc_pin.py`: which agentrc both load their shared scripts from (its docstring: dev PC, CI and rig differ), a
   verbatim copy of agentrc's `skills/arduino/scripts/agentrc_pin.py` configured by `test/hil/agentrc.json`; its
-  `features` refuse an agentrc without core mode or the shared core battery.
+  `features` refuse an agentrc without core mode, the shared core battery or named builds.
 
 ```bash
 H=.claude/skills/hil-contract/scripts
@@ -35,10 +35,11 @@ ci.lan has no arduino-cli and no checkout of this core: firmware is built on the
 each requested board not-run naming the missing file.
 
 A roster entry is the `arduino` skill's (`name`, the board's name in agentrc's board registry and its lock; `uid`, the
-DUT's USB serial under this core's TinyUSB stack; `usb_port`, required for an esptool board; `probe`, its USB-UART
-bridge's serial, whose registry entry supplies the esptool flasher, or a dev PC's unregistered board's own `flasher`;
-`debug`) plus `arduino.tests`: `["cdc", "timing"]`. A board's name must be a rig board of the build profile
-(`espressif_s3_devkitm`, `espressif_p4_function_ev`).
+DUT's USB serial under this core's TinyUSB stack; `uids`, the S3's serial per image `USBMode` (Identity per USB
+stack); `usb_port`, required for an esptool board; `probe`, its USB-UART bridge's serial, whose registry entry
+supplies the esptool flasher, or a dev PC's unregistered board's own `flasher`; `debug`) plus `arduino.tests`:
+`["cdc", "timing"]`. A board's name must be a rig board of the build profile (`espressif_s3_devkitm`,
+`espressif_p4_function_ev`).
 
 ci.lan's two boards are also on tinyusb's roster, tinyuf2's and Adafruit TinyUSB Arduino's. This contract performs
 no rig-wide operation. **Farm check**: tinyusb's launcher,
@@ -143,7 +144,8 @@ board's USB-Serial-JTAG (`debug`: `tool` `openocd-esp32`, `uid` its MAC with col
 gdb for the chip (`riscv32-esp-elf-gdb` for the P4, `xtensa-esp32s3-elf-gdb` for the S3). On the ESP32-P4 the
 USB-Serial-JTAG runs beside the high-speed OTG the sketches use (datasheet 4.2.2.11), so any record's sketch can be
 debugged. On the ESP32-S3 the OTG and the USB-Serial-JTAG share the one internal PHY (TRM 33.4.1): a TinyUSB sketch
-leaves no JTAG, and the roster has no S3 `debug` route (Limits).
+leaves no JTAG, so the S3's `debug` route, on the DUT's own `usb_port`, debugs only `core_cdc_hwcdc` (`core_cdc`
+built `USBMode=hwcdc`, a named build in each rig board's record), and `gdb` refuses any other sketch.
 
 ## Limits
 
@@ -152,11 +154,12 @@ leaves no JTAG, and the roster has no S3 `debug` route (Limits).
   other chip, USB-Serial-JTAG CDC (`USBMode=hwcdc`), UART, Wi-Fi, BLE, I2C, SPI, ADC, PWM and every other peripheral
   (no fixture wired), PSRAM, the second-stage bootloader beyond booting the image, OTA, cold power-on, and every other
   variant; those build only.
-- **S3 debug:** pending (hathach/agentrc#487). It needs a `USBMode=hwcdc` image, which the rig board's FQBN does not
-  select, and whose USB-Serial-JTAG serial is the MAC with colons, not the roster `uid` (Identity): the harness finds no
-  DUT under it, so `flash` passes ("the image may not run USB") and `check` fails.
+- **S3 debug:** only under `core_cdc_hwcdc`, flashed in a manual session for GDB. No harness test runs that image yet
+  (`cdc` requires `stack=tinyusb`): a follow-up. The P4's record carries it too, refused there: its roster has no
+  `uids`.
 - **Identity:** this core's TinyUSB stack reports the S3's MAC as its USB serial and `0` on the P4 (`USB.cpp`
-  `USB_SERIAL`); each board is also pinned by its `usb_port`.
+  `USB_SERIAL`); the S3's USB-Serial-JTAG (`303a:1001`) reports the MAC with colons, its `uids` `hwcdc` entry. Each
+  board is also pinned by its `usb_port`.
 - **CDC receive queue:** `core_cdc` sizes `Serial`'s receive queue to hold a whole echo. Under the default 256 bytes
   the P4 returned 896 of 1000 echoed bytes (run `esp32core-1`, 2026-11-06), presumably dropped by `USBCDC::_onRX`
   once the queue stayed full for 10 ticks (adafruit/arduino-esp32#26). The battery does not exercise that path.
@@ -164,4 +167,6 @@ leaves no JTAG, and the roster has no S3 `debug` route (Limits).
   2026-11-06: `cdc` and `timing` passed (`f_cpu` 360 MHz) and `core_cdc` was restored; a GDB session listed the
   FreeRTOS tasks over the USB-Serial-JTAG and the board passed `cdc` after it. `espressif_s3_devkitm` (uid
   `84F703C084E4` at `11-1.3`, `303a:1001`) ran the battery on 2026-11-06: `cdc` and `timing` passed (`f_cpu`
-  240 MHz) and `core_cdc` was restored.
+  240 MHz) and `core_cdc` was restored. On 2026-11-24 its `core_cdc_hwcdc` image enumerated as `303a:1001` serial
+  `84:F7:03:C0:84:E4` at `11-1.3`, a GDB session attached, read and detached under it and was refused under
+  `core_cdc`, which then enumerated as `84F703C084E4`.

@@ -22,11 +22,12 @@ class Config(unittest.TestCase):
         self.assertEqual(data["extra_engines"], [])  # no hil_ci.py wrapper or shared report commenter here
 
     def test_features_are_the_ones_this_profile_uses(self):
-        # core mode (check_build.PLATFORM) and the shared battery (hil_test.CORE_TESTS); no base image, no named build
+        # core mode (check_build.PLATFORM), the shared battery (hil_test.CORE_TESTS) and the hwcdc named build; no base
+        # image
         self.assertTrue(hil_test.BUILD.PLATFORM and hil_test.CORE_TESTS)
         self.assertFalse(any("base" in b for b in hil_test.BUILD.BOARDS.values()))
-        self.assertTrue(all(isinstance(s, str) for v in hil_test.BUILD.HIL_SKETCHES.values() for s in v))
-        self.assertEqual(agentrc_pin.config()["features"], ["core", "battery"])
+        self.assertTrue(any(isinstance(s, dict) for v in hil_test.BUILD.HIL_SKETCHES.values() for s in v))
+        self.assertEqual(agentrc_pin.config()["features"], ["core", "battery", "named"])
 
 
 class Selected(unittest.TestCase):
